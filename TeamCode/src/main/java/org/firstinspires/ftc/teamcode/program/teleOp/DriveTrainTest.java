@@ -19,15 +19,20 @@ public class DriveTrainTest extends OpMode {
         fl = hardwareMap.dcMotor.get("fl");
         br = hardwareMap.dcMotor.get("br");
         bl = hardwareMap.dcMotor.get("bl");
-//        arm = hardwareMap.dcMotor.get("arm");
 
-//        leftArm = hardwareMap.servo.get("leftArm");
-//        rightArm = hardwareMap.servo.get("rightArm");
+        fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        arm = hardwareMap.dcMotor.get("arm");
+
+        leftArm = hardwareMap.servo.get("leftArm");
+        rightArm = hardwareMap.servo.get("rightArm");
     }
 
     @Override
     public void loop() {
-        double x = gamepad1.left_stick_x, y = gamepad1.left_stick_y, turnPower = gamepad1.right_stick_x;
+        double x = gamepad1.left_stick_x / 1.5, y = -gamepad1.left_stick_y / 1.5, turnPower = gamepad1.right_stick_x / 1.5;
 
         if (abs(x) >= 0.05 || abs(y) >= 0.05 || abs(turnPower) >= 0.05) {
             fr.setPower(-x + y - turnPower);
@@ -41,25 +46,22 @@ public class DriveTrainTest extends OpMode {
             bl.setPower(ZERO);
         }
 
-        telemetry.addData("peepo", "");
-
         telemetry.update();
 
-//        if (gamepad1.right_bumper) {
-//            leftArm.setPosition(1);
-//            rightArm.setPosition(1);
-//        } else {
-//            leftArm.setPosition(ZERO);
-//            rightArm.setPosition(ZERO);
-//        } if (ZERO == 0) {
-//            //good
-//        }
-//        if (gamepad1.left_trigger >= 0.05) {
-//            arm.setPower(gamepad1.left_trigger / 2);
-//        } else if (gamepad1.right_trigger >= 0.05) {
-//            arm.setPower(-gamepad1.right_trigger / 2);
-//        } else {
-//            arm.setPower(0);
-//        }
+        if (gamepad1.right_bumper) {
+            leftArm.setPosition(ZERO);
+            rightArm.setPosition(1);
+        } else {
+            leftArm.setPosition(.6);
+            rightArm.setPosition(.35);
+        }
+
+        if (gamepad1.left_trigger >= 0.05) {
+            arm.setPower(gamepad1.left_trigger / 2);
+        } else if (gamepad1.right_trigger >= 0.05) {
+            arm.setPower(-gamepad1.right_trigger / 2);
+        } else {
+            arm.setPower(0);
+        }
     }
 }
