@@ -41,9 +41,6 @@ public class DriveTrainTest extends OpMode {
             bl.setPower(ZERO);
         }
 
-        telemetry.addData("peepo", "");
-
-        telemetry.update();
 
 //        if (gamepad1.right_bumper) {
 //            leftArm.setPosition(1);
