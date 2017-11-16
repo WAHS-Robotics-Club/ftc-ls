@@ -4,6 +4,9 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+
+import org.firstinspires.ftc.teamcode.program.HardwareMapConstants;
+
 import static java.lang.Math.*;
 
 @TeleOp(name = "Drive Train")
@@ -16,12 +19,12 @@ public class DriveTrainTest extends OpMode {
 
     @Override
     public void init() {
-        fr = hardwareMap.dcMotor.get("fr");
-        fl = hardwareMap.dcMotor.get("fl");
-        br = hardwareMap.dcMotor.get("br");
-        bl = hardwareMap.dcMotor.get("bl");
+        fl = hardwareMap.dcMotor.get(HardwareMapConstants.MOTOR_FRONT_LEFT);
+        fr = hardwareMap.dcMotor.get(HardwareMapConstants.MOTOR_FRONT_RIGHT);
+        bl = hardwareMap.dcMotor.get(HardwareMapConstants.MOTOR_BACK_LEFT);
+        br = hardwareMap.dcMotor.get(HardwareMapConstants.MOTOR_BACK_RIGHT);
 
-//        arm = hardwareMap.dcMotor.get("arm");
+        arm = hardwareMap.dcMotor.get(HardwareMapConstants.MOTOR_ARM);
 
         leftArm = hardwareMap.servo.get("leftArm");
         rightArm = hardwareMap.servo.get("rightArm");
