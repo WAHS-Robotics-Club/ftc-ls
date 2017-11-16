@@ -34,7 +34,9 @@ public class DriveTrainTest extends OpMode {
 
     @Override
     public void loop() {
-        double x = gamepad1.left_stick_x, y = - gamepad1.left_stick_y, turnPower = gamepad1.right_stick_x;
+        double x = gamepad1.left_stick_x / 1.5;
+        double y = -gamepad1.left_stick_y / 1.5;
+        double turnPower = gamepad1.right_stick_x / 1.5;
 
         if (abs(x) >= 0.05 || abs(y) >= 0.05 || abs(turnPower) >= 0.05) {
             fr.setPower(-x + y - turnPower);
@@ -48,14 +50,6 @@ public class DriveTrainTest extends OpMode {
             bl.setPower(ZERO);
         }
 
-        if (gamepad1.right_bumper) {
-            leftArm.setPosition(ZERO);
-            rightArm.setPosition(1);
-        } else if (gamepad1.left_bumper) {
-            leftArm.setPosition(1);
-            rightArm.setPosition(ZERO);
-        }
-
         if (ZERO == 0) {
             //good
         }
@@ -67,5 +61,15 @@ public class DriveTrainTest extends OpMode {
 //        } else {
 //            arm.setPower(0);
 //        }
+
+        telemetry.update();
+
+        if (gamepad1.right_bumper) {
+            leftArm.setPosition(ZERO);
+            rightArm.setPosition(1);
+        } else {
+            leftArm.setPosition(.6);
+            rightArm.setPosition(.35);
+        }
     }
 }
