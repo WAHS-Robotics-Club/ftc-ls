@@ -2,6 +2,9 @@ package org.firstinspires.ftc.teamcode.program.autonomous;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
+
+import org.firstinspires.ftc.teamcode.program.HardwareMapConstants;
 
 public class TestAutonomous {
 
@@ -9,12 +12,19 @@ public class TestAutonomous {
     protected final double WHEEL_CIRCUMFERENCE = 4 * Math.PI;
 
     private DcMotor fr, fl, br, bl;
+    private DcMotor arm;
+    private Servo leftClaw, rightClaw;
 
     public void setUp (HardwareMap hardwareMap) {
-        fl = hardwareMap.dcMotor.get("fl");
-        fr = hardwareMap.dcMotor.get("fr");
-        bl = hardwareMap.dcMotor.get("bl");
-        br = hardwareMap.dcMotor.get("br");
+        fl = hardwareMap.dcMotor.get(HardwareMapConstants.MOTOR_FRONT_LEFT);
+        fr = hardwareMap.dcMotor.get(HardwareMapConstants.MOTOR_FRONT_RIGHT);
+        bl = hardwareMap.dcMotor.get(HardwareMapConstants.MOTOR_BACK_LEFT);
+        br = hardwareMap.dcMotor.get(HardwareMapConstants.MOTOR_BACK_RIGHT);
+
+        arm = hardwareMap.dcMotor.get(HardwareMapConstants.MOTOR_ARM);
+
+        leftClaw = hardwareMap.servo.get(HardwareMapConstants.LEFT_CLAW);
+        rightClaw = hardwareMap.servo.get(HardwareMapConstants.RIGHT_CLAW);
 
         fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -29,8 +39,9 @@ public class TestAutonomous {
         fr.setMode(mode);
     }
 
-    public void move(double power, double angle, double distance, double moveSpeed) {
-        double x = power * Math.cos(angle); //Takes the angle in radians
+    public void move(double power, double angle, double distance) {
+        double x = power * Math.cos(angle);
+
         double y = power * Math.sin(angle); //Takes the angle in radians
 
         setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -40,10 +51,10 @@ public class TestAutonomous {
         double distanceRequested = (distance / WHEEL_CIRCUMFERENCE) * ENCODER_TICKS_PER_ROTATION;
 
         while (fr.getCurrentPosition() <= distanceRequested) {
-            fr.setPower((-x + y) * moveSpeed);
-            fl.setPower((-x - y) * moveSpeed);
-            br.setPower((+x + y) * moveSpeed);
-            bl.setPower((-y + x) * moveSpeed);
+            fr.setPower((-x + y));
+            fl.setPower((-x - y));
+            br.setPower((+x + y));
+            bl.setPower((-y + x));
         }
     }
 
