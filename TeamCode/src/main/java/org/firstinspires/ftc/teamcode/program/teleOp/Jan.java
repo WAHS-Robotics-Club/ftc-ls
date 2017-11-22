@@ -31,19 +31,27 @@ public class Jan extends OpMode{
         br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        leftClaw.setPosition(1);
-        rightClaw.setPosition(0.5);
+//        leftClaw.setPosition(1);
+//        rightClaw.setPosition(0.5);
+
+        telemetry.addData ("Left claw is at position ", leftClaw.getPosition());
+        telemetry.addData ("Right claw is at position ", rightClaw.getPosition());
+        telemetry.update();
     }
 
     @Override
     public void loop() {
+        double change = 0.0001;
 
-
-
-        if (gamepad1.right_bumper) {
-            leftClaw.setPosition(leftClaw.getPosition() + 0.01);
-            rightClaw.setPosition(rightClaw.getPosition() - 0.01);
+        if (gamepad1.left_bumper){
+            leftClaw.setPosition(leftClaw.getPosition() + change);
+            rightClaw.setPosition(rightClaw.getPosition() + change);
         }
+        if (gamepad1.right_bumper) {
+            rightClaw.setPosition(rightClaw.getPosition() - change);
+            leftClaw.setPosition(leftClaw.getPosition() - change);
+        }
+
         telemetry.addData ("Left claw is at position ", leftClaw.getPosition());
         telemetry.addData ("Right claw is at position ", rightClaw.getPosition());
         telemetry.update();
