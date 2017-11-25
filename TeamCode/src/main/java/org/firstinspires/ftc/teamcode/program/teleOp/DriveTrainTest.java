@@ -57,13 +57,13 @@ public class DriveTrainTest extends OpMode {
             //good
         }
 
-//        if (gamepad1.left_trigger >= 0.05) {
-//            arm.setPower(gamepad1.left_trigger / 2);
-//        } else if (gamepad1.right_trigger >= 0.05) {
-//            arm.setPower(-gamepad1.right_trigger / 2);
-//        } else {
-//            arm.setPower(0);
-//        }
+        if (gamepad1.left_trigger >= 0.05) {
+            arm.setPower(gamepad1.left_trigger / 2);
+        } else if (gamepad1.right_trigger >= 0.05) {
+            arm.setPower(-gamepad1.right_trigger / 2);
+        } else {
+            arm.setPower(0);
+        }
 
         telemetry.update();
 

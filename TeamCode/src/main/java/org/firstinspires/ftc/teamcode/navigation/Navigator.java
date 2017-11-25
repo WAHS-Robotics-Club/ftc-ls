@@ -100,7 +100,7 @@ public class Navigator {
      *         bonus points if a cube is placed inside it during autonomous
      */
     public CryptoColumn decodeTarget() {
-        RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(targets.get(4));
+        RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(targets.get(0));
 
         switch(vuMark) {
             case UNKNOWN: return CryptoColumn.UNKNOWN;
@@ -182,7 +182,6 @@ public class Navigator {
                 case SCREEN:
                     switch(orientation) {
                         case UPRIGHT:
-                            //noinspection SuspiciousNameCombination
                             result.x = -thetaY;
                             if(thetaX >= 0) {
                                 result.y = thetaX - 180;

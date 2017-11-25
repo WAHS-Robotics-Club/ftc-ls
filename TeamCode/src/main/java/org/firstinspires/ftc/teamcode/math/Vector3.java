@@ -92,8 +92,8 @@ public class Vector3 {
         return (x == comparator.x) && (y == comparator.y) && (z == comparator.z);
     }
 
-
-    protected String toText() {
+    @Override
+    public String toString() {
         return "(\n" +
                 "\tX: " + x + ",\n" +
                 "\tY: " + y + ",\n" +

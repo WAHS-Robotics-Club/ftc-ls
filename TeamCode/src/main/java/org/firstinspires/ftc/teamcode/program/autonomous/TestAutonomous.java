@@ -4,12 +4,15 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.Temperature;
 import org.firstinspires.ftc.teamcode.program.HardwareMapConstants;
+import static java.lang.Math.*;
 
 public class TestAutonomous {
-
+    //we should do everything in centimeters, like *real* americans
     protected final int ENCODER_TICKS_PER_ROTATION = 1120;
-    protected final double WHEEL_CIRCUMFERENCE = 4 * Math.PI;
+    protected final double WHEEL_CIRCUMFERENCE = 10.16 * Math.PI;
 
     private DcMotor fr, fl, br, bl;
     private DcMotor arm;
@@ -39,23 +42,61 @@ public class TestAutonomous {
         fr.setMode(mode);
     }
 
-    public void move(double power, double angle, double distance) {
-        double x = power * Math.cos(angle);
-
-        double y = power * Math.sin(angle); //Takes the angle in radians
+    void stop(){
+        fr.setPower(0);
+        fl.setPower(0);
+        br.setPower(0);
+        bl.setPower(0);
 
         setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
 
+    void getTelemetry(Telemetry telemetry){
+        telemetry.addData("fl target", fl.getCurrentPosition());
+        telemetry.addData("fr target", fr.getCurrentPosition());
+        telemetry.addData("bl target", bl.getCurrentPosition());
+        telemetry.addData("br target", br.getCurrentPosition());
+
+        telemetry.addData("fl power", fl.getPower());
+        telemetry.addData("fr power", fr.getPower());
+        telemetry.addData("bl power", bl.getPower());
+        telemetry.addData("br power", br.getPower());
+
+//        telemetry.addData("how warm it", Temperature);
+    }
+
+    public void move(double power, double angle, double distance, Telemetry telemetry) throws InterruptedException {
+        double distanceRequested = (distance / WHEEL_CIRCUMFERENCE) * ENCODER_TICKS_PER_ROTATION;
+        double x = distanceRequested * cos(angle);
+        double y = distanceRequested * sin(angle); //takes the angle in radians
+
+        setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        double distanceRequested = (distance / WHEEL_CIRCUMFERENCE) * ENCODER_TICKS_PER_ROTATION;
+        fl.setPower(-x + y);
+        fr.setPower(y - x);
+        bl.setPower(-y + x);
+        br.setPower(y + x);
 
-        while (fr.getCurrentPosition() <= distanceRequested) {
-            fr.setPower((-x + y));
-            fl.setPower((-x - y));
-            br.setPower((+x + y));
-            bl.setPower((-y + x));
+        fl.setTargetPosition((int) (x * signum(fl.getPower())));
+        br.setTargetPosition((int) (y * signum(br.getPower())));
+        fr.setTargetPosition((int) (x * signum(fr.getPower())));
+        bl.setTargetPosition((int) (y * signum(bl.getPower())));
+
+        setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        fl.setPower(-x + y);
+        fr.setPower(y - x);
+        bl.setPower(-y + x);
+        br.setPower(y + x);
+
+        while (fr.isBusy() || fl.isBusy() || br.isBusy() || bl.isBusy()){
+            Thread.sleep(1);
+            getTelemetry(telemetry);
         }
+
+        stop();
     }
 
     protected void turn(double turnSpeed, double turnAngle) {
@@ -65,12 +106,24 @@ public class TestAutonomous {
 
         double turnTo = (turnAngle / WHEEL_CIRCUMFERENCE) * ENCODER_TICKS_PER_ROTATION;
 
-        while (fr.getCurrentPosition() <= turnTo) {
+        while (fr.getCurrentPosition() <= fr.getTargetPosition()) {
             fl.setPower(turnSpeed);
             fr.setPower(turnSpeed);
             bl.setPower(turnSpeed);
             br.setPower(turnSpeed);
         }
+    }
+
+    public void turn(double power){
+        if(abs(power) < 0.05){
+            stop();
+        } else {
+            fl.setPower(power);
+            fr.setPower(power);
+            bl.setPower(power);
+            br.setPower(power);
+        }
+
     }
 }
 

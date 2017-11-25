@@ -9,7 +9,6 @@ import org.firstinspires.ftc.teamcode.program.HardwareMapConstants;
 
 @TeleOp (name = "Jan the Man")
 public class Jan extends OpMode{
-    double change = 0.0001;
 
     DcMotor fl,fr,bl,br,arm;
     Servo leftClaw,rightClaw;
@@ -42,18 +41,8 @@ public class Jan extends OpMode{
 
     @Override
     public void loop() {
-        if (gamepad1.left_bumper){
-            leftClaw.setPosition(change);
-            rightClaw.setPosition(change);
-            change = change + 0.001;
-        }
-        if (gamepad1.right_bumper) {
-            rightClaw.setPosition(rightClaw.getPosition() - change);
-            leftClaw.setPosition(leftClaw.getPosition() - change);
-            change = change - 0.001;
-        }
         if(gamepad1.x){
-            change = 0;
+            //hah the remenants of a previous version's testing
         }
         if(gamepad1.a){
             rightClaw.setPosition(0.38);
@@ -67,7 +56,6 @@ public class Jan extends OpMode{
 
         telemetry.addData ("Left claw is at position ", leftClaw.getPosition());
         telemetry.addData ("Right claw is at position ", rightClaw.getPosition());
-        telemetry.addData("what's change?", change);
         telemetry.update();
     }
 }
