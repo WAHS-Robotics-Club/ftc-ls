@@ -5,14 +5,13 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.Temperature;
 import org.firstinspires.ftc.teamcode.program.HardwareMapConstants;
 import static java.lang.Math.*;
 
 public class TestAutonomous {
-    //we should do everything in centimeters, like *real* americans
+
     protected final int ENCODER_TICKS_PER_ROTATION = 1120;
-    protected final double WHEEL_CIRCUMFERENCE = 10.16 * Math.PI;
+    protected final double WHEEL_CIRCUMFERENCE = 4 * Math.PI;
 
     private DcMotor fr, fl, br, bl;
     private DcMotor arm;
@@ -66,53 +65,55 @@ public class TestAutonomous {
 //        telemetry.addData("how warm it", Temperature);
     }
 
-    public void move(double power, double angle, double distance, Telemetry telemetry) throws InterruptedException {
+    public void move(double power, double angle, double distance) throws InterruptedException {
+
         double distanceRequested = (distance / WHEEL_CIRCUMFERENCE) * ENCODER_TICKS_PER_ROTATION;
-        double x = distanceRequested * cos(angle);
-        double y = distanceRequested * sin(angle); //takes the angle in radians
+
+        double x = power * cos(toRadians(angle));//takes the angle in degrees
+        double y = power * sin(toRadians(angle));
 
         setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         fl.setPower(-x + y);
         fr.setPower(y - x);
-        bl.setPower(-y + x);
-        br.setPower(y + x);
+//        bl.setPower(-y + x);
+//        br.setPower(y + x);
 
-        fl.setTargetPosition((int) (x * signum(fl.getPower())));
-        br.setTargetPosition((int) (y * signum(br.getPower())));
-        fr.setTargetPosition((int) (x * signum(fr.getPower())));
-        bl.setTargetPosition((int) (y * signum(bl.getPower())));
+        fl.setTargetPosition((int) (abs(distanceRequested * sin(toRadians(angle + 45))) * signum(fl.getPower())));
+//        br.setTargetPosition((int) (y * signum(br.getPower())));
+        fr.setTargetPosition((int) (abs(distanceRequested * cos(toRadians(angle + 45))) * signum(fr.getPower())));
+//        bl.setTargetPosition((int) (y * signum(bl.getPower())));
 
-        setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
+        fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         fl.setPower(-x + y);
         fr.setPower(y - x);
         bl.setPower(-y + x);
         br.setPower(y + x);
 
-        while (fr.isBusy() || fl.isBusy() || br.isBusy() || bl.isBusy()){
+        while (fr.isBusy() || fl.isBusy()){
             Thread.sleep(1);
-            getTelemetry(telemetry);
         }
 
         stop();
     }
 
-    protected void turn(double turnSpeed, double turnAngle) {
-        setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        double turnTo = (turnAngle / WHEEL_CIRCUMFERENCE) * ENCODER_TICKS_PER_ROTATION;
-
-        while (fr.getCurrentPosition() <= fr.getTargetPosition()) {
-            fl.setPower(turnSpeed);
-            fr.setPower(turnSpeed);
-            bl.setPower(turnSpeed);
-            br.setPower(turnSpeed);
-        }
-    }
+//    protected void turn(double turnSpeed, double turnAngle) {
+//        setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//
+//        setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//
+//        double turnTo = (turnAngle / WHEEL_CIRCUMFERENCE) * ENCODER_TICKS_PER_ROTATION;
+//
+//        while (fr.getCurrentPosition() <= fr.getTargetPosition()) {
+//            fl.setPower(turnSpeed);
+//            fr.setPower(turnSpeed);
+//            bl.setPower(turnSpeed);
+//            br.setPower(turnSpeed);
+//        }
+//    }
 
     public void turn(double power){
         if(abs(power) < 0.05){

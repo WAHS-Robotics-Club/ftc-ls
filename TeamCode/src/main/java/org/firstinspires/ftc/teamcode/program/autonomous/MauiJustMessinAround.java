@@ -15,24 +15,27 @@ public class MauiJustMessinAround extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         function.setUp(hardwareMap);
 
-        Navigator henry = new Navigator(CameraSide.BACK, PhoneOrientation.VOLUME_SIDE_DOWN, 1, true);
-        henry.init();
-
         waitForStart();
 
-        while(opModeIsActive()){
-            double yangle = henry.getRelativeTargetRotation().y;
-            if(henry.canSeeTarget()){
-                if(yangle > 3){
-                    function.turn(0.25);
-                } else if (yangle < -3){
-                    function.turn(-0.25);
-                } else {
-                    function.stop();
-                                    }
-            } else {
-                function.stop();
-            }
-        }
+        function.move(0.5, 0, 24);
+//        Navigator henry = new Navigator(CameraSide.BACK, PhoneOrientation.VOLUME_SIDE_DOWN, 1, true);
+//        henry.init();
+//
+//        waitForStart();
+//
+//        while(opModeIsActive()){
+//            double yangle = henry.getRelativeTargetRotation().y;
+//            if(henry.canSeeTarget()){
+//                if(yangle > 3){
+//                    function.turn(0.15);
+//                } else if (yangle < -3){
+//                    function.turn(-0.15);
+//                } else {
+//                    function.stop();
+//                }
+//            } else {
+//                function.stop();
+//            }
+//        }
     }
 }

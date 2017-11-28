@@ -31,6 +31,11 @@ public class Jan extends OpMode{
         br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
 //        leftClaw.setPosition(1);
 //        rightClaw.setPosition(0.5);
 
@@ -41,21 +46,28 @@ public class Jan extends OpMode{
 
     @Override
     public void loop() {
-        if(gamepad1.x){
-            //hah the remenants of a previous version's testing
-        }
-        if(gamepad1.a){
-            rightClaw.setPosition(0.38);
-            leftClaw.setPosition(0.50);
-        }
-        if(gamepad1.b){
-            rightClaw.setPosition(0.725);
-            leftClaw.setPosition(0.225);
-        }
+        fr.setPower(0.4);
+        fl.setPower(0.4);
+        br.setPower(0.4);
+        bl.setPower(0.4);
 
-
-        telemetry.addData ("Left claw is at position ", leftClaw.getPosition());
-        telemetry.addData ("Right claw is at position ", rightClaw.getPosition());
+        telemetry.addData ("fr", fr.getCurrentPosition());
+        telemetry.addData ("fl", fl.getCurrentPosition());
+//        if(gamepad1.x){
+//            //hah the remenants of a previous version's testing
+//        }
+//        if(gamepad1.a){
+//            rightClaw.setPosition(0.38);
+//            leftClaw.setPosition(0.50);
+//        }
+//        if(gamepad1.b){
+//            rightClaw.setPosition(0.725);
+//            leftClaw.setPosition(0.225);
+//        }
+//
+//
+//        telemetry.addData ("Left claw is at position ", leftClaw.getPosition());
+//        telemetry.addData ("Right claw is at position ", rightClaw.getPosition());
         telemetry.update();
     }
 }
