@@ -1,31 +1,37 @@
 package org.firstinspires.ftc.teamcode.program.autonomous;
-import android.graphics.Color;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
+@TeleOp(name = "colorscensor")
 public class SensorOfTheColor extends OpMode {
 
-    ColorSensor color_sensor;
+    ColorSensor cs;
+    DistanceSensor ds;
     @Override
 
     public void init() {
-        color_sensor = hardwareMap.colorSensor.get("color");
-
+        cs = hardwareMap.colorSensor.get("color");
+        ds = hardwareMap.get(DistanceSensor.class, "color");
     }
 
     @Override
     public void loop() {
-        double red = color_sensor.red();   // Red channel value
-        double green = color_sensor.green(); // Green channel value
-        double blue = color_sensor.blue();  // Blue channel value
 
-        color_sensor.alpha(); // Total luminosity
-        color_sensor.argb();  // Combined color value
+        double red = cs.red();   // Red channel value
+        double green = cs.green(); // Green channel value
+        double blue = cs.blue();  // Blue channel value
+
+        cs.alpha(); // Total luminosity
+        cs.argb();  // Combined color value
 
         telemetry.addData("R", red);
         telemetry.addData("G", green);
         telemetry.addData("B", blue);
+        telemetry.addData("Distance", ds.getDistance(DistanceUnit.INCH));
         telemetry.update();
     }
 }
