@@ -17,16 +17,16 @@ public class TestAutonomous {
     private DcMotor arm;
     private Servo leftClaw, rightClaw;
 
-    public void setUp (HardwareMap hardwareMap) {
-        fl = hardwareMap.dcMotor.get(HardwareMapConstants.MOTOR_FRONT_LEFT);
-        fr = hardwareMap.dcMotor.get(HardwareMapConstants.MOTOR_FRONT_RIGHT);
-        bl = hardwareMap.dcMotor.get(HardwareMapConstants.MOTOR_BACK_LEFT);
-        br = hardwareMap.dcMotor.get(HardwareMapConstants.MOTOR_BACK_RIGHT);
+    public void setUp (HardwareMap monkey) {
+        fl = monkey.dcMotor.get(HardwareMapConstants.MOTOR_FRONT_LEFT);
+        fr = monkey.dcMotor.get(HardwareMapConstants.MOTOR_FRONT_RIGHT);
+        bl = monkey.dcMotor.get(HardwareMapConstants.MOTOR_BACK_LEFT);
+        br = monkey.dcMotor.get(HardwareMapConstants.MOTOR_BACK_RIGHT);
 
-        arm = hardwareMap.dcMotor.get(HardwareMapConstants.MOTOR_ARM);
+        arm = monkey.dcMotor.get(HardwareMapConstants.MOTOR_ARM);
 
-        leftClaw = hardwareMap.servo.get(HardwareMapConstants.LEFT_CLAW);
-        rightClaw = hardwareMap.servo.get(HardwareMapConstants.RIGHT_CLAW);
+        leftClaw = monkey.servo.get(HardwareMapConstants.LEFT_CLAW);
+        rightClaw = monkey.servo.get(HardwareMapConstants.RIGHT_CLAW);
 
         fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -75,8 +75,8 @@ public class TestAutonomous {
         setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        fl.setPower(-x + y);
-        fr.setPower(y - x);
+        fl.setPower(-x - y);
+        fr.setPower(+y - x);
 //        bl.setPower(-y + x);
 //        br.setPower(y + x);
 
@@ -88,10 +88,10 @@ public class TestAutonomous {
         fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        fl.setPower(-x + y);
-        fr.setPower(y - x);
+        fl.setPower(-x - y);
+        fr.setPower(+y - x);
         bl.setPower(-y + x);
-        br.setPower(y + x);
+        br.setPower(+y + x);
 
         while (fr.isBusy() || fl.isBusy()){
             Thread.sleep(1);
@@ -115,6 +115,13 @@ public class TestAutonomous {
 //        }
 //    }
 
+    /***
+     * This is a spiffy little function, spry and saucy; redolent of
+     * elderberries and getting spruced, this is the prize pinot noir of
+     * the 2017 wine-in-a-box season.
+     *
+     * @param power what everyone wants
+     */
     public void turn(double power){
         if(abs(power) < 0.05){
             stop();

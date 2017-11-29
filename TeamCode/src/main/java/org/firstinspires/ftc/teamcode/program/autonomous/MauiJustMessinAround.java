@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.navigation.PhoneOrientation;
 @Autonomous (name = "Maui Just Messin' Around")
 public class MauiJustMessinAround extends LinearOpMode {
     TestAutonomous function = new TestAutonomous();
+    int willToLive = 0;
 
     @Override
     public void runOpMode() throws InterruptedException {

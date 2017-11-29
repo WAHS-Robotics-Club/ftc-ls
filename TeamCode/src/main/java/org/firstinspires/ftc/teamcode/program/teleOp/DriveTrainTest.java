@@ -68,11 +68,11 @@ public class DriveTrainTest extends OpMode {
         telemetry.update();
 
         if (gamepad1.right_bumper) {
-            leftClaw.setPosition(ZERO);
-            rightClaw.setPosition(1);
+            leftClaw.setPosition(0.50);
+            rightClaw.setPosition(0.38);
         } else {
-            leftClaw.setPosition(.6);
-            rightClaw.setPosition(.35);
+            leftClaw.setPosition(0.225);
+            rightClaw.setPosition(0.725);
         }
     }
 }
