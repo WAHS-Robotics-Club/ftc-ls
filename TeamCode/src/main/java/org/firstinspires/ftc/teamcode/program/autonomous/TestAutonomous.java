@@ -1,64 +1,130 @@
 package org.firstinspires.ftc.teamcode.program.autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.ColorSensor;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@Autonomous
-public class TestAutonomous extends LinearOpMode {
-    DcMotor fl, fr, bl, br;
-    Servo ls, rs, css;
-    ColorSensor cs;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.program.HardwareMapConstants;
+import static java.lang.Math.*;
 
-    @Override
-    public void runOpMode() throws InterruptedException {
-        fl = hardwareMap.dcMotor.get("fl");
-        fr = hardwareMap.dcMotor.get("fr");
-        bl = hardwareMap.dcMotor.get("bl");
-        br = hardwareMap.dcMotor.get("br");
-        cs = hardwareMap.colorSensor.get("color");
-        ls = hardwareMap.servo.get("ls");
-        rs = hardwareMap.servo.get("rs");
-        css = hardwareMap.servo.get("css");
+public class TestAutonomous {
 
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
+    protected final int ENCODER_TICKS_PER_ROTATION = 1120;
+    protected final double WHEEL_CIRCUMFERENCE = 4 * Math.PI;
 
-        waitForStart();
+    private DcMotor fr, fl, br, bl;
+    private DcMotor arm;
+    private Servo leftClaw, rightClaw;
 
-        while (opModeIsActive()) {
-            telemetry.addData("Status", "Running");
-            telemetry.update();
+    public void setUp (HardwareMap hardwareMap) {
+        fl = hardwareMap.dcMotor.get(HardwareMapConstants.MOTOR_FRONT_LEFT);
+        fr = hardwareMap.dcMotor.get(HardwareMapConstants.MOTOR_FRONT_RIGHT);
+        bl = hardwareMap.dcMotor.get(HardwareMapConstants.MOTOR_BACK_LEFT);
+        br = hardwareMap.dcMotor.get(HardwareMapConstants.MOTOR_BACK_RIGHT);
+
+        arm = hardwareMap.dcMotor.get(HardwareMapConstants.MOTOR_ARM);
+
+        leftClaw = hardwareMap.servo.get(HardwareMapConstants.LEFT_CLAW);
+        rightClaw = hardwareMap.servo.get(HardwareMapConstants.RIGHT_CLAW);
+
+        fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    }
+
+    private void setRunMode(DcMotor.RunMode mode) {
+        fl.setMode(mode);
+        fr.setMode(mode);
+        bl.setMode(mode);
+        fr.setMode(mode);
+    }
+
+    void stop(){
+        fr.setPower(0);
+        fl.setPower(0);
+        br.setPower(0);
+        bl.setPower(0);
+
+        setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
+    void getTelemetry(Telemetry telemetry){
+        telemetry.addData("fl target", fl.getCurrentPosition());
+        telemetry.addData("fr target", fr.getCurrentPosition());
+        telemetry.addData("bl target", bl.getCurrentPosition());
+        telemetry.addData("br target", br.getCurrentPosition());
+
+        telemetry.addData("fl power", fl.getPower());
+        telemetry.addData("fr power", fr.getPower());
+        telemetry.addData("bl power", bl.getPower());
+        telemetry.addData("br power", br.getPower());
+
+//        telemetry.addData("how warm it", Temperature);
+    }
+
+    public void move(double power, double angle, double distance) throws InterruptedException {
+
+        double distanceRequested = (distance / WHEEL_CIRCUMFERENCE) * ENCODER_TICKS_PER_ROTATION;
+
+        double x = power * cos(toRadians(angle));//takes the angle in degrees
+        double y = power * sin(toRadians(angle));
+
+        setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        fl.setPower(-x + y);
+        fr.setPower(y - x);
+//        bl.setPower(-y + x);
+//        br.setPower(y + x);
+
+        fl.setTargetPosition((int) (abs(distanceRequested * sin(toRadians(angle + 45))) * signum(fl.getPower())));
+//        br.setTargetPosition((int) (y * signum(br.getPower())));
+        fr.setTargetPosition((int) (abs(distanceRequested * cos(toRadians(angle + 45))) * signum(fr.getPower())));
+//        bl.setTargetPosition((int) (y * signum(bl.getPower())));
+
+        fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        fl.setPower(-x + y);
+        fr.setPower(y - x);
+        bl.setPower(-y + x);
+        br.setPower(y + x);
+
+        while (fr.isBusy() || fl.isBusy()){
+            Thread.sleep(1);
         }
 
-        move(-0.2, 0.2, -0.2, 0.2, 1250);
-        css.setPosition(60);
+        stop();
+    }
 
-        move(-0.2, -0.2, 0.2, 0.2, 500);
+//    protected void turn(double turnSpeed, double turnAngle) {
+//        setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//
+//        setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//
+//        double turnTo = (turnAngle / WHEEL_CIRCUMFERENCE) * ENCODER_TICKS_PER_ROTATION;
+//
+//        while (fr.getCurrentPosition() <= fr.getTargetPosition()) {
+//            fl.setPower(turnSpeed);
+//            fr.setPower(turnSpeed);
+//            bl.setPower(turnSpeed);
+//            br.setPower(turnSpeed);
+//        }
+//    }
 
-
-        if (cs.red() > 2) {
-            move(-0.2, 0.2, -0.2, 0.2, 1000);
+    public void turn(double power){
+        if(abs(power) < 0.05){
+            stop();
         } else {
-            move(0.2, -0.2, 0.2, -0.2, 1000);
+            fl.setPower(power);
+            fr.setPower(power);
+            bl.setPower(power);
+            br.setPower(power);
         }
+
     }
-
-     public void move(double flpower, double frpower, double blpower, double brpower, int msec)
-            throws InterruptedException {
-        if (opModeIsActive()) {
-            fl.setPower(flpower);
-            fr.setPower(frpower);
-            bl.setPower(blpower);
-            br.setPower(brpower);
-            sleep(msec);
-            fl.setPower(0);
-            fr.setPower(0);
-            bl.setPower(0);
-            br.setPower(0);
-
-        }
-    }
-
 }
+

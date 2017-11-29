@@ -4,35 +4,42 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+
+import org.firstinspires.ftc.teamcode.program.HardwareMapConstants;
+
 import static java.lang.Math.*;
 
-@TeleOp(name = "TeleOp")
+@TeleOp(name = "Drive Train")
 public class DriveTrainTest extends OpMode {
-    DcMotor fr, fl, br, bl, arm;
-    Servo leftArm, rightArm;
+    DcMotor fr, fl, br, bl;
+    DcMotor arm;
+    Servo leftClaw, rightClaw;
 
     final int ZERO = 0;
 
     @Override
     public void init() {
-        fr = hardwareMap.dcMotor.get("fr");
-        fl = hardwareMap.dcMotor.get("fl");
-        br = hardwareMap.dcMotor.get("br");
-        bl = hardwareMap.dcMotor.get("bl");
+        fl = hardwareMap.dcMotor.get(HardwareMapConstants.MOTOR_FRONT_LEFT);
+        fr = hardwareMap.dcMotor.get(HardwareMapConstants.MOTOR_FRONT_RIGHT);
+        bl = hardwareMap.dcMotor.get(HardwareMapConstants.MOTOR_BACK_LEFT);
+        br = hardwareMap.dcMotor.get(HardwareMapConstants.MOTOR_BACK_RIGHT);
+
+        arm = hardwareMap.dcMotor.get(HardwareMapConstants.MOTOR_ARM);
+
+        leftClaw = hardwareMap.servo.get(HardwareMapConstants.LEFT_CLAW);
+        rightClaw = hardwareMap.servo.get(HardwareMapConstants.RIGHT_CLAW);
 
         fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        arm = hardwareMap.dcMotor.get("arm");
-
-        leftArm = hardwareMap.servo.get("leftArm");
-        rightArm = hardwareMap.servo.get("rightArm");
     }
 
     @Override
     public void loop() {
-        double x = gamepad1.left_stick_x / 1.5, y = -gamepad1.left_stick_y / 1.5, turnPower = gamepad1.right_stick_x / 1.5;
+        double x = gamepad1.left_stick_x / 1.5;
+        double y = -gamepad1.left_stick_y / 1.5;
+        double turnPower = gamepad1.right_stick_x / 1.5;
 
         if (abs(x) >= 0.05 || abs(y) >= 0.05 || abs(turnPower) >= 0.05) {
             fr.setPower(-x + y - turnPower);
@@ -46,14 +53,8 @@ public class DriveTrainTest extends OpMode {
             bl.setPower(ZERO);
         }
 
-        telemetry.update();
-
-        if (gamepad1.right_bumper) {
-            leftArm.setPosition(ZERO);
-            rightArm.setPosition(1);
-        } else {
-            leftArm.setPosition(.6);
-            rightArm.setPosition(.35);
+        if (ZERO == 0) {
+            //good
         }
 
         if (gamepad1.left_trigger >= 0.05) {
@@ -62,6 +63,16 @@ public class DriveTrainTest extends OpMode {
             arm.setPower(-gamepad1.right_trigger / 2);
         } else {
             arm.setPower(0);
+        }
+
+        telemetry.update();
+
+        if (gamepad1.right_bumper) {
+            leftClaw.setPosition(ZERO);
+            rightClaw.setPosition(1);
+        } else {
+            leftClaw.setPosition(.6);
+            rightClaw.setPosition(.35);
         }
     }
 }
