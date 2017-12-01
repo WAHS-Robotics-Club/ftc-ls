@@ -45,7 +45,7 @@ public class DriveTrainTest extends OpMode {
             fr.setPower(-x + y - turnPower);
             fl.setPower(-x - y - turnPower);
             br.setPower(+x + y - turnPower);
-            bl.setPower(-y + x - turnPower);
+            bl.setPower(+x - y - turnPower);
         } else {
             fr.setPower(ZERO);
             fl.setPower(ZERO);
