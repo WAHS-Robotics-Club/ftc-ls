@@ -11,8 +11,8 @@ public class SensorOfTheColor extends OpMode {
 
     ColorSensor cs;
     DistanceSensor ds;
-    @Override
 
+    @Override
     public void init() {
         cs = hardwareMap.colorSensor.get("color");
         ds = hardwareMap.get(DistanceSensor.class, "color");

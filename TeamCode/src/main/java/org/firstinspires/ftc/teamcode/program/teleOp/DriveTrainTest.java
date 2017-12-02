@@ -5,56 +5,67 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.Toggle;
 import org.firstinspires.ftc.teamcode.program.HardwareMapConstants;
+import org.firstinspires.ftc.teamcode.program.autonomous.TestAutonomous;
 
 import static java.lang.Math.*;
 
-@TeleOp(name = "Drive Train")
+@TeleOp(name = "LS TeleOp")
 public class DriveTrainTest extends OpMode {
-    DcMotor fr, fl, br, bl;
-    DcMotor arm;
-    Servo leftClaw, rightClaw;
+    private DcMotor arm;
+    private Servo leftClaw, rightClaw;
 
-    final int ZERO = 0;
+    final double FULLSPEED = 0.75;
+
+    private TestAutonomous driveTrain = new TestAutonomous(true);
 
     @Override
     public void init() {
-        fl = hardwareMap.dcMotor.get(HardwareMapConstants.MOTOR_FRONT_LEFT);
-        fr = hardwareMap.dcMotor.get(HardwareMapConstants.MOTOR_FRONT_RIGHT);
-        bl = hardwareMap.dcMotor.get(HardwareMapConstants.MOTOR_BACK_LEFT);
-        br = hardwareMap.dcMotor.get(HardwareMapConstants.MOTOR_BACK_RIGHT);
-
         arm = hardwareMap.dcMotor.get(HardwareMapConstants.MOTOR_ARM);
+
+        driveTrain.setUp(hardwareMap);
 
         leftClaw = hardwareMap.servo.get(HardwareMapConstants.LEFT_CLAW);
         rightClaw = hardwareMap.servo.get(HardwareMapConstants.RIGHT_CLAW);
-
-        fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
+
+    private Toggle slowToggle = new Toggle();
+    private Toggle fourDirectionToggle = new Toggle();
+    private Toggle clawToggle = new Toggle();
 
     @Override
     public void loop() {
-        double x = gamepad1.left_stick_x / 1.5;
-        double y = -gamepad1.left_stick_y / 1.5;
-        double turnPower = gamepad1.right_stick_x / 1.5;
+        double x = gamepad1.left_stick_x;
+        double y = -gamepad1.left_stick_y;
+        double turnPower = gamepad1.right_stick_x;
 
-        if (abs(x) >= 0.05 || abs(y) >= 0.05 || abs(turnPower) >= 0.05) {
-            fr.setPower(-x + y - turnPower);
-            fl.setPower(-x - y - turnPower);
-            br.setPower(+x + y - turnPower);
-            bl.setPower(+x - y - turnPower);
-        } else {
-            fr.setPower(ZERO);
-            fl.setPower(ZERO);
-            br.setPower(ZERO);
-            bl.setPower(ZERO);
+        if(gamepad1.y) {
+            slowToggle.toggle();
         }
 
-        if (ZERO == 0) {
-            //good
+        if(gamepad1.x) {
+            fourDirectionToggle.toggle();
+        }
+
+        if(slowToggle.isToggled()) {
+            x /= 2;
+            y /= 2;
+            turnPower /= 2;
+        }
+
+        if(fourDirectionToggle.isToggled()) {
+            if(abs(x) < abs(y)) {
+                x = 0;
+            } else {
+                y = 0;
+            }
+        }
+
+        if (abs(x) >= 0.05 || abs(y) >= 0.05 || abs(turnPower) >= 0.05) {
+            driveTrain.holonomicMove(x * FULLSPEED, y * FULLSPEED, turnPower);
+        } else {
+            driveTrain.holonomicMove(0, 0, 0);
         }
 
         if (gamepad1.left_trigger >= 0.05) {
@@ -65,12 +76,17 @@ public class DriveTrainTest extends OpMode {
             arm.setPower(0);
         }
 
+        telemetry.addData("Foof", arm.getPower());
         telemetry.update();
 
-        if (gamepad1.right_bumper) {
-            leftClaw.setPosition(0.50);
-            rightClaw.setPosition(0.38);
-        } else {
+        if(gamepad1.right_bumper) {
+            clawToggle.toggle();
+        }
+
+        if (clawToggle.isToggled()) { //open
+            leftClaw.setPosition(0.60);
+            rightClaw.setPosition(0.32);
+        } else { //closed
             leftClaw.setPosition(0.225);
             rightClaw.setPosition(0.725);
         }

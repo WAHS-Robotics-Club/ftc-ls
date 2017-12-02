@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.program.autonomous;
 
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -15,24 +16,37 @@ public class TestAutonomous {
     protected final double WHEEL_CIRCUMFERENCE = 4 * PI;
 
     private DcMotorEx fr, fl, br, bl;
-    private DcMotor arm;
+    private Servo jewelWhacker;
+
     private Servo leftClaw, rightClaw;
 
-    public void setUp (HardwareMap hardware) {
+    private boolean isRed;
+
+    ColorSensor cs;
+
+    public TestAutonomous(boolean isRedFieldSide) {
+        isRed = isRedFieldSide;
+    }
+
+    public void setUp(HardwareMap hardware) {
         fl = (DcMotorEx) hardware.dcMotor.get(HardwareMapConstants.MOTOR_FRONT_LEFT);
         fr = (DcMotorEx) hardware.dcMotor.get(HardwareMapConstants.MOTOR_FRONT_RIGHT);
         bl = (DcMotorEx) hardware.dcMotor.get(HardwareMapConstants.MOTOR_BACK_LEFT);
         br = (DcMotorEx) hardware.dcMotor.get(HardwareMapConstants.MOTOR_BACK_RIGHT);
 
-        arm = hardware.dcMotor.get(HardwareMapConstants.MOTOR_ARM);
+        jewelWhacker = hardware.servo.get(HardwareMapConstants.COLOR_SERVO);
+
+        cs = hardware.colorSensor.get(HardwareMapConstants.COLOR_SENSOR);
 
         leftClaw = hardware.servo.get(HardwareMapConstants.LEFT_CLAW);
         rightClaw = hardware.servo.get(HardwareMapConstants.RIGHT_CLAW);
 
-        fl.setTargetPositionTolerance(15);
-        fr.setTargetPositionTolerance(15);
-        bl.setTargetPositionTolerance(15);
-        br.setTargetPositionTolerance(15);
+        final int TOLERANCE = 12;
+
+        fl.setTargetPositionTolerance(TOLERANCE);
+        fr.setTargetPositionTolerance(TOLERANCE);
+        bl.setTargetPositionTolerance(TOLERANCE);
+        br.setTargetPositionTolerance(TOLERANCE);
 
         fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -47,7 +61,7 @@ public class TestAutonomous {
         br.setMode(mode);
     }
 
-    private void stop(){
+    public void stop() {
         fr.setPower(0);
         fl.setPower(0);
         br.setPower(0);
@@ -57,7 +71,7 @@ public class TestAutonomous {
         setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    void getTelemetry(Telemetry telemetry){
+    void getTelemetry(Telemetry telemetry) {
         telemetry.addData("fl current position", fl.getCurrentPosition());
         telemetry.addData("fr current position", fr.getCurrentPosition());
         telemetry.addData("bl current position", bl.getCurrentPosition());
@@ -93,12 +107,12 @@ public class TestAutonomous {
 
         stop();
         Thread.sleep(1000);
-        
+
         setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         holonomicMove(x, y, 0);
 
-        while (fr.isBusy() || fl.isBusy() || br.isBusy() || bl.isBusy()) {
+        while(fr.isBusy() || fl.isBusy() || br.isBusy() || bl.isBusy()) {
             Thread.sleep(1);
 //            getTelemetry(telemetry);
 //            telemetry.update();
@@ -107,11 +121,27 @@ public class TestAutonomous {
         stop();
     }
 
-    public void holonomicMove(double x, double y, double turnPower ){
+    final int TIME = 300;
+
+    public void whackJewel() throws InterruptedException {
+//        if(cs.red() - cs.blue() > 10){
+//            turn(0.3 * (isRed ? 1 : -1));
+//            Thread.sleep(TIME);
+//        }
+        jewelWhacker.setPosition(1);
+    }
+
+    public void holonomicMove(double x, double y, double turnPower) {
         fr.setPower(-x + y - turnPower);
         fl.setPower(-x - y - turnPower);
         br.setPower(+x + y - turnPower);
         bl.setPower(-y + x - turnPower);
+    }
+
+    public void clamp() {
+        //closed
+        leftClaw.setPosition(0.225);
+        rightClaw.setPosition(0.725);
     }
 
 //    protected void turn(double turnSpeed, double turnAngle) {

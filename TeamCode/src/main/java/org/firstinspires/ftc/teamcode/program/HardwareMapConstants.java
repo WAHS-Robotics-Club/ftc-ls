@@ -10,6 +10,10 @@ public class HardwareMapConstants {
     public static final String MOTOR_BACK_RIGHT = "back-right";
 
     public static final String MOTOR_ARM = "arm";
+
+    public static final String COLOR_SERVO = "whacker";
+
+    public static final String COLOR_SENSOR = "color";
 }
 
 
