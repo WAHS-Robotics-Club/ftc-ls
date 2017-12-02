@@ -12,7 +12,7 @@ import static java.lang.Math.*;
 public class TestAutonomous {
 
     protected final int ENCODER_TICKS_PER_ROTATION = 1120;
-    protected final double WHEEL_CIRCUMFERENCE = 4 * Math.PI;
+    protected final double WHEEL_CIRCUMFERENCE = 4 * PI;
 
     private DcMotorEx fr, fl, br, bl;
     private DcMotor arm;
@@ -91,12 +91,17 @@ public class TestAutonomous {
         fr.setTargetPosition((int) (frblTarget * signum(fr.getPower())));
         bl.setTargetPosition((int) (frblTarget * signum(bl.getPower())));
 
+        stop();
+        Thread.sleep(1000);
+        
         setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         holonomicMove(x, y, 0);
 
         while (fr.isBusy() || fl.isBusy() || br.isBusy() || bl.isBusy()) {
             Thread.sleep(1);
+//            getTelemetry(telemetry);
+//            telemetry.update();
         }
 
         stop();

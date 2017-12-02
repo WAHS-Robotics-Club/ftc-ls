@@ -10,21 +10,17 @@ import org.firstinspires.ftc.teamcode.navigation.PhoneOrientation;
 @Autonomous (name = "Maui Just Messin' Around")
 public class MauiJustMessinAround extends LinearOpMode {
     TestAutonomous function = new TestAutonomous();
-    int willToLive = 0;
+
+    final double CORRECTION = 28d / 24d * (Math.E / Math.E);
 
     @Override
     public void runOpMode() throws InterruptedException {
-
-
         function.setUp(hardwareMap);
 
         waitForStart();
 
-        function.holonomicMove(.4,0,0);
-
-        Thread.sleep(3000);
-//
-//        function.move(1, 180, 24, telemetry);
+        function.move(.35, 7.5, 24 * CORRECTION, telemetry);
+        Thread.sleep(100);
 ////        Navigator henry = new Navigator(CameraSide.BACK, PhoneOrientation.VOLUME_SIDE_DOWN, 1, true);
 ////        henry.init();
 ////
