@@ -5,7 +5,7 @@ package org.firstinspires.ftc.teamcode.program.autonomous;
  */
 
 public class FieldMeasurements {
-    final static double distanceToWallWithCube = 15;
+    final static double distanceToWallWithCube = 16;
     final static double tileLength = 24;
     final static double columnWidth = 8;
 }

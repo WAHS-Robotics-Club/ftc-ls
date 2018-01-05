@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.program.autonomous;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -16,6 +17,7 @@ public class TestAutonomous {
     protected final double WHEEL_CIRCUMFERENCE = 4 * PI;
 
     private DcMotorEx fr, fl, br, bl;
+    private DcMotor arm;
     private Servo jewelWhacker;
 
     private Servo leftClaw, rightClaw;
@@ -33,6 +35,11 @@ public class TestAutonomous {
         fr = (DcMotorEx) hardware.dcMotor.get(HardwareMapConstants.MOTOR_FRONT_RIGHT);
         bl = (DcMotorEx) hardware.dcMotor.get(HardwareMapConstants.MOTOR_BACK_LEFT);
         br = (DcMotorEx) hardware.dcMotor.get(HardwareMapConstants.MOTOR_BACK_RIGHT);
+
+        fl.setDirection(DcMotorSimple.Direction.REVERSE);
+        bl.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        arm = hardware.dcMotor.get(HardwareMapConstants.MOTOR_ARM);
 
         jewelWhacker = hardware.servo.get(HardwareMapConstants.COLOR_SERVO);
 
@@ -52,6 +59,21 @@ public class TestAutonomous {
         fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+    }
+
+    public void initArm() throws InterruptedException {
+        arm.setPower(0.4);
+        Thread.sleep(600);
+        arm.setPower(0);
+        leftClaw.setPosition(0.74);
+        rightClaw.setPosition(0.20);
+    }
+
+    public void lowerArm() throws InterruptedException {
+        arm.setPower(-0.4);
+        Thread.sleep(600);
+        arm.setPower(0);
     }
 
     private void setRunMode(DcMotor.RunMode mode) {
@@ -132,9 +154,9 @@ public class TestAutonomous {
     }
 
     public void holonomicMove(double x, double y, double turnPower) {
-        fr.setPower(-x + y - turnPower);
-        fl.setPower(-x - y - turnPower);
-        br.setPower(+x + y - turnPower);
+        fr.setPower(-x - y - turnPower);
+        fl.setPower(-x + y + turnPower);
+        br.setPower(+x - y + turnPower);
         bl.setPower(-y + x - turnPower);
     }
 

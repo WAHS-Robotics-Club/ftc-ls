@@ -63,7 +63,7 @@ public class DriveTrainTest extends OpMode {
         }
 
         if (abs(x) >= 0.05 || abs(y) >= 0.05 || abs(turnPower) >= 0.05) {
-            driveTrain.holonomicMove(x * FULLSPEED, y * FULLSPEED, turnPower);
+            driveTrain.holonomicMove(x * FULLSPEED, y * FULLSPEED, turnPower * FULLSPEED);
         } else {
             driveTrain.holonomicMove(0, 0, 0);
         }
