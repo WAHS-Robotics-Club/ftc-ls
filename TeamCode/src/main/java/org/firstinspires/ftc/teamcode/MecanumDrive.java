@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.program.HardwareMapConstants;
@@ -13,13 +14,25 @@ public class MecanumDrive {
     final double ENCODERS_PER_ROTATION = 1120;
     final double WHEEL_CIRCUMFERENCE = Math.PI * 3;
 
-    private DcMotor fl, bl, fr, br;
+    private DcMotorEx fl, bl, fr, br;
 
     public void init(HardwareMap map) {
-        fl = map.dcMotor.get(HardwareMapConstants.MOTOR_FRONT_LEFT);
-        bl = map.dcMotor.get(HardwareMapConstants.MOTOR_BACK_LEFT);
-        fr = map.dcMotor.get(HardwareMapConstants.MOTOR_FRONT_RIGHT);
-        br = map.dcMotor.get(HardwareMapConstants.MOTOR_BACK_RIGHT);
+        fl = (DcMotorEx) map.dcMotor.get(HardwareMapConstants.MOTOR_FRONT_LEFT);
+        fr = (DcMotorEx) map.dcMotor.get(HardwareMapConstants.MOTOR_FRONT_RIGHT);
+        bl = (DcMotorEx) map.dcMotor.get(HardwareMapConstants.MOTOR_BACK_LEFT);
+        br = (DcMotorEx) map.dcMotor.get(HardwareMapConstants.MOTOR_BACK_RIGHT);
+
+        final int TOLERANCE = 12;
+
+        fl.setTargetPositionTolerance(TOLERANCE);
+        fr.setTargetPositionTolerance(TOLERANCE);
+        bl.setTargetPositionTolerance(TOLERANCE);
+        br.setTargetPositionTolerance(TOLERANCE);
+
+        fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     public void stop () {
@@ -58,5 +71,9 @@ public class MecanumDrive {
         bl.setMode(mode);
         fr.setMode(mode);
         br.setMode(mode);
+    }
+
+    public void turn(double power){
+        moveAndTurn(0, 0, power);
     }
 }

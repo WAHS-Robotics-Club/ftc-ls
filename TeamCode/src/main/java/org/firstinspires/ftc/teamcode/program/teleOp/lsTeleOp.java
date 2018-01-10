@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.program.teleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -19,13 +20,24 @@ public class lsTeleOp extends OpMode {
 
     final double FULLSPEED = 0.75;
 
-    private TestAutonomous driveTrain = new TestAutonomous(true);
-
     MecanumDrive alexander = new MecanumDrive();
+
+    Servo jewelWhacker;
+
+    ColorSensor cs;
 
     @Override
     public void init() {
-        driveTrain.setUp(hardwareMap);
+        alexander.init(hardwareMap);
+
+        arm = hardwareMap.dcMotor.get(HardwareMapConstants.MOTOR_ARM);
+
+        jewelWhacker = hardwareMap.servo.get(HardwareMapConstants.COLOR_SERVO);
+
+        cs = hardwareMap.colorSensor.get(HardwareMapConstants.COLOR_SENSOR);
+
+        leftClaw = hardwareMap.servo.get(HardwareMapConstants.LEFT_CLAW);
+        rightClaw = hardwareMap.servo.get(HardwareMapConstants.RIGHT_CLAW);
     }
 
     private Toggle slowToggle = new Toggle();
@@ -60,11 +72,7 @@ public class lsTeleOp extends OpMode {
             }
         }
 
-        if (abs(x) >= 0.05 || abs(y) >= 0.05 || abs(turnPower) >= 0.05) {
-            alexander.moveAndTurn(x, y, turnPower);
-        } else {
-            driveTrain.holonomicMove(0, 0, 0);
-        }
+        alexander.moveAndTurn(x, y, turnPower);
 
         if (gamepad1.left_trigger >= 0.05) {
             arm.setPower(gamepad1.left_trigger / 2);
