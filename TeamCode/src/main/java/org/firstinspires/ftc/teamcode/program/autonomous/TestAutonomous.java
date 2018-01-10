@@ -36,9 +36,6 @@ public class TestAutonomous {
         bl = (DcMotorEx) hardware.dcMotor.get(HardwareMapConstants.MOTOR_BACK_LEFT);
         br = (DcMotorEx) hardware.dcMotor.get(HardwareMapConstants.MOTOR_BACK_RIGHT);
 
-        fl.setDirection(DcMotorSimple.Direction.REVERSE);
-        bl.setDirection(DcMotorSimple.Direction.REVERSE);
-
         arm = hardware.dcMotor.get(HardwareMapConstants.MOTOR_ARM);
 
         jewelWhacker = hardware.servo.get(HardwareMapConstants.COLOR_SERVO);

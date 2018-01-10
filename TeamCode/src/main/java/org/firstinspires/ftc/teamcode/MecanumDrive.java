@@ -42,7 +42,7 @@ public class MecanumDrive {
     public void polarMoveAndTurn(double power, double angle, double turnPower){
         moveAndTurn(power * Math.cos(Math.toRadians(angle)), power * Math.sin(Math.toRadians(angle)), turnPower);
     }
-    public void encoderMove (double targetDistance, double power){
+    public void encoderMove (double targetDistance, double power, double angle){
         int encoders = (int)(targetDistance / WHEEL_CIRCUMFERENCE  * ENCODERS_PER_ROTATION);
 
         fl.setTargetPosition(encoders);
@@ -50,7 +50,7 @@ public class MecanumDrive {
         fr.setTargetPosition(-encoders);
         br.setTargetPosition(-encoders);
 
-        polarMoveAndTurn(power, 90, 0);
+        polarMoveAndTurn(power, 90, angle);
     }
     
     private void setRunMode (DcMotor.RunMode mode){

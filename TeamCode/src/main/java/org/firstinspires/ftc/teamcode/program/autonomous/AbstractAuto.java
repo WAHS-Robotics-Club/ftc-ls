@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.program.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.navigation.CameraSide;
 import org.firstinspires.ftc.teamcode.navigation.CryptoColumn;
 import org.firstinspires.ftc.teamcode.navigation.Navigator;
@@ -16,6 +17,8 @@ public class AbstractAuto {
     private LinearOpMode opMode;
     private TestAutonomous function;
     private Navigator henry = new Navigator(CameraSide.BACK, PhoneOrientation.VOLUME_SIDE_DOWN, 1, false);
+
+    MecanumDrive alexander = new MecanumDrive();
 
     public AbstractAuto(boolean isRed, LinearOpMode opMode){
         this.isRed = isRed;
@@ -38,7 +41,7 @@ public class AbstractAuto {
 
         Thread.sleep(500);
 
-        function.move(.35, isRed ? 180 : 0, INIT_MOVE, opMode.telemetry);
+        alexander.encoderMove(INIT_MOVE, .35, isRed ? 180 : 0);
 
         double time = System.nanoTime() / 1e9d;
 
@@ -64,14 +67,14 @@ public class AbstractAuto {
 
         Thread.sleep(1000);
 
-        function.move(.35, isRed ? 180 : 0, (32.9 - INIT_MOVE) + col * FieldMeasurements.columnWidth, opMode.telemetry);
+        alexander.encoderMove((32.9 - INIT_MOVE) + col * FieldMeasurements.columnWidth, 0.35, isRed ? 0 : 180);
 
         Thread.sleep(1000);
 
-        function.move(.35, 90, FieldMeasurements.distanceToWallWithCube, opMode.telemetry);
+        alexander.encoderMove(FieldMeasurements.distanceToWallWithCube, 0.35, 90);
     }
 
-    final double CORRECTION = 28d / 24d * (Math.E / Math.E);
+    final double CORRECTION = 28d / 24d;
 
     private void alignWithImage() {
         while(opMode.opModeIsActive()){

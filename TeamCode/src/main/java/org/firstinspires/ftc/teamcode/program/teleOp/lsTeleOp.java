@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.Toggle;
 import org.firstinspires.ftc.teamcode.program.HardwareMapConstants;
 import org.firstinspires.ftc.teamcode.program.autonomous.TestAutonomous;
@@ -12,7 +13,7 @@ import org.firstinspires.ftc.teamcode.program.autonomous.TestAutonomous;
 import static java.lang.Math.*;
 
 @TeleOp(name = "LS TeleOp")
-public class DriveTrainTest extends OpMode {
+public class lsTeleOp extends OpMode {
     private DcMotor arm;
     private Servo leftClaw, rightClaw;
 
@@ -20,14 +21,11 @@ public class DriveTrainTest extends OpMode {
 
     private TestAutonomous driveTrain = new TestAutonomous(true);
 
+    MecanumDrive alexander = new MecanumDrive();
+
     @Override
     public void init() {
-        arm = hardwareMap.dcMotor.get(HardwareMapConstants.MOTOR_ARM);
-
         driveTrain.setUp(hardwareMap);
-
-        leftClaw = hardwareMap.servo.get(HardwareMapConstants.LEFT_CLAW);
-        rightClaw = hardwareMap.servo.get(HardwareMapConstants.RIGHT_CLAW);
     }
 
     private Toggle slowToggle = new Toggle();
@@ -63,7 +61,7 @@ public class DriveTrainTest extends OpMode {
         }
 
         if (abs(x) >= 0.05 || abs(y) >= 0.05 || abs(turnPower) >= 0.05) {
-            driveTrain.holonomicMove(x * FULLSPEED, y * FULLSPEED, turnPower * FULLSPEED);
+            alexander.moveAndTurn(x, y, turnPower);
         } else {
             driveTrain.holonomicMove(0, 0, 0);
         }
