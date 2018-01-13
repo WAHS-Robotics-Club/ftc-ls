@@ -90,11 +90,11 @@ public class lsTeleOp extends OpMode {
         }
 
         if (clawToggle.isToggled()) { //open
-            leftClaw.setPosition(0.60);
-            rightClaw.setPosition(0.32);
+            leftClaw.setPosition(0.80);
+            rightClaw.setPosition(0.15);
         } else { //closed
-            leftClaw.setPosition(0.225);
-            rightClaw.setPosition(0.725);
+            leftClaw.setPosition(0.425);
+            rightClaw.setPosition(0.475);
         }
     }
 }

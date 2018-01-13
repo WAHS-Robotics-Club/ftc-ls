@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.program.HardwareMapConstants;
 
 public class MecanumDrive {
     final double ENCODERS_PER_ROTATION = 1120;
-    final double WHEEL_CIRCUMFERENCE = Math.PI * 3;
+    final double WHEEL_CIRCUMFERENCE = Math.PI * 3; //probably in inches
 
     private DcMotorEx fl, bl, fr, br;
 
@@ -41,10 +41,10 @@ public class MecanumDrive {
 
     public void moveAndTurn(double x, double y, double turnPower) {
         if (Math.abs(x) > 0.05 || Math.abs(y) > 0.05 || Math.abs(turnPower) > 0.05) {
-            fl.setPower(y + x - turnPower);
-            bl.setPower(y - x - turnPower);
-            fr.setPower(-y - x - turnPower);
-            br.setPower(-y + x - turnPower);
+            fl.setPower((-x - y) - turnPower); //decreases x, increases y with positive power
+            bl.setPower((-x + y)- turnPower);
+            fr.setPower((+x - y)- turnPower);
+            br.setPower((+x + y) - turnPower);
         } else {
             fl.setPower(0);
             bl.setPower(0);

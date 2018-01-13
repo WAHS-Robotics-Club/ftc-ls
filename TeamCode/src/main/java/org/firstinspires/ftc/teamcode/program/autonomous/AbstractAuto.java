@@ -61,39 +61,49 @@ public class AbstractAuto {
 
         Thread.sleep(500);
 
-        jewelWhacker.setPosition(0);
+        jewelWhacker.setPosition(0.80);
 
         Thread.sleep(500);
 
-        if(cs.red() > Math.E){
+        if(cs.red() > 20){
+            jewelRed = true;
+        } else {
+            jewelWhacker.setPosition(0.82);
+        }
+
+        Thread.sleep(500);
+
+        if(cs.red() > 20){
             jewelRed = true;
         } else {
             jewelRed = false;
         }
 
-        double whackPower = isRed ? -0.2 : 0.2;
+        opMode.telemetry.addData("red", cs.red());
+        opMode.telemetry.update();
+        Thread.sleep(5000);
 
-        if(jewelRed){
-            alexander.turn(whackPower);
-        } else {
-            alexander.turn(-whackPower);
-        }
+        double jewelMove = jewelRed ? -1 : 1;
 
         Thread.sleep(500);
 
-        if(jewelRed){
-            alexander.turn(-whackPower);
-        } else {
-            alexander.turn(whackPower);
-        }
+        alexander.encoderMove(10, jewelMove * 0.2, 0);
+
+        Thread.sleep(600);
+
+        jewelWhacker.setPosition(0.2);
 
         Thread.sleep(500);
+
+        alexander.encoderMove(110, -jewelMove, 0);
+
+        Thread.sleep(jewelRed ? 300 : 1000);
 
         alexander.stop();
 
         Thread.sleep(250);
 
-        alexander.encoderMove(INIT_MOVE, .35, isRed ? 180 : 0);
+//        alexander.encoderMove(INIT_MOVE, .35, isRed ? 180 : 0);
 
         double time = System.nanoTime() / 1e9d;
 
@@ -117,16 +127,19 @@ public class AbstractAuto {
                 break;
         }
 
-        Thread.sleep(1000);
-
-        alexander.encoderMove((32.9 - INIT_MOVE) + col * FieldMeasurements.columnWidth, 0.35, isRed ? 0 : 180);
-
-        Thread.sleep(1000);
-
-        alexander.encoderMove(FieldMeasurements.distanceToWallWithCube, 0.35, 90);
-    }
+        opMode.telemetry.addData("what do I see", col);
+        opMode.telemetry.update();
+//        Thread.sleep(1000);
+//
+//        alexander.encoderMove((32.9 - INIT_MOVE) + col * FieldMeasurements.columnWidth, 0.35, isRed ? 0 : 180);
+//
+//        Thread.sleep(1000);
+//
+//        alexander.encoderMove(FieldMeasurements.distanceToWallWithCube, 0.35, 90);
+//    }
 
     final double CORRECTION = 28d / 24d;
+    }
 
     private void alignWithImage() {
         while(opMode.opModeIsActive()){
