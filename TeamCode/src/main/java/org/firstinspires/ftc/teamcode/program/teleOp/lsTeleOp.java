@@ -46,6 +46,7 @@ public class lsTeleOp extends OpMode {
 
     @Override
     public void loop() {
+
         double x = gamepad1.left_stick_x;
         double y = -gamepad1.left_stick_y;
         double turnPower = gamepad1.right_stick_x;
