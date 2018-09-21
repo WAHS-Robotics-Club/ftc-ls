@@ -73,7 +73,7 @@ public class Navigator {
     }
 
     public void init() {
-        VuforiaLocalizer vuforia = ClassFactory.createVuforiaLocalizer(vuforiaSettings);
+        VuforiaLocalizer vuforia = ClassFactory.getInstance().createVuforia(vuforiaSettings);
 
         targets = vuforia.loadTrackablesFromAsset("RelicVuMark");
 
@@ -163,7 +163,7 @@ public class Navigator {
      *         very quickly
      */
     public Vector3 getRelativeTargetRotation() { //TODO: Implement this function for ALL phone orientations
-        OpenGLMatrix rawPose = listener.getRawPose();
+        OpenGLMatrix rawPose = listener.getPosePhone();
         AxesOrder axesOrder = AxesOrder.XYZ;
 
         if(rawPose != null) {
