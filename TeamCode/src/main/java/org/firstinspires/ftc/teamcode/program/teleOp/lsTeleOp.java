@@ -17,7 +17,6 @@ import static java.lang.Math.*;
 public class lsTeleOp extends OpMode {
     private DcMotor arm;
     private Servo leftClaw, rightClaw;
-
     final double FULLSPEED = 0.75;
 
     MecanumDrive alexander = new MecanumDrive();
