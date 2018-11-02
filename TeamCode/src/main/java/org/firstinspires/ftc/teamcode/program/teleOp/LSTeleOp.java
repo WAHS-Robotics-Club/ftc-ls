@@ -2,23 +2,17 @@ package org.firstinspires.ftc.teamcode.program.teleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.HolonomicDrive;
-import org.firstinspires.ftc.teamcode.program.HardwareMapConstants;
+import org.firstinspires.ftc.teamcode.LSRobot;
 
-@TeleOp(name = "HolonomicTeleOp")
+@TeleOp(name = "LSTeleOp")
 
-public class HolonomicTeleOp extends OpMode {
-    HolonomicDrive Prospero = new HolonomicDrive();
+public class LSTeleOp extends OpMode {
+    LSRobot Prospero = new LSRobot();
 
     @Override
     public void init() {
         Prospero.init(hardwareMap);
-    }
-
-    public void whereMichelle(){
-        telemetry.addLine("bean");
     }
 
     @Override
@@ -31,9 +25,16 @@ public class HolonomicTeleOp extends OpMode {
         double righttrig = gamepad1.right_trigger;
 
         boolean a = gamepad1.a;
+        boolean b = gamepad1.b;
+        boolean xbutt = gamepad1.x;
 
-        Prospero.MoveAround(x, y , turnPower);
+        boolean dpadup = gamepad1.dpad_up;
+        boolean dpaddown = gamepad1.dpad_down;
 
-        Prospero.Michelle(lefttrig, righttrig, a);
+        Prospero.MoveAround(x, y, turnPower);
+
+        Prospero.Micheller(lefttrig, righttrig, a, b, telemetry);
+
+        Prospero.Jordaner(dpadup, dpaddown, xbutt, telemetry);
     }
 }
