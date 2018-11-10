@@ -11,6 +11,8 @@ public class HardwareMapConstants {
 
     public static final String MICHELLE_LIFT = "mlift";
     public static final String MICHELLE_COLLECT = "mcollect";
+
+    public static final String THREE = "e";
 }
 
 
