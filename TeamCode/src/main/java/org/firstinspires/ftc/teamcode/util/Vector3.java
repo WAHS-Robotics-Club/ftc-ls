@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.math;
+package org.firstinspires.ftc.teamcode.util;
 
 
 import static java.lang.Math.*;
