@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.program;
+package org.firstinspires.ftc.teamcode.util;
 
 public class HardwareMapConstants {
     public static final String MOTOR_FRONT_LEFT = "front-left";
