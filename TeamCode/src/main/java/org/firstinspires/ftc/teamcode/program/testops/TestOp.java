@@ -30,7 +30,7 @@ public class TestOp extends OpMode {
         double y = (-gamepad1.left_stick_y)/2;
         double x = (gamepad1.left_stick_x)/2;
 
-        double r = gamepad1.right_stick_x;
+        double r = (gamepad1.right_stick_x)/2;
 
         fl.setPower(y + x - r);
         bl.setPower(y - x - r);

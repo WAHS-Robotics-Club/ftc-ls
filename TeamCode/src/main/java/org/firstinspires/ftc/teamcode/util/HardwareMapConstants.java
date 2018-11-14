@@ -6,13 +6,9 @@ public class HardwareMapConstants {
     public static final String MOTOR_BACK_LEFT = "back-left";
     public static final String MOTOR_BACK_RIGHT = "back-right";
 
-    public static final String JORDAN_LIFT = "jlift";
-    public static final String JORDAN_DUNK = "jdunk";
+    public static final String SHOOTER_LIFT = "shooter-lift";
+    public static final String SHOOTER_ARM = "shooter-arm";
 
-    public static final String MICHELLE_LIFT = "mlift";
-    public static final String MICHELLE_COLLECT = "mcollect";
-
-    public static final String THREE = "e";
+    public static final String COLLECTOR_LIFT = "collector-lift";
+    public static final String COLLECTOR_ARM = "collector-arm";
 }
-
-
