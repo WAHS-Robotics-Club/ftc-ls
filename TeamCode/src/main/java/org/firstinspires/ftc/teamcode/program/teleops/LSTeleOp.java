@@ -2,18 +2,17 @@ package org.firstinspires.ftc.teamcode.program.teleops;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import org.firstinspires.ftc.teamcode.LSRobot;
 
 @TeleOp(name = "LSTeleOp")
 
 public class LSTeleOp extends OpMode {
-    LSRobot Prospero = new LSRobot();
+    LSRobot lsBot = new LSRobot();
 
     @Override
     public void init() {
-        Prospero.init(hardwareMap);
+        lsBot.init(hardwareMap);
     }
 
     @Override
@@ -22,20 +21,22 @@ public class LSTeleOp extends OpMode {
         double y = (gamepad1.left_stick_y);
         double turnPower = gamepad1.right_stick_x;
 
-        double lefttrig = gamepad1.left_trigger;
-        double righttrig = gamepad1.right_trigger;
+        double leftTrigger = gamepad1.left_trigger;
+        double rightTrigger = gamepad1.right_trigger;
+        boolean leftBumper = gamepad1.left_bumper;
+        boolean rightBumper = gamepad1.right_bumper;
 
-        boolean a = gamepad1.a;
-        boolean b = gamepad1.b;
-        boolean xbutt = gamepad1.x;
+        boolean xButton = gamepad1.x;
+        boolean yButton = gamepad1.y;
 
-        boolean dpadup = gamepad1.dpad_up;
-        boolean dpaddown = gamepad1.dpad_down;
+        lsBot.Move(x, y, turnPower);
 
-        Prospero.MoveAround(x, y, turnPower);
+        lsBot.MoveCollector(leftBumper, rightBumper);
 
-        Prospero.Micheller(lefttrig, righttrig, a, b, telemetry);
+        lsBot.Collect(yButton);
 
-        Prospero.Jordaner(dpadup, dpaddown, xbutt, telemetry);
+        lsBot.MoveShooter(leftTrigger, rightTrigger);
+
+        lsBot.Shoot(xButton);
     }
 }

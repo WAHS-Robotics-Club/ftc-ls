@@ -5,19 +5,14 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.util.HardwareMapConstants;
-
-//This lad hosts all of the functions used for robot behavior. Extended with
-//names from the Tempest.
 
 public class LSRobot {
     final double ENCODERS_PER_ROTATION = 1120;
     final double WHEEL_CIRCUMFERENCE = Math.PI * 3; //probably in inches
-    final static double ZERO = Math.E;
 
-    private DcMotorEx fl, bl, fr, br, jordanLift, michelleLift;
-    private Servo jordanDunk, michelleCollect;
+    private DcMotorEx fl, bl, fr, br, shooterLift, collectorLift;
+    private Servo shooterArm, collectorArm;
 
     public void init(HardwareMap map) {
         fl = (DcMotorEx) map.dcMotor.get(HardwareMapConstants.MOTOR_FRONT_LEFT);
@@ -25,11 +20,11 @@ public class LSRobot {
         bl = (DcMotorEx) map.dcMotor.get(HardwareMapConstants.MOTOR_BACK_LEFT);
         br = (DcMotorEx) map.dcMotor.get(HardwareMapConstants.MOTOR_BACK_RIGHT);
 
-        jordanLift = (DcMotorEx) map.dcMotor.get(HardwareMapConstants.JORDAN_LIFT);
-        jordanDunk = map.servo.get(HardwareMapConstants.JORDAN_DUNK);
+        shooterLift = (DcMotorEx) map.dcMotor.get(HardwareMapConstants.SHOOTER_LIFT);
+        shooterArm = map.servo.get(HardwareMapConstants.SHOOTER_ARM);
 
-        michelleLift = (DcMotorEx) map.dcMotor.get(HardwareMapConstants.MICHELLE_LIFT);
-        michelleCollect = map.servo.get(HardwareMapConstants.MICHELLE_COLLECT);
+        collectorLift = (DcMotorEx) map.dcMotor.get(HardwareMapConstants.COLLECTOR_LIFT);
+        collectorArm = map.servo.get(HardwareMapConstants.COLLECTOR_ARM);
 
         final int TOLERANCE = 12;
 
@@ -44,16 +39,16 @@ public class LSRobot {
         bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
-    public void MoveAround (double x, double y, double turnPower){
+    public void Move(double x, double y, double turnPower){
         if (Math.abs(x) > 0.05 || Math.abs(y) > 0.05 || Math.abs(turnPower) > 0.05) {
 
-            fl.setPower(+ x + y);
+            fl.setPower(+ x + y - turnPower);
 
-            bl.setPower(- x + y);
+            bl.setPower(- x + y - turnPower);
 
-            fr.setPower(+ x - y);
+            fr.setPower(+ x - y - turnPower);
 
-            br.setPower(- x - y);
+            br.setPower(- x - y - turnPower);
 
         } else {
             fl.setPower(0);
@@ -63,44 +58,45 @@ public class LSRobot {
         }
     }
 
-    public void AutoBlindMove(double x, double y, double turnPower, long time) throws InterruptedException {
-        MoveAround(x, y, turnPower);
+    public void Move(double x, double y, double turnPower, long time) throws InterruptedException {
+        Move(x, y, turnPower);
 
         Thread.sleep(time * 1000);
-
-        MoveAround(0, 0,0);
     }
 
-    public void Micheller (double up, double down, boolean button, boolean collect, Telemetry telemetry){
-        double speed = up - down;
-
-        michelleLift.setPower(speed);
-
-        if(collect){
-            michelleCollect.setDirection(Servo.Direction.FORWARD);
-        } else {
-            michelleCollect.setPosition(0);
-        }
-
-        if(button) {
-            telemetry.addData("michelle is at", michelleLift.getCurrentPosition());
-            telemetry.addData("michelle's bopper is going", michelleCollect.getDirection());
-        }
-    }
-
-    public void Jordaner (boolean up, boolean down, boolean IsDunk, Telemetry telemetry){
+    public void MoveCollector(boolean up, boolean down){
         if(up){
-            jordanLift.setPower(0.1);
-        } if(down){
-            jordanLift.setPower(-0.1);
+            collectorLift.setPower(0.2);
+        } else if(down) {
+            collectorLift.setPower(-0.2);
         } else {
-            jordanLift.setPower(0);
+            collectorLift.setPower(0.0);
         }
+    }
 
-        if(IsDunk){
-            jordanDunk.setPosition(ZERO);
+    public void Collect(boolean collect){
+        if(collect){
+            collectorArm.setPosition(2.5);
         } else {
-            jordanDunk.setPosition(0);
+            collectorArm.setPosition(0.0);
+        }
+    }
+
+    public void MoveShooter(double up, double down){
+        if(Math.abs(up) > 0.05){
+            shooterLift.setPower(0.2);
+        }else if(Math.abs(down) > 0.05){
+            shooterLift.setPower(-0.2);
+        } else {
+            shooterLift.setPower(0);
+        }
+    }
+
+    public void Shoot(boolean shoot){
+        if(shoot){
+            shooterArm.setPosition(2.5);
+        } else {
+            shooterArm.setPosition(0.0);
         }
     }
 }
