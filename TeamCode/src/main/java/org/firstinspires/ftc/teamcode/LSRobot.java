@@ -9,10 +9,16 @@ import org.firstinspires.ftc.teamcode.util.HardwareMapConstants;
 
 public class LSRobot {
     final double ENCODERS_PER_ROTATION = 1120;
-    final double WHEEL_CIRCUMFERENCE = Math.PI * 3; //probably in inches
+    final double WHEEL_CIRCUMFERENCE = Math.PI * 4; //probably in inches
+
+    final boolean redside = true;
+
+    final double autospeed = 0.3;
+
+    boolean EncoderMode = false;
 
     private DcMotorEx fl, bl, fr, br, shooterLift, collectorLift;
-    private Servo shooterArm, collectorArm;
+    private Servo shooterArm, collectorArm, collectorExtendor;
 
     public void init(HardwareMap map) {
         fl = (DcMotorEx) map.dcMotor.get(HardwareMapConstants.MOTOR_FRONT_LEFT);
@@ -25,6 +31,7 @@ public class LSRobot {
 
         collectorLift = (DcMotorEx) map.dcMotor.get(HardwareMapConstants.COLLECTOR_LIFT);
         collectorArm = map.servo.get(HardwareMapConstants.COLLECTOR_ARM);
+        collectorExtendor = map.servo.get(HardwareMapConstants.COLLECTOR_EXTENDER);
 
         final int TOLERANCE = 12;
 
@@ -97,6 +104,61 @@ public class LSRobot {
             shooterArm.setPosition(2.5);
         } else {
             shooterArm.setPosition(0.0);
+        }
+    }
+
+    public boolean MotorEncoders (){
+        //swaps motors between RUN_USING_ENCODER and RUN_WITHOUT_ENCODER
+
+        if(!EncoderMode){
+            fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            br.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            bl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        } else {
+            fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            br.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            bl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        }
+        EncoderMode = !EncoderMode;
+
+        return EncoderMode;
+    }
+
+//    public void EncoderMove (double x, double y, double speed, double turnradius){
+//        Work in progress method for more general movement. Gonna pass on it for now because
+//        we don't need to get that fancy.
+//        MotorEncoders();
+//
+//        fl.setTargetPosition();
+//        fr.setTargetPosition();
+//        br.setTargetPosition();
+//        bl.setTargetPosition();
+//
+//        fl.setPower(speed);
+//        fr.setPower(speed);
+//        br.setPower(speed);
+//        bl.setPower(speed);
+//    }
+
+    public void EasyMove (){
+        MotorEncoders();
+
+        int firstmove = (int) (ENCODERS_PER_ROTATION * WHEEL_CIRCUMFERENCE * 1);
+        int secondmove = (int)(ENCODERS_PER_ROTATION * WHEEL_CIRCUMFERENCE * 1);
+        int thirdmove = (int) (ENCODERS_PER_ROTATION * WHEEL_CIRCUMFERENCE * 1);
+
+        fl.setTargetPosition(firstmove);
+        fr.setTargetPosition(-firstmove);
+        br.setTargetPosition(-firstmove);
+        bl.setTargetPosition(firstmove);
+
+        while(fl.isBusy()){
+        fl.setPower(autospeed);
+        fr.setPower(autospeed);
+        br.setPower(autospeed);
+        bl.setPower(autospeed);
         }
     }
 }

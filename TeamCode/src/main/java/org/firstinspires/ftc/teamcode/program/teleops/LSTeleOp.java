@@ -17,9 +17,9 @@ public class LSTeleOp extends OpMode {
 
     @Override
     public void loop() {
-        double x = (gamepad1.left_stick_x);
-        double y = (gamepad1.left_stick_y);
-        double turnPower = gamepad1.right_stick_x;
+        double x = (gamepad1.left_stick_x)/3;
+        double y = (gamepad1.left_stick_y)/3;
+        double turnPower = (gamepad1.right_stick_x)/3;
 
         double leftTrigger = gamepad1.left_trigger;
         double rightTrigger = gamepad1.right_trigger;
