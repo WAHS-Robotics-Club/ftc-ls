@@ -5,17 +5,20 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.teamcode.util.HardwareMapConstants;
 
 public class LSRobot {
-    final double ENCODERS_PER_ROTATION = 1120;
+    private static final String VUFORIA_KEY = "AfLxv2j/////AAABmYGPUEQbkUSboaGDXA3ZrG8gbZ8ovALERXI9LZm5oTH5KoH2USA2+zMEy3TQ8m8flx9YFAbuoqLkSkuWwOvbPXuWwnRe9Z/8kOum9F8P7haxIVSS366oxGFaocRAx7kgpPHk6/LWmhJsbZ9Erai9FEBYZnbfyoVxQSmLgi0QxP+sihyA1VjdOTANVcS+B6e2GMVEZppbro1GHoA/+SN4tVNQOAItQotgsmDmW0lpqxKLhTZ/+EeanbC5PjiPh+LWyETIO+/S4eRCkxSyw6OcvzUU9D8R7yWIdmPCMhltXcDHrjJdYRDb28Kth/7hSdjj3zSfogBQiHhjyRWDUkCeTGnGq6nuELLUTMJhRc/jRhyI";
+
+    final int ENCODERS_PER_ROTATION = 1120;
     final double WHEEL_CIRCUMFERENCE = Math.PI * 4; //probably in inches
 
     final boolean redside = true;
 
     final double autospeed = 0.3;
-
-    boolean EncoderMode = false;
 
     private DcMotorEx fl, bl, fr, br, shooterLift, collectorLift;
     private Servo shooterArm, collectorArm, collectorExtendor;
@@ -44,6 +47,17 @@ public class LSRobot {
         fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        SetRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+
+        parameters.vuforiaLicenseKey = VUFORIA_KEY;
+
+        parameters.cameraName = map.get(WebcamName.class, "Webcam 1");
+
+        vuf = ClassFactory.getInstance().createVuforia(parameters);
+
     }
 
     public void Move(double x, double y, double turnPower){
@@ -71,13 +85,19 @@ public class LSRobot {
         Thread.sleep(time * 1000);
     }
 
-    public void MoveCollector(boolean up, boolean down){
+    public void MoveCollector(boolean up, boolean down, boolean dpadleft, boolean dpadright){
         if(up){
             collectorLift.setPower(0.2);
         } else if(down) {
             collectorLift.setPower(-0.2);
         } else {
             collectorLift.setPower(0.0);
+        }
+        if(dpadleft){
+            collectorExtendor.setPosition(collectorExtendor.getPosition() + 0.01);
+        }
+        if(dpadright){
+            collectorExtendor.setPosition(collectorExtendor.getPosition() - 0.01);
         }
     }
 
@@ -107,29 +127,25 @@ public class LSRobot {
         }
     }
 
-    public boolean MotorEncoders (){
+    public void SetRunMode(DcMotor.RunMode runMode){
         //swaps motors between RUN_USING_ENCODER and RUN_WITHOUT_ENCODER
+            fl.setMode(runMode);
+            fr.setMode(runMode);
+            br.setMode(runMode);
+            bl.setMode(runMode);
+    }
 
-        if(!EncoderMode){
-            fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            br.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            bl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        } else {
-            fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            br.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            bl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        }
-        EncoderMode = !EncoderMode;
-
-        return EncoderMode;
+    public void SetEncoderTarget(int encoderTarget){
+        fl.setTargetPosition(encoderTarget);
+        fl.setTargetPosition(encoderTarget);
+        fl.setTargetPosition(encoderTarget);
+        fl.setTargetPosition(encoderTarget);
     }
 
 //    public void EncoderMove (double x, double y, double speed, double turnradius){
 //        Work in progress method for more general movement. Gonna pass on it for now because
 //        we don't need to get that fancy.
-//        MotorEncoders();
+//        SetRunMode();
 //
 //        fl.setTargetPosition();
 //        fr.setTargetPosition();
@@ -142,23 +158,85 @@ public class LSRobot {
 //        bl.setPower(speed);
 //    }
 
-    public void EasyMove (){
-        MotorEncoders();
+    public void AutoMove (int direction, int distance, double power) throws InterruptedException {
+        //this is pretty gross but it allows encoder movement in 8 directions w/o much math
+        SetRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        SetRunMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        int firstmove = (int) (ENCODERS_PER_ROTATION * WHEEL_CIRCUMFERENCE * 1);
-        int secondmove = (int)(ENCODERS_PER_ROTATION * WHEEL_CIRCUMFERENCE * 1);
-        int thirdmove = (int) (ENCODERS_PER_ROTATION * WHEEL_CIRCUMFERENCE * 1);
+        distance = (int)(distance / WHEEL_CIRCUMFERENCE * ENCODERS_PER_ROTATION);
 
-        fl.setTargetPosition(firstmove);
-        fr.setTargetPosition(-firstmove);
-        br.setTargetPosition(-firstmove);
-        bl.setTargetPosition(firstmove);
 
-        while(fl.isBusy()){
-        fl.setPower(autospeed);
-        fr.setPower(autospeed);
-        br.setPower(autospeed);
-        bl.setPower(autospeed);
+        switch(direction){
+            default:
+                Move(0, 0, 1);
+                Thread.sleep(1000);
+                break;
+
+            case 0:
+                fl.setTargetPosition(distance);
+                fr.setTargetPosition(distance);
+                br.setTargetPosition(-distance);
+                bl.setTargetPosition(-distance);
+                break;
+
+            case 45:
+                fl.setTargetPosition(distance);
+                fr.setTargetPosition(0);
+                br.setTargetPosition(-distance);
+                bl.setTargetPosition(0);
+                break;
+
+            case 90:
+                fl.setTargetPosition(distance);
+                fr.setTargetPosition(-distance);
+                br.setTargetPosition(-distance);
+                bl.setTargetPosition(distance);
+                break;
+
+            case 135:
+                fl.setTargetPosition(0);
+                fr.setTargetPosition(-distance);
+                br.setTargetPosition(0);
+                bl.setTargetPosition(distance);
+                break;
+
+            case 180:
+                fl.setTargetPosition(-distance);
+                fr.setTargetPosition(-distance);
+                br.setTargetPosition(distance);
+                bl.setTargetPosition(distance);
+                break;
+
+            case 225:
+                fl.setTargetPosition(0);
+                fr.setTargetPosition(-distance);
+                br.setTargetPosition(0);
+                bl.setTargetPosition(distance);
+                break;
+
+            case 270:
+                fl.setTargetPosition(-distance);
+                fr.setTargetPosition(distance);
+                br.setTargetPosition(distance);
+                bl.setTargetPosition(-distance);
+                break;
+
+            case 315:
+                fl.setTargetPosition(-distance);
+                fr.setTargetPosition(0);
+                br.setTargetPosition(distance);
+                bl.setTargetPosition(0);
+                break;
         }
+
+        while(fl.isBusy() || fr.isBusy() || br.isBusy() || bl.isBusy()){
+            fl.setPower(power);
+            fr.setPower(power);
+            bl.setPower(power);
+            br.setPower(power);
+        }
+
+        SetRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        SetRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 }

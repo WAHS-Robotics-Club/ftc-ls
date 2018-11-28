@@ -26,12 +26,15 @@ public class LSTeleOp extends OpMode {
         boolean leftBumper = gamepad1.left_bumper;
         boolean rightBumper = gamepad1.right_bumper;
 
+        boolean dpadleft = gamepad1.dpad_left;
+        boolean dpadright = gamepad1.dpad_right;
+
         boolean xButton = gamepad1.x;
         boolean yButton = gamepad1.y;
 
         lsBot.Move(x, y, turnPower);
 
-        lsBot.MoveCollector(leftBumper, rightBumper);
+        lsBot.MoveCollector(leftBumper, rightBumper, dpadleft, dpadright);
 
         lsBot.Collect(yButton);
 
