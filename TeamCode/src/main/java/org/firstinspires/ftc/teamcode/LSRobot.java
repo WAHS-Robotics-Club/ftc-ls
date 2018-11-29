@@ -1,11 +1,14 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.configuration.annotations.ServoType;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.teamcode.util.HardwareMapConstants;
@@ -21,7 +24,9 @@ public class LSRobot {
     final double autospeed = 0.3;
 
     private DcMotorEx fl, bl, fr, br, shooterLift, collectorLift;
-    private Servo shooterArm, collectorArm, collectorExtendor;
+    private CRServo shooterArm, collectorArm, collectorExtendorLeft, collectorExtendorRight;
+
+    VuforiaLocalizer vuforia;
 
     public void init(HardwareMap map) {
         fl = (DcMotorEx) map.dcMotor.get(HardwareMapConstants.MOTOR_FRONT_LEFT);
@@ -30,11 +35,13 @@ public class LSRobot {
         br = (DcMotorEx) map.dcMotor.get(HardwareMapConstants.MOTOR_BACK_RIGHT);
 
         shooterLift = (DcMotorEx) map.dcMotor.get(HardwareMapConstants.SHOOTER_LIFT);
-        shooterArm = map.servo.get(HardwareMapConstants.SHOOTER_ARM);
+        shooterArm = map.crservo.get(HardwareMapConstants.SHOOTER_ARM);
 
         collectorLift = (DcMotorEx) map.dcMotor.get(HardwareMapConstants.COLLECTOR_LIFT);
-        collectorArm = map.servo.get(HardwareMapConstants.COLLECTOR_ARM);
-        collectorExtendor = map.servo.get(HardwareMapConstants.COLLECTOR_EXTENDER);
+        collectorArm = map.crservo.get(HardwareMapConstants.COLLECTOR_ARM);
+
+        collectorExtendorLeft = map.crservo.get(HardwareMapConstants.COLLECTOR_EXTENDER_LEFT);
+        collectorExtendorRight = map.crservo.get(HardwareMapConstants.COLLECTOR_EXTENDER_RIGHT);
 
         final int TOLERANCE = 12;
 
@@ -54,10 +61,9 @@ public class LSRobot {
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
 
-        parameters.cameraName = map.get(WebcamName.class, "Webcam 1");
+        parameters.cameraName = map.get(WebcamName.class, "Webcam");
 
-        vuf = ClassFactory.getInstance().createVuforia(parameters);
-
+        vuforia = ClassFactory.getInstance().createVuforia(parameters);
     }
 
     public void Move(double x, double y, double turnPower){
@@ -85,27 +91,45 @@ public class LSRobot {
         Thread.sleep(time * 1000);
     }
 
-    public void MoveCollector(boolean up, boolean down, boolean dpadleft, boolean dpadright){
+    public void MoveCollector(boolean up, boolean down, boolean dpadleft, boolean dpadright, Telemetry telemetry){
         if(up){
             collectorLift.setPower(0.2);
         } else if(down) {
             collectorLift.setPower(-0.2);
-        } else {
-            collectorLift.setPower(0.0);
         }
+        else{
+            collectorLift.setPower(0);
+        }
+
         if(dpadleft){
-            collectorExtendor.setPosition(collectorExtendor.getPosition() + 0.01);
+            collectorExtendorLeft.setPower(collectorExtendorLeft.getPower() + 0.02);
+            collectorExtendorRight.setPower(collectorExtendorRight.getPower() - 0.02);
+
+        } if(dpadright){
+            collectorExtendorLeft.setPower(collectorExtendorLeft.getPower() - 0.02);
+            collectorExtendorRight.setPower(collectorExtendorRight.getPower() + 0.02);
+        } else {
+            collectorExtendorLeft.setPower(0);
+            collectorExtendorRight.setPower(0);
         }
-        if(dpadright){
-            collectorExtendor.setPosition(collectorExtendor.getPosition() - 0.01);
-        }
+
+
+        telemetry.addData("right collector", collectorExtendorRight.getPower());
+        telemetry.addData("left collector", collectorExtendorLeft.getPower());
+
+        telemetry.addData("Michelle Mover", collectorLift.getPower());
+
+        telemetry.update();
     }
 
-    public void Collect(boolean collect){
+    public void Collect(boolean collect, boolean outofnames){
         if(collect){
-            collectorArm.setPosition(2.5);
-        } else {
-            collectorArm.setPosition(0.0);
+            collectorArm.setPower(0.4);
+        } if(outofnames){
+            collectorArm.setPower(-0.4);
+        }
+        else {
+            collectorArm.setPower(0);
         }
     }
 
@@ -119,13 +143,17 @@ public class LSRobot {
         }
     }
 
-    public void Shoot(boolean shoot){
-        if(shoot){
-            shooterArm.setPosition(2.5);
+    public void Shoot(boolean shoot, boolean unshoot) {
+        if (shoot) {
+            shooterArm.setPower(1.0);
+        }
+        else if (unshoot) {
+            shooterArm.setPower(-0.3);
         } else {
-            shooterArm.setPosition(0.0);
+            shooterArm.setPower(0);
         }
     }
+
 
     public void SetRunMode(DcMotor.RunMode runMode){
         //swaps motors between RUN_USING_ENCODER and RUN_WITHOUT_ENCODER
@@ -137,9 +165,9 @@ public class LSRobot {
 
     public void SetEncoderTarget(int encoderTarget){
         fl.setTargetPosition(encoderTarget);
-        fl.setTargetPosition(encoderTarget);
-        fl.setTargetPosition(encoderTarget);
-        fl.setTargetPosition(encoderTarget);
+        fr.setTargetPosition(encoderTarget);
+        br.setTargetPosition(encoderTarget);
+        bl.setTargetPosition(encoderTarget);
     }
 
 //    public void EncoderMove (double x, double y, double speed, double turnradius){

@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.program.teleops;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.LSRobot;
 
@@ -13,6 +14,7 @@ public class LSTeleOp extends OpMode {
     @Override
     public void init() {
         lsBot.init(hardwareMap);
+        lsBot.SetRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     @Override
@@ -31,15 +33,17 @@ public class LSTeleOp extends OpMode {
 
         boolean xButton = gamepad1.x;
         boolean yButton = gamepad1.y;
+        boolean bButton = gamepad1.b;
+        boolean aButton = gamepad1.a;
 
         lsBot.Move(x, y, turnPower);
 
-        lsBot.MoveCollector(leftBumper, rightBumper, dpadleft, dpadright);
+        lsBot.MoveCollector(leftBumper, rightBumper, dpadleft, dpadright, telemetry);
 
-        lsBot.Collect(yButton);
+        lsBot.Collect(yButton, bButton);
 
         lsBot.MoveShooter(leftTrigger, rightTrigger);
 
-        lsBot.Shoot(xButton);
+        lsBot.Shoot(xButton, aButton);
     }
 }

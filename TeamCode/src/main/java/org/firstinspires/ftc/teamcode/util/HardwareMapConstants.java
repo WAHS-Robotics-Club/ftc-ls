@@ -11,5 +11,6 @@ public class HardwareMapConstants {
 
     public static final String COLLECTOR_LIFT = "collector-lift";
     public static final String COLLECTOR_ARM = "collector-arm";
-    public static final String COLLECTOR_EXTENDER = "collector-extender";
+    public static final String COLLECTOR_EXTENDER_LEFT = "collector-extender-left";
+    public static final String COLLECTOR_EXTENDER_RIGHT = "collector-extender-right";
 }

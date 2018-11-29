@@ -26,7 +26,6 @@ public class LSAuto extends LinearOpMode {
 
         lsBot.init(hardwareMap);
 
-        lsBot.VuforiaInitializer();
-
+        lsBot.AutoMove(45, 2, 0.3);
     }
 }
