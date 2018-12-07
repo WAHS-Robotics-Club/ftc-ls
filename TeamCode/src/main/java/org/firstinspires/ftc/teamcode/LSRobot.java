@@ -69,13 +69,13 @@ public class LSRobot {
     public void Move(double x, double y, double turnPower){
         if (Math.abs(x) > 0.05 || Math.abs(y) > 0.05 || Math.abs(turnPower) > 0.05) {
 
-            fl.setPower(+ x + y - turnPower);
+            fl.setPower(- x + y - turnPower);
 
-            bl.setPower(- x + y - turnPower);
+            bl.setPower(+ x + y - turnPower);
 
-            fr.setPower(+ x - y - turnPower);
+            fr.setPower(- x - y - turnPower);
 
-            br.setPower(- x - y - turnPower);
+            br.setPower(+ x - y - turnPower);
 
         } else {
             fl.setPower(0);
@@ -91,7 +91,7 @@ public class LSRobot {
         Thread.sleep(time * 1000);
     }
 
-    public void MoveCollector(boolean up, boolean down, boolean dpadleft, boolean dpadright, Telemetry telemetry){
+    public void MoveCollector(boolean up, boolean down, double lefttrigger, double righttrigger, Telemetry telemetry){
         if(up){
             collectorLift.setPower(0.2);
         } else if(down) {
@@ -101,13 +101,13 @@ public class LSRobot {
             collectorLift.setPower(0);
         }
 
-        if(dpadleft){
-            collectorExtendorLeft.setPower(collectorExtendorLeft.getPower() + 0.02);
-            collectorExtendorRight.setPower(collectorExtendorRight.getPower() - 0.02);
+        if(lefttrigger > 0.05){
+            collectorExtendorLeft.setPower(lefttrigger);
+            collectorExtendorRight.setPower(-lefttrigger);
 
-        } if(dpadright){
-            collectorExtendorLeft.setPower(collectorExtendorLeft.getPower() - 0.02);
-            collectorExtendorRight.setPower(collectorExtendorRight.getPower() + 0.02);
+        } else if(righttrigger > 0.05){
+            collectorExtendorLeft.setPower(-righttrigger);
+            collectorExtendorRight.setPower(righttrigger);
         } else {
             collectorExtendorLeft.setPower(0);
             collectorExtendorRight.setPower(0);
@@ -124,20 +124,20 @@ public class LSRobot {
 
     public void Collect(boolean collect, boolean outofnames){
         if(collect){
-            collectorArm.setPower(0.4);
-        } if(outofnames){
-            collectorArm.setPower(-0.4);
+            collectorArm.setPower(1.0);
+        } else if(outofnames){
+            collectorArm.setPower(-1.0);
         }
         else {
             collectorArm.setPower(0);
         }
     }
 
-    public void MoveShooter(double up, double down){
-        if(Math.abs(up) > 0.05){
-            shooterLift.setPower(0.2);
-        }else if(Math.abs(down) > 0.05){
-            shooterLift.setPower(-0.2);
+    public void MoveShooter(boolean up, boolean down){
+        if(up){
+            shooterLift.setPower(0.3);
+        }else if(down){
+            shooterLift.setPower(-0.3);
         } else {
             shooterLift.setPower(0);
         }
@@ -148,7 +148,7 @@ public class LSRobot {
             shooterArm.setPower(1.0);
         }
         else if (unshoot) {
-            shooterArm.setPower(-0.3);
+            shooterArm.setPower(-1.0);
         } else {
             shooterArm.setPower(0);
         }
@@ -186,20 +186,14 @@ public class LSRobot {
 //        bl.setPower(speed);
 //    }
 
-    public void AutoMove (int direction, int distance, double power) throws InterruptedException {
+    public void AutoMove (int direction, int distance, double power, Telemetry telemetry) throws InterruptedException {
         //this is pretty gross but it allows encoder movement in 8 directions w/o much math
-        SetRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //SetRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         SetRunMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         distance = (int)(distance / WHEEL_CIRCUMFERENCE * ENCODERS_PER_ROTATION);
 
-
         switch(direction){
-            default:
-                Move(0, 0, 1);
-                Thread.sleep(1000);
-                break;
-
             case 0:
                 fl.setTargetPosition(distance);
                 fr.setTargetPosition(distance);
@@ -255,16 +249,21 @@ public class LSRobot {
                 br.setTargetPosition(distance);
                 bl.setTargetPosition(0);
                 break;
+
+            default:
+                Move(0, 0, 1);
+                Thread.sleep(3000);
+                telemetry.addData("didn't go to the right case", "bottom text");
+                break;
         }
 
         while(fl.isBusy() || fr.isBusy() || br.isBusy() || bl.isBusy()){
-            fl.setPower(power);
+            fl.setPower(-power);
             fr.setPower(power);
-            bl.setPower(power);
+            bl.setPower(-power);
             br.setPower(power);
         }
 
-        SetRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        SetRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        SetRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 }

@@ -38,11 +38,11 @@ public class LSTeleOp extends OpMode {
 
         lsBot.Move(x, y, turnPower);
 
-        lsBot.MoveCollector(leftBumper, rightBumper, dpadleft, dpadright, telemetry);
+        lsBot.MoveCollector(dpadleft, dpadright, leftTrigger, rightTrigger, telemetry);
 
         lsBot.Collect(yButton, bButton);
 
-        lsBot.MoveShooter(leftTrigger, rightTrigger);
+        lsBot.MoveShooter(leftBumper, rightBumper);
 
         lsBot.Shoot(xButton, aButton);
     }
