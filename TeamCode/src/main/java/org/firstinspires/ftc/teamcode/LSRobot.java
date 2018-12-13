@@ -14,19 +14,13 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.teamcode.util.HardwareMapConstants;
 
 public class LSRobot {
-    private static final String VUFORIA_KEY = "AfLxv2j/////AAABmYGPUEQbkUSboaGDXA3ZrG8gbZ8ovALERXI9LZm5oTH5KoH2USA2+zMEy3TQ8m8flx9YFAbuoqLkSkuWwOvbPXuWwnRe9Z/8kOum9F8P7haxIVSS366oxGFaocRAx7kgpPHk6/LWmhJsbZ9Erai9FEBYZnbfyoVxQSmLgi0QxP+sihyA1VjdOTANVcS+B6e2GMVEZppbro1GHoA/+SN4tVNQOAItQotgsmDmW0lpqxKLhTZ/+EeanbC5PjiPh+LWyETIO+/S4eRCkxSyw6OcvzUU9D8R7yWIdmPCMhltXcDHrjJdYRDb28Kth/7hSdjj3zSfogBQiHhjyRWDUkCeTGnGq6nuELLUTMJhRc/jRhyI";
 
     final int ENCODERS_PER_ROTATION = 1120;
     final double WHEEL_CIRCUMFERENCE = Math.PI * 4; //probably in inches
 
-    final boolean redside = true;
-
-    final double autospeed = 0.3;
-
     private DcMotorEx fl, bl, fr, br, shooterLift, collectorLift;
     private CRServo shooterArm, collectorArm, collectorExtendorLeft, collectorExtendorRight;
 
-    VuforiaLocalizer vuforia;
 
     public void init(HardwareMap map) {
         fl = (DcMotorEx) map.dcMotor.get(HardwareMapConstants.MOTOR_FRONT_LEFT);
@@ -57,13 +51,9 @@ public class LSRobot {
 
         SetRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
-        parameters.vuforiaLicenseKey = VUFORIA_KEY;
 
-        parameters.cameraName = map.get(WebcamName.class, "Webcam");
 
-        vuforia = ClassFactory.getInstance().createVuforia(parameters);
     }
 
     public void Move(double x, double y, double turnPower){
