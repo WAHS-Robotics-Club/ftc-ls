@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.program.testops;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -10,23 +11,24 @@ import org.firstinspires.ftc.teamcode.LSRobot;
 @Autonomous(name = "hanging test")
 
 public class HangingTest extends OpMode {
-    DcMotor shooterArm;
+    CRServo ml, mr;
 
     LSRobot lsBot = new LSRobot();
 
     @Override
     public void init() {
-        lsBot.init(hardwareMap);
-
+        ml = hardwareMap.crservo.get("michelle-left");
+        mr = hardwareMap.crservo.get("michelle-right");
     }
 
     @Override
     public void loop() {
-        while(shooterArm.isBusy()){
-            shooterArm.setPower(1);
+        if(Math.abs(gamepad1.left_stick_x) > 0.05){
+            ml.setPower(gamepad1.left_stick_x);
+            mr.setPower(-gamepad1.left_stick_x);
+        } else {
+            ml.setPower(0);
+            mr.setPower(0);
         }
-
-        telemetry.addData("shooter arm is at", shooterArm.getCurrentPosition());
-        telemetry.update();
     }
 }
