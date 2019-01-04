@@ -183,6 +183,11 @@ public class LSRobot {
 
         distance = (int)(distance / WHEEL_CIRCUMFERENCE * ENCODERS_PER_ROTATION);
 
+        fl.setTargetPosition(0);
+        fr.setTargetPosition(0);
+        br.setTargetPosition(0);
+        bl.setTargetPosition(0);
+
         switch(direction){
             case 0:
                 fl.setTargetPosition(distance);
@@ -244,6 +249,8 @@ public class LSRobot {
                 Move(0, 0, 1);
                 Thread.sleep(3000);
                 telemetry.addData("didn't go to the right case", "bottom text");
+                telemetry.update();
+                Move(0, 0, 0);
                 break;
         }
 

@@ -36,19 +36,19 @@ public class LSAuto extends LinearOpMode {
             telemetry.addData("part finished:", "move");
             telemetry.update();
 
-            lsBot.MoveShooter(true, false);
-            Thread.sleep(3000);
-            lsBot.MoveShooter(false, false);
-
-            telemetry.addData("part finished:", "lift");
-            telemetry.update();
-
-            lsBot.Shoot(true, false);
-            Thread.sleep(2000);
-            lsBot.Shoot(false, false);
-
-            telemetry.addData("finished", "yep");
-            telemetry.update();
+//            lsBot.MoveShooter(true, false);
+//            Thread.sleep(3000);
+//            lsBot.MoveShooter(false, false);
+//
+//            telemetry.addData("part finished:", "lift");
+//            telemetry.update();
+//
+//            lsBot.Shoot(true, false);
+//            Thread.sleep(2000);
+//            lsBot.Shoot(false, false);
+//
+//            telemetry.addData("finished", "yep");
+//            telemetry.update();
         }
     }
 }
