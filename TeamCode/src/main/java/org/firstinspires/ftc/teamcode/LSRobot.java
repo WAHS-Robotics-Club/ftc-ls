@@ -4,13 +4,8 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.configuration.annotations.ServoType;
 
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.teamcode.util.HardwareMapConstants;
 
 public class LSRobot {
@@ -18,8 +13,8 @@ public class LSRobot {
     final int ENCODERS_PER_ROTATION = 1120;
     final double WHEEL_CIRCUMFERENCE = Math.PI * 4; //probably in inches
 
-    private DcMotorEx fl, bl, fr, br, shooterLift, collectorLift;
-    private CRServo shooterArm, collectorArm, collectorExtendorLeft, collectorExtendorRight;
+    private DcMotorEx fl, bl, fr, br, shooterLift, mainLift;
+    private CRServo shooterArmLeft, shooterArmRight, clawLeft, clawRight, collectorExtender, collectorLowererL, collectorLowererR;
 
 
     public void init(HardwareMap map) {
@@ -29,13 +24,17 @@ public class LSRobot {
         br = (DcMotorEx) map.dcMotor.get(HardwareMapConstants.MOTOR_BACK_RIGHT);
 
         shooterLift = (DcMotorEx) map.dcMotor.get(HardwareMapConstants.SHOOTER_LIFT);
-        shooterArm = map.crservo.get(HardwareMapConstants.SHOOTER_ARM);
+        //shooterArmLeft = map.crservo.get(HardwareMapConstants.SHOOTER_ARM_LEFT);
+        shooterArmRight = map.crservo.get(HardwareMapConstants.SHOOTER_ARM_RIGHT);
 
-        collectorLift = (DcMotorEx) map.dcMotor.get(HardwareMapConstants.COLLECTOR_LIFT);
-        collectorArm = map.crservo.get(HardwareMapConstants.COLLECTOR_ARM);
+        clawLeft = map.crservo.get(HardwareMapConstants.COLLECTOR_CLAW_LEFT);
+        clawRight = map.crservo.get(HardwareMapConstants.COLLECTOR_CLAW_RIGHT);
+        collectorExtender = map.crservo.get(HardwareMapConstants.COLLECTOR_EXTENDER);
+        collectorLowererL = map.crservo.get(HardwareMapConstants.COLLECTOR_LOWERER_LEFT);
+        collectorLowererR = map.crservo.get(HardwareMapConstants.COLLECTOR_LOWERER_RIGHT);
 
-        collectorExtendorLeft = map.crservo.get(HardwareMapConstants.COLLECTOR_EXTENDER_LEFT);
-        collectorExtendorRight = map.crservo.get(HardwareMapConstants.COLLECTOR_EXTENDER_RIGHT);
+        mainLift = (DcMotorEx) map.dcMotor.get(HardwareMapConstants.LIFTER);
+
 
         final int TOLERANCE = 12;
 
@@ -50,10 +49,6 @@ public class LSRobot {
         bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         SetRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-
-
-
     }
 
     public void Move(double x, double y, double turnPower){
@@ -83,43 +78,38 @@ public class LSRobot {
 
     public void MoveCollector(boolean up, boolean down, double lefttrigger, double righttrigger, Telemetry telemetry){
         if(up){
-            collectorLift.setPower(0.2);
-        } else if(down) {
-            collectorLift.setPower(-0.2);
+            collectorLowererL.setPower(-0.05);
+            collectorLowererR.setPower(0.05);
+        } if(down) {
+            collectorLowererL.setPower(0.05);
+            collectorLowererR.setPower(-0.05);
         }
         else{
-            collectorLift.setPower(0);
+            collectorLowererL.setPower(0);
+            collectorLowererR.setPower(0);
         }
 
         if(lefttrigger > 0.05){
-            collectorExtendorLeft.setPower(lefttrigger);
-            collectorExtendorRight.setPower(-lefttrigger);
+            collectorExtender.setPower(lefttrigger);
 
         } else if(righttrigger > 0.05){
-            collectorExtendorLeft.setPower(-righttrigger);
-            collectorExtendorRight.setPower(righttrigger);
+            collectorExtender.setPower(-righttrigger);
         } else {
-            collectorExtendorLeft.setPower(0);
-            collectorExtendorRight.setPower(0);
+            collectorExtender.setPower(0);
         }
-
-
-        telemetry.addData("right collector", collectorExtendorRight.getPower());
-        telemetry.addData("left collector", collectorExtendorLeft.getPower());
-
-        telemetry.addData("Michelle Mover", collectorLift.getPower());
-
-        telemetry.update();
     }
 
     public void Collect(boolean collect, boolean outofnames){
         if(collect){
-            collectorArm.setPower(1.0);
+            clawLeft.setPower(1.0);
+            clawRight.setPower(-1.0);
         } else if(outofnames){
-            collectorArm.setPower(-1.0);
+            clawLeft.setPower(-1.0);
+            clawRight.setPower(1.0);
         }
         else {
-            collectorArm.setPower(0);
+            clawLeft.setPower(0);
+            clawRight.setPower(0);
         }
     }
 
@@ -135,15 +125,17 @@ public class LSRobot {
 
     public void Shoot(boolean shoot, boolean unshoot) {
         if (shoot) {
-            shooterArm.setPower(1.0);
+            shooterArmLeft.setPower(1.0);
+            shooterArmRight.setPower(-1.0);
         }
         else if (unshoot) {
-            shooterArm.setPower(-1.0);
+            shooterArmLeft.setPower(-1.0);
+            shooterArmRight.setPower(1.0);
         } else {
-            shooterArm.setPower(0);
+            shooterArmLeft.setPower(0);
+            shooterArmRight.setPower(0);
         }
     }
-
 
     public void SetRunMode(DcMotor.RunMode runMode){
         //swaps motors between RUN_USING_ENCODER and RUN_WITHOUT_ENCODER
@@ -158,6 +150,16 @@ public class LSRobot {
         fr.setTargetPosition(encoderTarget);
         br.setTargetPosition(encoderTarget);
         bl.setTargetPosition(encoderTarget);
+    }
+
+    public void LiftRobot(boolean up, boolean down){
+        if(up){
+            mainLift.setPower(0.05);
+        } if (down){
+            mainLift.setPower(-0.05);
+        } else {
+            mainLift.setPower(0);
+        }
     }
 
 //    public void EncoderMove (double x, double y, double speed, double turnradius){

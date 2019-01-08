@@ -30,6 +30,8 @@ public class LSTeleOp extends OpMode {
 
         boolean dpadleft = gamepad1.dpad_left;
         boolean dpadright = gamepad1.dpad_right;
+        boolean dpadup = gamepad1.dpad_up;
+        boolean dpaddown = gamepad1.dpad_down;
 
         boolean xButton = gamepad1.x;
         boolean yButton = gamepad1.y;
@@ -45,5 +47,7 @@ public class LSTeleOp extends OpMode {
         lsBot.MoveShooter(leftBumper, rightBumper);
 
         lsBot.Shoot(xButton, aButton);
+
+        lsBot.LiftRobot(dpadup, dpaddown);
     }
 }
