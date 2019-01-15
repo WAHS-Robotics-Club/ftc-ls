@@ -4,7 +4,9 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.LSRobot;
+import org.firstinspires.ftc.teamcode.util.Navigator;
 
 @TeleOp(name = "LSTeleOp")
 
@@ -19,9 +21,10 @@ public class LSTeleOp extends OpMode {
 
     @Override
     public void loop() {
-        double x = (gamepad1.left_stick_x)/3;
-        double y = (gamepad1.left_stick_y)/3;
-        double turnPower = (gamepad1.right_stick_x)/3;
+
+        double x = (gamepad1.left_stick_x)/1.5;
+        double y = (gamepad1.left_stick_y)/1.5;
+        double turnPower = (gamepad1.right_stick_x)/1.5;
 
         double leftTrigger = gamepad1.left_trigger;
         double rightTrigger = gamepad1.right_trigger;
@@ -33,21 +36,21 @@ public class LSTeleOp extends OpMode {
         boolean dpadup = gamepad1.dpad_up;
         boolean dpaddown = gamepad1.dpad_down;
 
-        boolean xButton = gamepad1.x;
-        boolean yButton = gamepad1.y;
-        boolean bButton = gamepad1.b;
-        boolean aButton = gamepad1.a;
+        boolean xbutton = gamepad1.x;
+        boolean ybutton = gamepad1.y;
+        boolean b = gamepad1.b;
+        boolean a = gamepad1.a;
 
-        lsBot.Move(x, y, turnPower);
+        lsBot.Move(x, y, turnPower, telemetry);
 
-        lsBot.MoveCollector(dpadleft, dpadright, leftTrigger, rightTrigger, telemetry);
+//        lsBot.MoveCollector(dpadleft, dpadright, leftTrigger, rightTrigger, telemetry);
 
-        lsBot.Collect(yButton, bButton);
+        lsBot.Collect(ybutton, b);
 
         lsBot.MoveShooter(leftBumper, rightBumper);
 
-        lsBot.Shoot(xButton, aButton);
+        lsBot.Shoot(xbutton, a);
 
-        lsBot.LiftRobot(dpadup, dpaddown);
+        lsBot.LiftRobot(dpadup, dpaddown, telemetry);
     }
 }

@@ -30,25 +30,10 @@ public class LSAuto extends LinearOpMode {
 
         waitForStart();
 
-        while (opModeIsActive()){
-            lsBot.AutoMove(315, 1, 0.2, telemetry);
+//        lsBot.Lower();
 
-            telemetry.addData("part finished:", "move");
-            telemetry.update();
+        lsBot.AutoMove(0, 180, 0, telemetry);
 
-//            lsBot.MoveShooter(true, false);
-//            Thread.sleep(3000);
-//            lsBot.MoveShooter(false, false);
-//
-//            telemetry.addData("part finished:", "lift");
-//            telemetry.update();
-//
-//            lsBot.Shoot(true, false);
-//            Thread.sleep(2000);
-//            lsBot.Shoot(false, false);
-//
-//            telemetry.addData("finished", "yep");
-//            telemetry.update();
-        }
+        lsBot.Stop(telemetry);
     }
 }

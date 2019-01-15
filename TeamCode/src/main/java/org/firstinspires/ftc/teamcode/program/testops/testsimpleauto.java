@@ -31,9 +31,9 @@ public class testsimpleauto extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()){
-            lsBot.Move(0, -1, 0);
+            lsBot.Move(0, -1, 0, telemetry);
             Thread.sleep(2500);
-            lsBot.Move(0, 0, 0);
+            lsBot.Move(0, 0, 0, telemetry);
         }
 
         lsBot.MoveShooter(true, false);
