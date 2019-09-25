@@ -43,7 +43,7 @@ import com.qualcomm.robotcore.hardware.SwitchableLight;
 /*
  * This is an example LinearOpMode that shows how to use a color sensor in a generic
  * way, insensitive which particular make or model of color sensor is used. The opmode
- * assumes that the color sensor is configured with a name of "color sensor".
+ * assumes that the color sensor is configured with a name of "sensor_color".
  *
  * If the color sensor has a light which is controllable, you can use the X button on
  * the gamepad to toggle the light on and off.
@@ -53,7 +53,7 @@ import com.qualcomm.robotcore.hardware.SwitchableLight;
  */
 @TeleOp(name = "Sensor: Color", group = "Sensor")
 @Disabled
-public class  SensorColor extends LinearOpMode {
+public class SensorColor extends LinearOpMode {
 
   /** The colorSensor field will contain a reference to our color sensor hardware object */
   NormalizedColorSensor colorSensor;
