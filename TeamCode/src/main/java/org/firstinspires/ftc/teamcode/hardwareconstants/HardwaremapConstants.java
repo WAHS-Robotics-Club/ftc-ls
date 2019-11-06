@@ -1,7 +1,6 @@
-package org.firstinspires.ftc.teamcode.HardwareConstants;
+package org.firstinspires.ftc.teamcode.hardwareconstants;
 
 
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 

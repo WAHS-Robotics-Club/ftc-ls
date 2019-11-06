@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import org.firstinspires.ftc.teamcode.HardwareConstants.HardwaremapConstants;
+import org.firstinspires.ftc.teamcode.hardwareconstants.HardwaremapConstants;
 
 class Reminder extends OpMode {
 

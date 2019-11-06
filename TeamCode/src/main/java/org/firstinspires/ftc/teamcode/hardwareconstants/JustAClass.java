@@ -1,12 +1,10 @@
-package org.firstinspires.ftc.teamcode.HardwareConstants;
+package org.firstinspires.ftc.teamcode.hardwareconstants;
 
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorImpl;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-
-import java.sql.Time;
 
 public class JustAClass {
     DcMotor swing;
