@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import org.firstinspires.ftc.teamcode.HardwareConstants.HardwaremapConstants;
 
 class Reminder extends OpMode {
 
@@ -12,11 +13,9 @@ class Reminder extends OpMode {
     @Override
     public void init() {
 
-        //Wheel
-        frontLeft = hardwareMap.dcMotor.get("FrontLeft");
-        frontRight = hardwareMap.dcMotor.get("FrontRight");
-        backLeft = hardwareMap.dcMotor.get("BackLeft");
-        backRight = hardwareMap.dcMotor.get("BackRight");
+        //Wheels hardware map
+        HardwaremapConstants map = new HardwaremapConstants();
+        map.wheels(hardwareMap);
 
         //Gets the controller stick values into a variable
         leftX = gamepad1.left_stick_x;
