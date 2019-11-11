@@ -2,9 +2,15 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import org.firstinspires.ftc.teamcode.hardwareconstants.HardwaremapConstants;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+
+import org.firstinspires.ftc.teamcode.hardwareconstants.DriveTrain;
+import org.firstinspires.ftc.teamcode.hardwareconstants.HardwareMapConstants;
 
 class Reminder extends OpMode {
+
+    DriveTrain driveTrain = new DriveTrain();
+    HardwareMapConstants hardwaremap = new HardwareMapConstants();
 
     DcMotor frontLeft, frontRight, backLeft, backRight;
 
@@ -13,11 +19,13 @@ class Reminder extends OpMode {
     @Override
     public void init() {
 
-        //Wheels hardware map
-        HardwaremapConstants map = new HardwaremapConstants();
-        map.wheels(hardwareMap);
+        //Maps the hardware to the phone. See @HardwareMapConstants
+        hardwaremap.driveTrainWheels();
 
-        //Gets the controller stick values into a variable
+
+
+
+        //Puts the controller stick values into a variable
         leftX = gamepad1.left_stick_x;
         leftY = gamepad1.left_stick_y;
         rightX = gamepad1.right_stick_x;

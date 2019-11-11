@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.lastyear;
+package org.firstinspires.ftc.teamcode.previousyears;
 
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -7,8 +7,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.lastyear.util.HardwareMapConstants;
-import org.firstinspires.ftc.teamcode.lastyear.util.Navigator;
+import org.firstinspires.ftc.teamcode.previousyears.util.HardwareMapConstants;
+import org.firstinspires.ftc.teamcode.previousyears.util.Navigator;
 
 public class LSRobot {
 

@@ -1,10 +1,10 @@
-package org.firstinspires.ftc.teamcode.lastyear.program.teleops;
+package org.firstinspires.ftc.teamcode.previousyears.program.teleops;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.lastyear.LSRobot;
+import org.firstinspires.ftc.teamcode.previousyears.LSRobot;
 
 @TeleOp(name = "LSTeleOp")
 

@@ -1,11 +1,11 @@
-package org.firstinspires.ftc.teamcode.lastyear.program.testops;
+package org.firstinspires.ftc.teamcode.previousyears.program.testops;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
-import org.firstinspires.ftc.teamcode.lastyear.LSRobot;
+import org.firstinspires.ftc.teamcode.previousyears.LSRobot;
 
 @Autonomous(name = "LS Gross Auto")
 public class testsimpleauto extends LinearOpMode {

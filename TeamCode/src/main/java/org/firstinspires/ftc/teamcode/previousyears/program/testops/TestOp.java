@@ -1,10 +1,10 @@
-package org.firstinspires.ftc.teamcode.lastyear.program.testops;
+package org.firstinspires.ftc.teamcode.previousyears.program.testops;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.lastyear.util.HardwareMapConstants;
+import org.firstinspires.ftc.teamcode.previousyears.util.HardwareMapConstants;
 
 @TeleOp(name = "TestOp")
 

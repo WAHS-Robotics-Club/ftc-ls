@@ -1,10 +1,10 @@
-package org.firstinspires.ftc.teamcode.lastyear.program.testops;
+package org.firstinspires.ftc.teamcode.previousyears.program.testops;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 
-import org.firstinspires.ftc.teamcode.lastyear.LSRobot;
+import org.firstinspires.ftc.teamcode.previousyears.LSRobot;
 
 @Autonomous(name = "hanging test")
 
