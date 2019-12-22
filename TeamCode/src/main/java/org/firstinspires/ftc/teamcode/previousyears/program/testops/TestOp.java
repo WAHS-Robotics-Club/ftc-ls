@@ -1,22 +1,23 @@
 package org.firstinspires.ftc.teamcode.previousyears.program.testops;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.previousyears.util.HardwareMapConstants;
+import org.firstinspires.ftc.teamcode.previousyears.util.HardwareMapConstants2018;
 
 @TeleOp(name = "TestOp")
-
+@Disabled
 public class TestOp extends OpMode {
     DcMotor fl, fr, bl, br;
 
     @Override
     public void init() {
-        fl = hardwareMap.dcMotor.get(HardwareMapConstants.MOTOR_FRONT_LEFT);
-        bl = hardwareMap.dcMotor.get(HardwareMapConstants.MOTOR_BACK_LEFT);
-        fr = hardwareMap.dcMotor.get(HardwareMapConstants.MOTOR_FRONT_RIGHT);
-        br = hardwareMap.dcMotor.get(HardwareMapConstants.MOTOR_BACK_RIGHT);
+        fl = hardwareMap.dcMotor.get(HardwareMapConstants2018.MOTOR_FRONT_LEFT);
+        bl = hardwareMap.dcMotor.get(HardwareMapConstants2018.MOTOR_BACK_LEFT);
+        fr = hardwareMap.dcMotor.get(HardwareMapConstants2018.MOTOR_FRONT_RIGHT);
+        br = hardwareMap.dcMotor.get(HardwareMapConstants2018.MOTOR_BACK_RIGHT);
 
         fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

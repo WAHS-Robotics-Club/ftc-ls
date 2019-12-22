@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.previousyears.util.HardwareMapConstants;
+import org.firstinspires.ftc.teamcode.previousyears.util.HardwareMapConstants2018;
 import org.firstinspires.ftc.teamcode.previousyears.util.Navigator;
 
 public class LSRobot {
@@ -22,22 +22,22 @@ public class LSRobot {
     Navigator navigator = new Navigator();
 
     public void init(HardwareMap map) {
-        fl = (DcMotorEx) map.dcMotor.get(HardwareMapConstants.MOTOR_FRONT_LEFT);
-        fr = (DcMotorEx) map.dcMotor.get(HardwareMapConstants.MOTOR_FRONT_RIGHT);
-        bl = (DcMotorEx) map.dcMotor.get(HardwareMapConstants.MOTOR_BACK_LEFT);
-        br = (DcMotorEx) map.dcMotor.get(HardwareMapConstants.MOTOR_BACK_RIGHT);
+        fl = (DcMotorEx) map.dcMotor.get(HardwareMapConstants2018.MOTOR_FRONT_LEFT);
+        fr = (DcMotorEx) map.dcMotor.get(HardwareMapConstants2018.MOTOR_FRONT_RIGHT);
+        bl = (DcMotorEx) map.dcMotor.get(HardwareMapConstants2018.MOTOR_BACK_LEFT);
+        br = (DcMotorEx) map.dcMotor.get(HardwareMapConstants2018.MOTOR_BACK_RIGHT);
 
-        shooterLift = (DcMotorEx) map.dcMotor.get(HardwareMapConstants.SHOOTER_LIFT);
-        //shooterArmLeft = map.crservo.get(HardwareMapConstants.SHOOTER_ARM_LEFT);
-        shooterArmRight = map.crservo.get(HardwareMapConstants.SHOOTER_ARM_RIGHT);
+        shooterLift = (DcMotorEx) map.dcMotor.get(HardwareMapConstants2018.SHOOTER_LIFT);
+        //shooterArmLeft = map.crservo.get(HardwareMapConstants2018.SHOOTER_ARM_LEFT);
+        shooterArmRight = map.crservo.get(HardwareMapConstants2018.SHOOTER_ARM_RIGHT);
 
-        clawLeft = map.servo.get(HardwareMapConstants.COLLECTOR_CLAW_LEFT);
-        clawRight = map.servo.get(HardwareMapConstants.COLLECTOR_CLAW_RIGHT);
-        collectorExtender = map.crservo.get(HardwareMapConstants.COLLECTOR_EXTENDER);
-        collectorLowererL = map.crservo.get(HardwareMapConstants.COLLECTOR_LOWERER_LEFT);
-        collectorLowererR = map.crservo.get(HardwareMapConstants.COLLECTOR_LOWERER_RIGHT);
+        clawLeft = map.servo.get(HardwareMapConstants2018.COLLECTOR_CLAW_LEFT);
+        clawRight = map.servo.get(HardwareMapConstants2018.COLLECTOR_CLAW_RIGHT);
+        collectorExtender = map.crservo.get(HardwareMapConstants2018.COLLECTOR_EXTENDER);
+        collectorLowererL = map.crservo.get(HardwareMapConstants2018.COLLECTOR_LOWERER_LEFT);
+        collectorLowererR = map.crservo.get(HardwareMapConstants2018.COLLECTOR_LOWERER_RIGHT);
 
-        mainLift = (DcMotorEx) map.dcMotor.get(HardwareMapConstants.LIFTER);
+        mainLift = (DcMotorEx) map.dcMotor.get(HardwareMapConstants2018.LIFTER);
 
 
         final int TOLERANCE = 12;

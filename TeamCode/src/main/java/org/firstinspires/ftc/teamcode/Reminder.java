@@ -10,7 +10,6 @@ import org.firstinspires.ftc.teamcode.hardwareconstants.HardwareMapConstants;
 class Reminder extends OpMode {
 
     DriveTrain driveTrain = new DriveTrain();
-    HardwareMapConstants hardwaremap = new HardwareMapConstants();
 
     DcMotor frontLeft, frontRight, backLeft, backRight;
 
@@ -20,10 +19,6 @@ class Reminder extends OpMode {
     public void init() {
 
         //Maps the hardware to the phone. See @HardwareMapConstants
-        hardwaremap.driveTrainWheels();
-
-
-
 
         //Puts the controller stick values into a variable
         leftX = gamepad1.left_stick_x;

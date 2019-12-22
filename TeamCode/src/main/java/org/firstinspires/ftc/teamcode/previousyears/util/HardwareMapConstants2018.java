@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.previousyears.util;
 
-public class HardwareMapConstants {
+public class HardwareMapConstants2018 {
     //drive train
     public static final String MOTOR_FRONT_LEFT = "front-left";
     public static final String MOTOR_FRONT_RIGHT = "front-right";
