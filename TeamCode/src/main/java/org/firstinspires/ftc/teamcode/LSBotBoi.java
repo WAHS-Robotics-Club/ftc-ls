@@ -56,10 +56,10 @@ public class LSBotBoi {
         
     }
 
-
+    //Mecanum drive train
     public void move(double x, double y, double rotation, boolean rightBumper, Telemetry telemetry) {
 
-
+        //pressing 'right bumper' will reduce the power on movement
         if (Math.abs(x) > .01 || Math.abs(y) >.01 || Math.abs(rotation) > 0.01 && (rightBumper = true)) {
 
             fl.setPower((-x + y - rotation) * .75);
@@ -92,16 +92,17 @@ public class LSBotBoi {
         }
     }
 
-
+    //Will stop movement for Autonomous program
     public void stop(Telemetry telemetry) {move(0, 0, 0, false, telemetry);}
 
-
+    //The program rotates both the crane arm and the servos that rotate the grabber arms
     public void craneMove(double rightTrigger, double leftTrigger, int craneMinimumPosistion, Telemetry telemetry){
 
         double cranePower = rightTrigger - leftTrigger;
 
         if ((rightTrigger > .01 ^ leftTrigger > 0.1) && craneMotorRight.getCurrentPosition() > craneMinimumPosistion){
 
+            //
             craneMotorRight.setPower(cranePower * .75);
             craneMotorLeft.setPower(-cranePower * .75);
 
@@ -130,36 +131,21 @@ public class LSBotBoi {
     }
 
 
+    int bumperCount = -1;
+    double timeSinceButtonPress = 0;
     public void setFoundationHook (boolean leftBumper, Telemetry telemetry) {
-        int count = -1;
-
-        double timeSinceButtonPress = 0;
-
-        while (leftBumper = false) {
-            timeSinceButtonPress++;
-
-            telemetry.addData("Time since LB pressed:", timeSinceButtonPress);
-            telemetry.addData("Time buffer:", System.nanoTime() - timeSinceButtonPress);
-            telemetry.update();
-        }
-
-        if (leftBumper = true){
+        if (leftBumper == true){
             if(System.nanoTime() - timeSinceButtonPress < 400){
-                count *= -1;
+                timeSinceButtonPress = System.nanoTime();
+                bumperCount *= -1;
             }
 
-            timeSinceButtonPress = 0;
-
-            if (count == 1){
+            if (bumperCount == 1){
                 foundationHook.setPosition(.7);
             }else{
                 foundationHook.setPosition(0);
             }
-
         }
-
-
-
     }
 
 }
