@@ -21,7 +21,7 @@ public class TeleOpMain extends OpMode{
     public void loop() {
 
         double x = gamepad1.left_stick_x;
-        double y = -gamepad1.left_stick_y;
+        double y = gamepad1.left_stick_y;
         double rotation = gamepad1.right_stick_x;
 
         double rightTrigger = gamepad1.right_trigger;
@@ -30,11 +30,17 @@ public class TeleOpMain extends OpMode{
         boolean leftBumper = gamepad1.left_bumper;
         boolean rightBumper = gamepad1.right_bumper;
 
+        boolean x_button = gamepad1.x;
+
         telemetry.addData("Crane Encoder Postition:", lsBot.craneMotorLeft.getCurrentPosition());
 
         lsBot.move(x, y, rotation, rightBumper, telemetry);
 
-        lsBot.setFoundationHook(leftBumper, telemetry);
+//        lsBot.setFoundationHook(leftBumper, telemetry);
+
+        lsBot.craneMove(rightTrigger, leftTrigger, telemetry);
+
+        lsBot.grab(x_button);
 
     }
 }

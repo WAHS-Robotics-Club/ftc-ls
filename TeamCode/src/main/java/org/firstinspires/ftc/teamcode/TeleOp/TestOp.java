@@ -36,7 +36,7 @@ public class TestOp extends OpMode{
     @Override
     public void loop() {
         double xAxis = gamepad1.left_stick_x, yAxis = -gamepad1.left_stick_y, rotation = gamepad1.right_stick_x;
-//        driveTrain.mecanumDrive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x, telemetry);
+
         if (Math.abs(xAxis) > 0.01 || Math.abs(yAxis) > 0.01 || Math.abs(rotation) > 0.01){
             frontLeftWheel.setPower(-xAxis + yAxis - rotation);
             frontRightWheel.setPower(-xAxis - yAxis - rotation);
