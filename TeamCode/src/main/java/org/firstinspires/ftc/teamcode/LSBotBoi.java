@@ -38,8 +38,7 @@ public class LSBotBoi {
         grabServoLeft = map.crservo.get(HardwareMapConstants.grabLeft);
         grabServoRight = map.crservo.get(HardwareMapConstants.grabRight);
 
-//        foundationHook = map.servo.get(HardwareMapConstants.foundationHook);
-
+        foundationHook = map.servo.get(HardwareMapConstants.foundationHook);
 
         fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

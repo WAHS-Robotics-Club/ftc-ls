@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.LSBotBoi;
 @com.qualcomm.robotcore.eventloop.opmode.Autonomous (name = "autonomous red")
 public class AutonomousRed extends LinearOpMode {
 
-    LSBotBoi lsBot;
+    LSBotBoi lsBot = new LSBotBoi();
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -43,13 +43,13 @@ public class AutonomousRed extends LinearOpMode {
         wait(200);
 
 
-//        lsBot.setFoundationHook(true, telemetry);
-//
-//        wait(100);
-//
-//        lsBot.setFoundationHook(false, telemetry);
-//
-//        wait(600);
+        lsBot.setFoundationHook(true, telemetry);
+
+        wait(100);
+
+        lsBot.setFoundationHook(false, telemetry);
+
+        wait(600);
 
 
         lsBot.autoMove(-1, 0, 0, true, telemetry);
@@ -81,11 +81,11 @@ public class AutonomousRed extends LinearOpMode {
         wait(300);
 
 
-//        lsBot.setFoundationHook(true, telemetry);
-//
-//        wait(100);
-//
-//        lsBot.setFoundationHook(false, telemetry);
+        lsBot.setFoundationHook(true, telemetry);
+
+        wait(100);
+
+        lsBot.setFoundationHook(false, telemetry);
 
     }
 }
