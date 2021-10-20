@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
-//You are on the sam_code branch
+//You are on the darius_code branch
 //Hi Sam
 
 @TeleOp(name ="Single Driver TeleOp")
