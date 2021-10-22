@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.Objects.Grabber;
 import org.firstinspires.ftc.teamcode.Objects.Misc;
 
 
-@TeleOp(name ="Single Driver TeleOp - HME", group = "TeleOp")
+@TeleOp(name ="Test TeleOp - LS", group = "TeleOp")
 public class TestTeleOp extends OpMode {
     //Initializing the servo objects:
 
