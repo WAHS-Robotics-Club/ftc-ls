@@ -26,10 +26,10 @@ public class TestTeleOp extends OpMode {
     }
 
     /*
-    leftFront = 2
-    leftBack = 1
-    rightFront = 3
-    rightBack = 0
+    leftFront = 0
+    leftBack = 3
+    rightFront = 1
+    rightBack = 2
      */
 
     @Override public void loop() {
