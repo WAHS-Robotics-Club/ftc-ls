@@ -15,6 +15,7 @@ public class SingleDriver extends OpMode {
     DcMotor backLeftMotor;
     DcMotor frontRightMotor;
     DcMotor backRightMotor;
+    DcMotor cradle;
 
     //Initiation process:
     @Override
@@ -24,6 +25,12 @@ public class SingleDriver extends OpMode {
         backLeftMotor = hardwareMap.dcMotor.get("backLeftMotor");
         frontRightMotor = hardwareMap.dcMotor.get("frontRightMotor");
         backRightMotor = hardwareMap.dcMotor.get("backRightMotor");
+        arm = hardwareMap.dcMotor.get("arm");
+        linActuator = hardwareMap.dcMotor.get("linActuator");
+        grabber1 = hardwareMap.dcMotor.get("grabber1");
+        grabber2 = hardwareMap.dcMotor.get("grabber2");
+
+
     }
 
     //Loop process:
@@ -33,5 +40,22 @@ public class SingleDriver extends OpMode {
         backLeftMotor.setPower(-gamepad1.left_stick_y + -gamepad1.left_stick_x + gamepad1.right_stick_x);
         frontRightMotor.setPower(gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x);
         backRightMotor.setPower(gamepad1.left_stick_y + -gamepad1.left_stick_x + gamepad1.right_stick_x);
+        arm.setPower(gamepad1.left_trigger);
+
+        // lin actuator forward if x is pressed, back if y is pressed, off else
+        if (gamepad1.x) {
+            linActuator.setPower(1);
+        }
+        else if (gamepad1.y) {
+            linActuator.setPower(-1);
+        }
+        else {
+            linActuator.setPower(0);
+
+        }
+
+        //turn on servo grabber
+
+
     }
 }
