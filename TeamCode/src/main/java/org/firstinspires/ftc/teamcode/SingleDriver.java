@@ -52,10 +52,10 @@ public class SingleDriver extends OpMode {
     //Loop process:
     @Override
     public void loop(){
-        frontLeftMotor.setPower(-gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x);
-        backLeftMotor.setPower(-gamepad1.left_stick_y + -gamepad1.left_stick_x + gamepad1.right_stick_x);
-        frontRightMotor.setPower(gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x);
-        backRightMotor.setPower(gamepad1.left_stick_y + -gamepad1.left_stick_x + gamepad1.right_stick_x);
+        frontLeftMotor.setPower(.75*(-gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x));
+        backLeftMotor.setPower(.75*(-gamepad1.left_stick_y + -gamepad1.left_stick_x + gamepad1.right_stick_x));
+        frontRightMotor.setPower(.75*(gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x));
+        backRightMotor.setPower(.75*(gamepad1.left_stick_y + -gamepad1.left_stick_x + gamepad1.right_stick_x));
 
 
 
@@ -82,15 +82,14 @@ public class SingleDriver extends OpMode {
         }
 
         //raises the lift to pick up objects if triggers pushed. Still otherwise
-        if ((gamepad1.left_trigger==0 && gamepad1.right_trigger==0))
-                || (gamepad2.left_trigger!=0 && gamepad2.right_trigger!=0)) {
+        if ((gamepad1.left_trigger==0 && gamepad1.right_trigger==0) || (gamepad1.left_trigger!=0 && gamepad1.right_trigger!=0)) {
             arm.setPower(0);
         }
         else if (gamepad1.left_trigger!=0) {
-            arm.setPower(gamepad2.left_trigger);
+            arm.setPower(gamepad1.left_trigger);
         }
         else if (gamepad1.right_trigger!=0) {
-            arm.setPower(-gamepad2.right_trigger);
+            arm.setPower(-gamepad1.right_trigger);
 
         }
 
