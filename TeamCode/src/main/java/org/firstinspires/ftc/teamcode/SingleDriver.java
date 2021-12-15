@@ -83,13 +83,13 @@ public class SingleDriver extends OpMode {
 
         //raises the lift to pick up objects if triggers pushed. Still otherwise
         if ((gamepad1.left_trigger==0 && gamepad1.right_trigger==0) || (gamepad1.left_trigger!=0 && gamepad1.right_trigger!=0)) {
-            arm.setPower(0);
+            arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
         else if (gamepad1.left_trigger!=0) {
-            arm.setPower(gamepad1.left_trigger);
+            arm.setPower(0.3*(gamepad1.left_trigger));
         }
         else if (gamepad1.right_trigger!=0) {
-            arm.setPower(-gamepad1.right_trigger);
+            arm.setPower(0.3*(-gamepad1.right_trigger));
 
         }
 
