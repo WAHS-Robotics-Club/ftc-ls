@@ -34,9 +34,12 @@ public class SingleDriver extends OpMode {
         backLeftMotor = hardwareMap.dcMotor.get("backLeftMotor");
         frontRightMotor = hardwareMap.dcMotor.get("frontRightMotor");
         backRightMotor = hardwareMap.dcMotor.get("backRightMotor");
+
         linActuator = hardwareMap.dcMotor.get("linActuator");
+
         leftServoGrabber = hardwareMap.servo.get("leftServoGrabber");
         rightServoGrabber = hardwareMap.servo.get("rightServoGrabber");
+
         arm= hardwareMap.dcMotor.get("arm");
 
         //send servos to initial position
