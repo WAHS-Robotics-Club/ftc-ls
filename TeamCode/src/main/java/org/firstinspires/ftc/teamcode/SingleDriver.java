@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 
 //You are on the sam_code branch
@@ -19,7 +20,7 @@ public class SingleDriver extends OpMode {
     Servo leftServoGrabber; //servo grabber on the right
     Servo rightServoGrabber; //servo grabber on the left
     DcMotor linActuator; //linear actuator that raises objects
-    
+    Toggle toggleGrabber;
 
     //prepares servo motors
     public final static double GRABBER_START = 0.45; //starting position of servo
@@ -36,6 +37,14 @@ public class SingleDriver extends OpMode {
             leftServoGrabber.setPosition(0);
         }
     }
+
+    public void ManualToggleGrabber(Gamepad gamepad1){
+        if(gamepad1.right_bumper) {
+            toggleGrabber.toggle();
+        }
+        CheckToggleGrabber();
+    }
+    
     //Initiation process:
     @Override
     public void init(){
