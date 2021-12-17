@@ -19,6 +19,7 @@ public class SingleDriver extends OpMode {
     Servo leftServoGrabber; //servo grabber on the right
     Servo rightServoGrabber; //servo grabber on the left
     DcMotor linActuator; //linear actuator that raises objects
+    
 
     //prepares servo motors
     public final static double GRABBER_START = 0.45; //starting position of servo
@@ -26,6 +27,15 @@ public class SingleDriver extends OpMode {
     public final static double GRABBER_MIN = 0.45; //min position of servo
     public final static double GRABBER_SPEED = 0.1; //speed at which grabber grabs that which is to be grabbed
 
+    public void CheckToggleGrabber(){
+        if(toggleGrabber.isToggled()){
+            rightServoGrabber.setPosition(0.05);
+            leftServoGrabber.setPosition(0.95);
+        }else{
+            rightServoGrabber.setPosition(1);
+            leftServoGrabber.setPosition(0);
+        }
+    }
     //Initiation process:
     @Override
     public void init(){
