@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -23,6 +24,7 @@ public class SingleDriver extends OpMode {
     Servo rightServoGrabber; //servo grabber on the left
     DcMotor linActuator; //linear actuator that raises objects
     Toggle toggleGrabber;
+    CRServo spinServo;
 
     //prepares servo motors
     public final static double GRABBER_START = 0.45; //starting position of servo
@@ -87,9 +89,15 @@ public class SingleDriver extends OpMode {
 
         arm= hardwareMap.dcMotor.get("arm");
 
+        spinServo = (CRServo) hardwareMap.dcMotor.get("spinServo");
+
         //send servos to initial position
         leftServoGrabber.setPosition(GRABBER_START);
         rightServoGrabber.setPosition(GRABBER_START);
+
+
+        //make spin servo stationary
+        spinServo.setPower(0.5);
 
 
 
@@ -152,6 +160,13 @@ public class SingleDriver extends OpMode {
         }
 
 
+        // spins spin thing
+        if (gamepad1.x) {
+            spinServo.setPower(1);
 
+        }
+        else if (gamepad1.y) {
+            spinServo.setPower(0.5);
+        }
     }
 }
