@@ -7,6 +7,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.tool.DriveTrain;
+import org.firstinspires.ftc.teamcode.tool.Toggle;
+import org.firstinspires.ftc.teamcode.tool.Grabber;
 
 
 //You are on the sam_code branch
@@ -15,85 +18,28 @@ import com.qualcomm.robotcore.hardware.Servo;
 @TeleOp(name ="Single Driver TeleOp")
 public class SingleDriver extends OpMode {
     //Local DcMotor variables:
-    DcMotor frontLeftMotor;
-    DcMotor backLeftMotor;
-    DcMotor frontRightMotor;
-    DcMotor backRightMotor;
+    DriveTrain driveTrain;
     DcMotor arm; //arm to lift objects
-    Servo leftServoGrabber; //servo grabber on the right
-    Servo rightServoGrabber; //servo grabber on the left
+    Grabber grabber;
     DcMotor linActuator; //linear actuator that raises objects
     Toggle toggleGrabber;
     CRServo spinServo;
-
-    //prepares servo motors
-    public final static double GRABBER_START = 0.45; //starting position of servo
-    public final static double GRABBER_MAX = 0.75; //max position of servo
-    public final static double GRABBER_MIN = 0.45; //min position of servo
-    public final static double GRABBER_SPEED = 0.1; //speed at which grabber grabs that which is to be grabbed
-
-    public void CheckToggleGrabber(){
-        if(toggleGrabber.isToggled()){
-            rightServoGrabber.setPosition(0.05);
-            leftServoGrabber.setPosition(0.95);
-        }else{
-            rightServoGrabber.setPosition(1);
-            leftServoGrabber.setPosition(0);
-        }
-    }
-
-
-
-    public class Toggle {
-        private double cooldownTime;
-        private boolean toggled;
-        private double time;
-
-        public Toggle(double cooldownTime) {
-            this.cooldownTime = cooldownTime;
-            toggled = false;
-            time = System.nanoTime();
-        }
-
-        public Toggle() {
-            this(0.25);
-        }
-
-        public void toggle() {
-            if((System.nanoTime() - time) / 1e9 >= cooldownTime) {
-                toggled = !toggled;
-                time = System.nanoTime();
-            }
-        }
-
-        public boolean isToggled() {
-            return toggled;
-        }
-    }
-
 
     
     //Initiation process:
     @Override
     public void init(){
         //Hardwaremap ALL motors:
-        frontLeftMotor = hardwareMap.dcMotor.get("frontLeftMotor");
-        backLeftMotor = hardwareMap.dcMotor.get("backLeftMotor");
-        frontRightMotor = hardwareMap.dcMotor.get("frontRightMotor");
-        backRightMotor = hardwareMap.dcMotor.get("backRightMotor");
+        driveTrain = DriveTrain.initDriveTrain(hardwareMap);
 
         linActuator = hardwareMap.dcMotor.get("linActuator");
 
-        leftServoGrabber = hardwareMap.servo.get("leftServoGrabber");
-        rightServoGrabber = hardwareMap.servo.get("rightServoGrabber");
+        grabber = Grabber.initGrabber(hardwareMap);
 
         arm= hardwareMap.dcMotor.get("arm");
 
         spinServo = (CRServo) hardwareMap.dcMotor.get("spinServo");
 
-        //send servos to initial position
-        leftServoGrabber.setPosition(GRABBER_START);
-        rightServoGrabber.setPosition(GRABBER_START);
 
 
         //make spin servo stationary
@@ -107,18 +53,14 @@ public class SingleDriver extends OpMode {
     //Loop process:
     @Override
     public void loop(){
-        frontLeftMotor.setPower(.6*(-gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x));
-        backLeftMotor.setPower(.6*(-gamepad1.left_stick_y + -gamepad1.left_stick_x + gamepad1.right_stick_x));
-        frontRightMotor.setPower(.6*(gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x));
-        backRightMotor.setPower(.6*(gamepad1.left_stick_y + -gamepad1.left_stick_x + gamepad1.right_stick_x));
+
+        driveTrain.manualDrive(gamepad1);
+        driveTrain.checkToggleSpeed(gamepad1);
+        DriveTrain.logTelemetry(telemetry, driveTrain);
 
 
 
-        ///toggles grabber
 
-            if(gamepad2.b) {
-                toggleGrabber.toggle();
-            }
 
         // lin actuator forward if x is pressed, back if y is pressed, off else
         if (gamepad2.x) {
@@ -132,15 +74,12 @@ public class SingleDriver extends OpMode {
 
         }
 
-        //turn on servo grabber NOT DONE yet
-        if (gamepad1.b) {
-            leftServoGrabber.setPosition(GRABBER_MAX);
-            rightServoGrabber.setPosition(GRABBER_MAX);
-        }
-        else if (gamepad1.a) {
-            leftServoGrabber.setPosition(0.45);
-            rightServoGrabber.setPosition(0.45);
-        }
+        //activate grabber thing
+        grabber.ManualToggleGrabber(gamepad1);
+        telemetry.addData("Left Servo Position", grabber.leftServoPosition());
+        telemetry.addData("Right Servo Position", grabber.rightServoPosition());
+
+
 
 
         //holds the lift still
