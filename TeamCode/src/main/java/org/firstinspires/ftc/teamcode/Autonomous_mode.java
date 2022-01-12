@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.PwmControl;
 
+import org.firstinspires.ftc.teamcode.tool.BananaFruit;
 import org.firstinspires.ftc.teamcode.tool.DriveTrain;
 import org.firstinspires.ftc.teamcode.tool.Toggle;
 import org.firstinspires.ftc.teamcode.tool.Grabber;
@@ -26,8 +27,6 @@ public class Autonomous_mode extends LinearOpMode{
 
 
     //prepares servo motors
-    public final static double GRABBER_START = 0.45; //starting position of servo
-    public final static double GRABBER_MAX = 0.75; //max position of servo
 
 
     @Override
@@ -41,6 +40,14 @@ public class Autonomous_mode extends LinearOpMode{
         arm= hardwareMap.dcMotor.get("arm");
         spinServo = (CRServo) hardwareMap.dcMotor.get("spinServo");
 
+        telemetry.addData("IsBusy", driveTrain.isBusy());
+        driveTrain.logTelemetry(telemetry, driveTrain);
+        telemetry.update();
+        driveTrain.resetEncoders();
+        BananaFruit gyro = new BananaFruit();
+        gyro.runBananaFruit(hardwareMap, telemetry);
+        telemetry.update();
+
 
 
 
@@ -52,6 +59,25 @@ public class Autonomous_mode extends LinearOpMode{
         waitForStart();
 
 
+
+        sleep(300);
+        driveTrain.moveForwardsBy(telemetry, -20);
+        driveTrain.turnToHeading(gyro, telemetry,90);
+
+
+        sleep(300);
+        driveTrain.moveForwardsBy(telemetry, -20);
+        driveTrain.turnToHeading(gyro, telemetry,175);
+
+
+        sleep(300);
+        driveTrain.moveForwardsBy(telemetry, -20);
+        driveTrain.turnToHeading(gyro, telemetry,-90);
+
+
+        sleep(300);
+        driveTrain.moveForwardsBy(telemetry, -20);
+        driveTrain.turnToHeading(gyro, telemetry, 5);
     }
 
 

@@ -75,7 +75,7 @@ public class SingleDriver extends OpMode {
         }
 
         //activate grabber thing
-        grabber.ManualToggleGrabber(gamepad1);
+        grabber.ManualToggleGrabber(gamepad2);
         telemetry.addData("Left Servo Position", grabber.leftServoPosition());
         telemetry.addData("Right Servo Position", grabber.rightServoPosition());
 

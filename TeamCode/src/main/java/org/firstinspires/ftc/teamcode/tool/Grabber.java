@@ -48,8 +48,8 @@ public class Grabber {
 
 
 
-    public void ManualToggleGrabber(Gamepad gamepad1){
-        if(gamepad1.right_bumper) {
+    public void ManualToggleGrabber(Gamepad gamepad2){
+        if(gamepad2.right_bumper) {
             toggleGrabber.toggle();
         }
         checkToggleGrabber();

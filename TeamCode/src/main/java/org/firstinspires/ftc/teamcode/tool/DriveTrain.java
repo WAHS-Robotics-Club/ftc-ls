@@ -33,15 +33,15 @@ public class DriveTrain{
 
     public void manualDrive(Gamepad gamepad1){
         if(!toggleSpeed.isToggled()) {
-            FrontLeftMotor.setPower(gamepad1.left_stick_x + -gamepad1.left_stick_y + gamepad1.right_stick_x);
-            BackLeftMotor.setPower(-gamepad1.left_stick_x + -gamepad1.left_stick_y + gamepad1.right_stick_x);
-            FrontRightMotor.setPower(gamepad1.left_stick_x + gamepad1.left_stick_y + gamepad1.right_stick_x);
-            BackRightMotor.setPower(-gamepad1.left_stick_x + gamepad1.left_stick_y + gamepad1.right_stick_x);
+            FrontLeftMotor.setPower(0.6*(gamepad1.left_stick_x + -gamepad1.left_stick_y + gamepad1.right_stick_x));
+            BackLeftMotor.setPower(0.6*(-gamepad1.left_stick_x + -gamepad1.left_stick_y + gamepad1.right_stick_x));
+            FrontRightMotor.setPower(0.6*(gamepad1.left_stick_x + gamepad1.left_stick_y + gamepad1.right_stick_x));
+            BackRightMotor.setPower(0.6*(-gamepad1.left_stick_x + gamepad1.left_stick_y + gamepad1.right_stick_x));
         }else{
-            FrontLeftMotor.setPower((gamepad1.left_stick_x + -gamepad1.left_stick_y + gamepad1.right_stick_x)/4);
-            BackLeftMotor.setPower((-gamepad1.left_stick_x + -gamepad1.left_stick_y + gamepad1.right_stick_x)/4);
-            FrontRightMotor.setPower((gamepad1.left_stick_x + gamepad1.left_stick_y + gamepad1.right_stick_x)/4);
-            BackRightMotor.setPower((-gamepad1.left_stick_x + gamepad1.left_stick_y + gamepad1.right_stick_x)/4);
+            FrontLeftMotor.setPower((0.6*(gamepad1.left_stick_x + -gamepad1.left_stick_y + gamepad1.right_stick_x)/4));
+            BackLeftMotor.setPower(0.6*((-gamepad1.left_stick_x + -gamepad1.left_stick_y + gamepad1.right_stick_x)/4));
+            FrontRightMotor.setPower(0.6*((gamepad1.left_stick_x + gamepad1.left_stick_y + gamepad1.right_stick_x)/4));
+            BackRightMotor.setPower(0.6*((-gamepad1.left_stick_x + gamepad1.left_stick_y + gamepad1.right_stick_x)/4));
         }
     }
 
