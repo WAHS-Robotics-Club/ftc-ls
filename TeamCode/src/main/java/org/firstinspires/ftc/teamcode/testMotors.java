@@ -4,19 +4,17 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.tool.DriveTrain;
-import org.firstinspires.ftc.teamcode.tool.Toggle;
 import org.firstinspires.ftc.teamcode.tool.Grabber;
+import org.firstinspires.ftc.teamcode.tool.Toggle;
 
 
 //You are on the sam_code branch
 //Hi Sam
 
-@TeleOp(name ="Single Driver TeleOp")
-public class SingleDriver extends OpMode {
+@TeleOp(name ="test TELEOP")
+public class testMotors extends OpMode {
     //Local DcMotor variables:
     DriveTrain driveTrain;
     DcMotor arm; //arm to lift objects
@@ -54,12 +52,31 @@ public class SingleDriver extends OpMode {
     @Override
     public void loop(){
 
-        driveTrain.manualDrive(gamepad1);
-        driveTrain.checkToggleSpeed(gamepad1);
         DriveTrain.logTelemetry(telemetry, driveTrain);
 
+        if(gamepad1.a){
+            driveTrain.flMotor.setPower(1);
+        }else{
+            driveTrain.flMotor.setPower(0);
+        }
 
+        if(gamepad1.b){
+            driveTrain.blMotor.setPower(1);
+        }else{
+            driveTrain.blMotor.setPower(0);
+        }
 
+        if(gamepad1.x){
+            driveTrain.frMotor.setPower(1);
+        }else{
+            driveTrain.frMotor.setPower(0);
+        }
+
+        if(gamepad1.y){
+            driveTrain.brMotor.setPower(1);
+        }else{
+            driveTrain.brMotor.setPower(0);
+        }
 
 
         // lin actuator forward if x is pressed, back if y is pressed, off else

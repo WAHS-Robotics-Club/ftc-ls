@@ -12,7 +12,7 @@ public class Grabber {
     public Servo leftServo;
     public Servo rightServo;
 
-    public DcMotor spoolMotor;
+
 
     private Toggle toggleGrabber;
 
@@ -30,11 +30,11 @@ public class Grabber {
 
     public void checkToggleGrabber(){
         if(toggleGrabber.isToggled()){
-            rightServo.setPosition(0.65);
-            leftServo.setPosition(0.35);
+            rightServo.setPosition(0.95);
+            leftServo.setPosition(0.5);
         }else{
-            rightServo.setPosition(0.35);
-            leftServo.setPosition(0.65);
+            rightServo.setPosition(0.05);
+            leftServo.setPosition(0.95);
         }
     }
 
