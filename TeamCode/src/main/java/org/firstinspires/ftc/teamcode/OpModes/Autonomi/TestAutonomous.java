@@ -9,8 +9,8 @@ import org.firstinspires.ftc.teamcode.Objects.DriveTrain;
 import org.firstinspires.ftc.teamcode.Objects.Grabber;
 import org.firstinspires.ftc.teamcode.Objects.Misc;
 
-@Autonomous(name ="Universal Parking - Autonomous")
-public class UniversalParking extends LinearOpMode {
+@Autonomous(name ="Test Autonomous - Autonomous")
+public class TestAutonomous extends LinearOpMode {
 
     DriveTrain driveTrain;
     Grabber grabber;
@@ -20,7 +20,6 @@ public class UniversalParking extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         driveTrain = DriveTrain.initDriveTrain(hardwareMap, DcMotor.ZeroPowerBehavior.BRAKE);
         grabber = Grabber.initGrabber(hardwareMap);
-        misc = Misc.initMiscellaneous(hardwareMap);
 
         telemetry.addData("IsBusy", driveTrain.isBusy());
         driveTrain.logTelemetry(telemetry, driveTrain);
@@ -32,11 +31,29 @@ public class UniversalParking extends LinearOpMode {
 
         waitForStart();
 
-
         //ONLY MODIFY STUFF AFTER THIS
-        sleep(20000);
-        driveTrain.moveForwardsBy(telemetry, 20);
 
+        //Sets the height to a safe height
+        grabber.setHeightTo(telemetry, 500);
+        grabber.toggleGrabberAuto();
+
+        driveTrain.moveForwardsBy(telemetry, 12);
+
+        sleep(1000);
+
+        driveTrain.moveForwardsBy(telemetry, 12);
+
+        driveTrain.turnToHeading(gyro, telemetry, 90);
+        driveTrain.moveForwardsBy(telemetry, 12);
+
+        driveTrain.turnToHeading(gyro, telemetry, 180);
+        driveTrain.moveForwardsBy(telemetry, 12);
+
+        driveTrain.turnToHeading(gyro, telemetry, -90);
+        driveTrain.moveForwardsBy(telemetry, 12);
+
+        driveTrain.turnToHeading(gyro, telemetry, 0);
+        driveTrain.moveForwardsBy(telemetry, -12);
 
         //STILL REQUIRES TESTING
     }

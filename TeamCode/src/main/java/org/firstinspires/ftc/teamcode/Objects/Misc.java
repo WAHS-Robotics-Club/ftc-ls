@@ -1,54 +1,58 @@
 package org.firstinspires.ftc.teamcode.Objects;
 
+import com.qualcomm.robotcore.hardware.CRServoImplEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Tool.Toggle;
 
 public class Misc {
-    public Servo foundationGrabber;
-    Toggle toggleFoundationGrabber;
-    public Servo capstoneDropper;
-    Toggle toggleCapstoneDropper;
+    Toggle toggleCarouselPower;
+    Toggle toggleCarouselDirection;
+    CRServoImplEx carouselServo;
 
     public static Misc initMiscellaneous(HardwareMap hardwareMap){
         Misc misc = new Misc();
-        misc.foundationGrabber = hardwareMap.servo.get("foundationServo");
-        misc.toggleFoundationGrabber = new Toggle();
-        misc.capstoneDropper = hardwareMap.servo.get("capstoneDropper");
-        misc.toggleCapstoneDropper = new Toggle();
+        misc.toggleCarouselPower = new Toggle();
+        misc.toggleCarouselDirection = new Toggle();
+        misc.carouselServo = (CRServoImplEx) hardwareMap.crservo.get("spinnerServo");
 
         return misc;
     }
 
-    public void checkTogglePosition(Gamepad gamepad){
-        if(gamepad.a){
-            toggleFoundationGrabber.toggle();
-        }
+    public void toggleCarouselPowerManual(Gamepad gamepad){
         if(gamepad.b){
-            toggleCapstoneDropper.toggle();
+            toggleCarouselPower.toggle();
         }
     }
 
-    public void useMiscLoop(){
-        useFoundationGrabber();
-        useCapstoneDropper();
+    public void toggleCarouselPowerAuto() throws InterruptedException{
+        toggleCarouselPower.toggle();
+        Thread.sleep(50);
+        runCarouselServo();
     }
 
-    public void useFoundationGrabber(){
-        if(toggleFoundationGrabber.isToggled()){
-            foundationGrabber.setPosition(0);
-        }else{
-            foundationGrabber.setPosition(180);
+    public void toggleCarouselDirectionManual(Gamepad gamepad){
+        if(gamepad.a){
+            toggleCarouselDirection.toggle();
         }
     }
 
-    public void useCapstoneDropper(){
-        if(toggleCapstoneDropper.isToggled()){
-            capstoneDropper.setPosition(0);
+    public void toggleCarouselDirectionAuto() throws InterruptedException{
+        toggleCarouselDirection.toggle();
+        Thread.sleep(50);
+        runCarouselServo();
+    }
+
+    public void runCarouselServo(){
+        if(toggleCarouselPower.isToggled()){
+            if(toggleCarouselDirection.isToggled()){
+                carouselServo.setPower(-1);
+            }else{
+                carouselServo.setPower(1);
+            }
         }else{
-            capstoneDropper.setPosition(180);
+            carouselServo.setPower(0);
         }
     }
 

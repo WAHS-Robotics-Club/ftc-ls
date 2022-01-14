@@ -31,19 +31,28 @@ public class Grabber {
         return grabber;
     }
 
-    public void CheckToggleGrabber(){
+    public void checkToggleGrabber(){
         if(toggleGrabber.isToggled()){
+            rightServo.setPosition(0.95);
+            leftServo.setPosition(0.05);
+        }else{
             rightServo.setPosition(0.05);
             leftServo.setPosition(0.95);
-        }else{
-            rightServo.setPosition(1);
-            leftServo.setPosition(0);
         }
     }
+
+    public double leftServoPosition(){
+        return leftServo.getPosition();
+    }
+
+    public double rightServoPosition(){
+        return rightServo.getPosition();
+    }
+
     public void setHeightTo(Telemetry telemetry, int targetPosition) throws InterruptedException{
         Thread.sleep(1);
 
-        spoolMotor.setPower(.8);
+        spoolMotor.setPower(1);
         spoolMotor.setTargetPosition(targetPosition);
         spoolMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
@@ -59,33 +68,43 @@ public class Grabber {
         if(gamepad1.right_bumper) {
             toggleGrabber.toggle();
         }
-        CheckToggleGrabber();
+        checkToggleGrabber();
+    }
+
+    public void forceToggleGrabber(){
+        toggleGrabber.toggle();
+    }
+
+    public void toggleGrabberAuto() throws InterruptedException{
+        forceToggleGrabber();
+        Thread.sleep(50);
+        checkToggleGrabber();
     }
 
     public void ManualSpoolMotor(Gamepad gamepad) {
         //Moves the arm up and down
-        if(gamepad.right_trigger >= 0.1 && gamepad.left_trigger >= 0.1){
-            SpoolMotorControl(0, gamepad);
-        }else if(gamepad.right_trigger >= 0.1){
-            SpoolMotorControl(gamepad.right_trigger, gamepad);
-        }else if(gamepad.left_trigger >= 0.1){
-            SpoolMotorControl(-gamepad.left_trigger, gamepad);
-        }else{
-            SpoolMotorControl(0, gamepad);
-        }
+            if (gamepad.right_trigger >= 0.1 && gamepad.left_trigger >= 0.1) {
+                SpoolMotorControl(0, gamepad);
+            } else if (gamepad.right_trigger >= 0.1) {
+                SpoolMotorControl(gamepad.right_trigger, gamepad);
+            } else if (gamepad.left_trigger >= 0.1) {
+                SpoolMotorControl(-gamepad.left_trigger, gamepad);
+            } else {
+                SpoolMotorControl(0, gamepad);
+            }
     }
 
     private void SpoolMotorControl(float Power, Gamepad gamepad){
-        if (spoolMotor.getCurrentPosition() < 12300 && spoolMotor.getCurrentPosition() > -10 || gamepad.dpad_right) {
+        if (spoolMotor.getCurrentPosition() < 18000 && spoolMotor.getCurrentPosition() > -10 || gamepad.dpad_right) {
             if (Math.abs(Power) >= 0.1) {
                 spoolMotor.setPower(Power);
             } else {
                 spoolMotor.setPower(0);
             }
         }else if(spoolMotor.getCurrentPosition() > -10){
-            spoolMotor.setPower(-.2);
+            spoolMotor.setPower(-.3);
         }else{
-            spoolMotor.setPower(.2);
+            spoolMotor.setPower(.3);
         }
 
         if(gamepad.dpad_up){

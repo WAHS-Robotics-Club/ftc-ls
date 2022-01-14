@@ -9,8 +9,8 @@ import org.firstinspires.ftc.teamcode.Objects.DriveTrain;
 import org.firstinspires.ftc.teamcode.Objects.Grabber;
 import org.firstinspires.ftc.teamcode.Objects.Misc;
 
-@Autonomous(name ="Universal Parking - Autonomous")
-public class UniversalParking extends LinearOpMode {
+@Autonomous(name ="Reset - Autonomous")
+public class ResetAutonomous extends LinearOpMode {
 
     DriveTrain driveTrain;
     Grabber grabber;
@@ -32,12 +32,24 @@ public class UniversalParking extends LinearOpMode {
 
         waitForStart();
 
-
         //ONLY MODIFY STUFF AFTER THIS
-        sleep(20000);
-        driveTrain.moveForwardsBy(telemetry, 20);
 
+    /*  Grabber Commands:
+        grabber.setHeightTo(telemetry, 500);
+        grabber.toggleGrabberAuto();
 
-        //STILL REQUIRES TESTING
+        Drive Train Commands:
+        driveTrain.moveForwardsBy(telemetry, 10);
+        driveTrain.turnToHeading(gyro, telemetry, 90);
+
+        Misc:
+        sleep(1000);
+        misc.toggleCarouselAuto();
+    */
+
+        grabber.toggleGrabberAuto();
+        grabber.setHeightTo(telemetry, 0);
+        sleep(500);
+
     }
 }

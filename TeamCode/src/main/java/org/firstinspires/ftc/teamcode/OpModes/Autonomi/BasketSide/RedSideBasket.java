@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.OpModes.Autonomi;
+package org.firstinspires.ftc.teamcode.OpModes.Autonomi.BasketSide;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -9,8 +9,8 @@ import org.firstinspires.ftc.teamcode.Objects.DriveTrain;
 import org.firstinspires.ftc.teamcode.Objects.Grabber;
 import org.firstinspires.ftc.teamcode.Objects.Misc;
 
-@Autonomous(name ="Universal Parking - Autonomous")
-public class UniversalParking extends LinearOpMode {
+@Autonomous(name ="Red Side, Basket - Autonomous")
+public class RedSideBasket extends LinearOpMode {
 
     DriveTrain driveTrain;
     Grabber grabber;
@@ -32,12 +32,37 @@ public class UniversalParking extends LinearOpMode {
 
         waitForStart();
 
-
         //ONLY MODIFY STUFF AFTER THIS
-        sleep(20000);
-        driveTrain.moveForwardsBy(telemetry, 20);
 
+    /*  Grabber Commands:
+        grabber.setHeightTo(telemetry, 500);
+        grabber.toggleGrabberAuto();
 
-        //STILL REQUIRES TESTING
+        Drive Train Commands:
+        driveTrain.moveForwardsBy(telemetry, 10);
+        driveTrain.turnToHeading(gyro, telemetry, 90);
+
+        Misc:
+        sleep(1000);
+        misc.toggleCarouselAuto();
+    */
+
+        grabber.toggleGrabberAuto();
+        sleep(500);
+        grabber.setHeightTo(telemetry, 5000);
+
+        driveTrain.moveForwardsBy(telemetry, 9);
+        driveTrain.turnToHeading(gyro, telemetry, -55);
+        driveTrain.moveForwardsBy(telemetry, 25);
+        sleep(700);
+        grabber.toggleGrabberAuto();
+        sleep(350);
+
+        driveTrain.moveForwardsBy(telemetry, -20);
+        driveTrain.turnToHeading(gyro, telemetry, 80);
+        driveTrain.moveForwardsBy(telemetry, 50);
+
+        grabber.setHeightTo(telemetry, 0);
+
     }
 }

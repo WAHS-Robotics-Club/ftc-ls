@@ -17,8 +17,10 @@ public class DriveTrain{
     DcMotor brMotor;
     Toggle toggleSpeed;
     int targetHeading;
+    //Sets the acceptable margin of error for the heading (in degrees)
+    final double HEADING_ACCURACY = 2;
 
-    public static DriveTrain initDriveTrain(HardwareMap hardwareMap) {
+    public static DriveTrain initDriveTrain(HardwareMap hardwareMap, DcMotor.ZeroPowerBehavior brakeAction) {
         //Hardware mapping the motors:
         DriveTrain driveTrain = new DriveTrain();
 
@@ -26,16 +28,29 @@ public class DriveTrain{
         driveTrain.frMotor = hardwareMap.dcMotor.get("frontRightMotor");
         driveTrain.blMotor = hardwareMap.dcMotor.get("backLeftMotor");
         driveTrain.brMotor = hardwareMap.dcMotor.get("backRightMotor");
+
+        driveTrain.flMotor.setZeroPowerBehavior(brakeAction);
+        driveTrain.frMotor.setZeroPowerBehavior(brakeAction);
+        driveTrain.blMotor.setZeroPowerBehavior(brakeAction);
+        driveTrain.brMotor.setZeroPowerBehavior(brakeAction);
+
         driveTrain.toggleSpeed = new Toggle();
 
         return driveTrain;
     }
 
     public void manualDrive(Gamepad gamepad1){
+        if(!toggleSpeed.isToggled()) {
             flMotor.setPower(gamepad1.left_stick_x + -gamepad1.left_stick_y + gamepad1.right_stick_x);
             frMotor.setPower(gamepad1.left_stick_x + gamepad1.left_stick_y + gamepad1.right_stick_x);
             blMotor.setPower(-gamepad1.left_stick_x + -gamepad1.left_stick_y + gamepad1.right_stick_x);
             brMotor.setPower(-gamepad1.left_stick_x + gamepad1.left_stick_y + gamepad1.right_stick_x);
+        }else{
+            flMotor.setPower((gamepad1.left_stick_x + -gamepad1.left_stick_y + gamepad1.right_stick_x)/4);
+            frMotor.setPower((gamepad1.left_stick_x + gamepad1.left_stick_y + gamepad1.right_stick_x)/4);
+            blMotor.setPower((-gamepad1.left_stick_x + -gamepad1.left_stick_y + gamepad1.right_stick_x)/4);
+            brMotor.setPower((-gamepad1.left_stick_x + gamepad1.left_stick_y + gamepad1.right_stick_x)/4);
+        }
     }
 
     public void checkToggleSpeed(Gamepad gamepad1){
@@ -45,15 +60,16 @@ public class DriveTrain{
     }
 
     public static void logTelemetry(Telemetry telemetry, DriveTrain driveTrain) {
-        // telemetry.addData("Heading", driveTrain.getHeading() + " degrees");
+        //telemetry.addData("Heading", driveTrain.getHeading() + " degrees");
         //1120 ticks in a rotation
         telemetry.addData("FL Power", driveTrain.flMotor.getPower());
         telemetry.addData("FR Power", driveTrain.frMotor.getPower());
         telemetry.addData("BL Power", driveTrain.blMotor.getPower());
-        telemetry.addData("BR Power", driveTrain.brMotor .getPower());
+        telemetry.addData("BR Power", driveTrain.brMotor.getPower());
     }
 
     private void goForwardsTo(double inches) throws InterruptedException{
+        Thread.sleep(1);
         resetEncoders();
         Thread.sleep(1);
         int targetPosition;
@@ -62,12 +78,14 @@ public class DriveTrain{
         rotations = inches / (4*Math.PI);
         targetPosition = (int)(rotations * 1120);
 
-        flMotor.setTargetPosition(-targetPosition);
-        frMotor.setTargetPosition(targetPosition);
-        blMotor.setTargetPosition(-targetPosition);
-        brMotor.setTargetPosition(targetPosition);
+        flMotor.setTargetPosition(targetPosition);
+        frMotor.setTargetPosition(-targetPosition);
+        blMotor.setTargetPosition(targetPosition);
+        brMotor.setTargetPosition(-targetPosition);
 
+        Thread.sleep(1);
         setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
+        Thread.sleep(1);
     }
 
     public void setRunMode(DcMotor.RunMode runMode){
@@ -85,81 +103,89 @@ public class DriveTrain{
     }
 
     public void resetEncoders(){
-        flMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        blMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        brMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        setBasePower(0);
+        setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        setBasePower(0.8);
+    }
+
+    public void moveForwardsBy(Telemetry telemetry, double inches) throws InterruptedException{
+        //Going Forwards
+        goForwardsTo(inches);
+        Thread.sleep(10);
+        while(isBusy()){
+            telemetry.update();
+            Thread.sleep(1);
+        }
+        Thread.sleep(10);
     }
 
     public boolean isBusy(){
-        if(flMotor.isBusy() && frMotor.isBusy() && blMotor.isBusy() && brMotor.isBusy()){
-            return true;
-        }else{
-            return false;
-        }
+        return (flMotor.isBusy() && blMotor.isBusy() && frMotor.isBusy() && brMotor.isBusy());
     }
 
     public boolean isCorrectHeading(int currentHeading){
-        if(targetHeading == currentHeading){
-            return true;
-        }else{
-            return false;
-        }
+        return (targetHeading < currentHeading + HEADING_ACCURACY && targetHeading > currentHeading - HEADING_ACCURACY);
     }
 
-    private void turnRobotToHeading(int currentHeading){
-        if(currentHeading > 145 || currentHeading < -145){
-            if(currentHeading < 0){
+    private boolean isWithinDangerZone(int heading){
+        return (heading > 145 || heading < -145);
+    }
+
+    private void turnRobotToHeading(int currentHeading, int targetHeading){
+        if(isWithinDangerZone(targetHeading) && targetHeading < 0){
+            if(isWithinDangerZone(currentHeading) && currentHeading > 0){
+                    currentHeading -= 360;
+            }
+        }else if(isWithinDangerZone(targetHeading) && targetHeading > 0){
+            if(isWithinDangerZone(currentHeading) && currentHeading < 0){
                 currentHeading += 360;
             }
         }
 
-        double modifier, basePower;
-        modifier = ((Math.sqrt(Math.abs(targetHeading - currentHeading)))/2);
-        basePower = 0.1;
+        double modifier, startingPower, difference;
+        difference = Math.abs(targetHeading - currentHeading);
+        modifier = ((Math.sqrt((difference)))/2);
+        startingPower = 0.1;
 
-        if(targetHeading < currentHeading - .5){
-            flMotor.setPower(-basePower * modifier);
-            frMotor.setPower(-basePower * modifier);
-            blMotor.setPower(-basePower * modifier);
-            brMotor.setPower(-basePower * modifier);
-        }else if(targetHeading > currentHeading + .5){
-            flMotor.setPower(basePower * modifier);
-            frMotor.setPower(basePower * modifier);
-            blMotor.setPower(basePower * modifier);
-            brMotor.setPower(basePower * modifier);
+        if(targetHeading < currentHeading - HEADING_ACCURACY){
+            flMotor.setPower(startingPower * modifier);
+            frMotor.setPower(startingPower * modifier);
+            blMotor.setPower(startingPower * modifier);
+            brMotor.setPower(startingPower * modifier);
+        }else if(targetHeading > currentHeading + HEADING_ACCURACY){
+            flMotor.setPower(-startingPower * modifier);
+            frMotor.setPower(-startingPower * modifier);
+            blMotor.setPower(-startingPower * modifier);
+            brMotor.setPower(-startingPower * modifier);
         }else{
             flMotor.setPower(0);
             frMotor.setPower(0);
             blMotor.setPower(0);
             brMotor.setPower(0);
         }
-
     }
 
-    public void moveForwardsBy(Telemetry telemetry, int inches) throws InterruptedException{
-        //Going Forwards
-        int i = 0;
-        goForwardsTo(inches);
-        setBasePower(.8);
-        Thread.sleep(1);
-        while(isBusy() && i < 500){
-            telemetry.update();
-            i++;
-            Thread.sleep(1);
-        }
-    }
+
 
     public void turnToHeading(BananaFruit gyro, Telemetry telemetry, int inputTargetHeading) throws InterruptedException{
         //Turning
-        targetHeading = inputTargetHeading;
+        targetHeading = -inputTargetHeading;
         setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
         while(!isCorrectHeading(gyro.getHeading())){
             telemetry.update();
-            turnRobotToHeading(gyro.getHeading());
+            turnRobotToHeading(gyro.getHeading(), targetHeading);
             Thread.sleep(1);
         }
+
+        Thread.sleep(10);
+        flMotor.setPower(0);
+        frMotor.setPower(0);
+        blMotor.setPower(0);
+        brMotor.setPower(0);
+        Thread.sleep(10);
+
     }
+
 
 }
 

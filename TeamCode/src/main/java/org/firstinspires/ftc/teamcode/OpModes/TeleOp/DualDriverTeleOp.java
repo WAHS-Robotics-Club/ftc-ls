@@ -2,15 +2,15 @@ package org.firstinspires.ftc.teamcode.OpModes.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Objects.DriveTrain;
 import org.firstinspires.ftc.teamcode.Objects.Grabber;
 import org.firstinspires.ftc.teamcode.Objects.Misc;
 
-
-@TeleOp(name ="Dual Driver TeleOp - HME", group = "TeleOp")
+@TeleOp(name ="Dual Driver TeleOp - CM", group = "TeleOp")
 public class DualDriverTeleOp extends OpMode {
-    //Initializing the servo objects:
+    //Initializing the main objects:
     Grabber grabber;
     DriveTrain driveTrain;
     Misc misc;
@@ -19,18 +19,13 @@ public class DualDriverTeleOp extends OpMode {
     public void init(){
         //Hardware mapping the servos:
         grabber = Grabber.initGrabber(hardwareMap);
-        driveTrain = DriveTrain.initDriveTrain(hardwareMap);
+        driveTrain = DriveTrain.initDriveTrain(hardwareMap, DcMotor.ZeroPowerBehavior.FLOAT);
         misc = Misc.initMiscellaneous(hardwareMap);
+
+        driveTrain.resetEncoders();
+        driveTrain.setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    /*
-    leftFront = 2
-    leftBack = 1
-    rightFront = 3
-    rightBack = 0
-    */
-
-    //Elijah was here! And here too!
     @Override public void loop(){
         //Drive Train manual control system
         driveTrain.manualDrive(gamepad1);
@@ -39,15 +34,17 @@ public class DualDriverTeleOp extends OpMode {
 
         //Grabber System (Servos)
         grabber.ManualToggleGrabber(gamepad1);
-        telemetry.addData("spool motor position", grabber.spoolMotor.getCurrentPosition());
+        telemetry.addData("Left Servo Position", grabber.leftServoPosition());
+        telemetry.addData("Right Servo Position", grabber.rightServoPosition());
 
         //Spool controls
         grabber.ManualSpoolMotor(gamepad2);
+        telemetry.addData("Spool Motor Position", grabber.spoolMotor.getCurrentPosition());
 
         //Misc controls
-        misc.checkTogglePosition(gamepad2);
-        misc.useMiscLoop();
-
+        misc.toggleCarouselPowerManual(gamepad2);
+        misc.toggleCarouselDirectionManual(gamepad2);
+        misc.runCarouselServo();
     }
 
 }
