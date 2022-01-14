@@ -81,7 +81,7 @@ public class Grabber {
         checkToggleGrabber();
     }
 
-    public void ManualSpoolMotor(Gamepad gamepad) {
+    public void ManuallinActuator(Gamepad gamepad) {
         //Moves the arm up and down
             if (gamepad.right_trigger >= 0.1 && gamepad.left_trigger >= 0.1) {
                 SpoolMotorControl(0, gamepad);
