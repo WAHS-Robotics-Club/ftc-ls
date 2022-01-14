@@ -25,6 +25,8 @@ public class DualDriverTeleOp extends OpMode {
 
         driveTrain.resetEncoders();
         driveTrain.setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        arm = hardwareMap.dcMotor.get("arm");
     }
 
     @Override public void loop(){
