@@ -14,6 +14,7 @@ public class DualDriverTeleOp extends OpMode {
     Grabber grabber;
     DriveTrain driveTrain;
     Misc misc;
+    DcMotor arm;
 
     @Override
     public void init(){
@@ -39,7 +40,7 @@ public class DualDriverTeleOp extends OpMode {
 
         //Spool controls
         grabber.ManualSpoolMotor(gamepad2);
-        telemetry.addData("Spool Motor Position", grabber.spoolMotor.getCurrentPosition());
+        telemetry.addData("Spool Motor Position", grabber.linActuator.getCurrentPosition());
 
         //Misc controls
         misc.toggleCarouselPowerManual(gamepad2);

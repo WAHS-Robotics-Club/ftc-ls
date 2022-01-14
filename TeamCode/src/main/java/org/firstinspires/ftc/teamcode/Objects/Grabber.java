@@ -12,7 +12,7 @@ public class Grabber {
     public Servo leftServo;
     public Servo rightServo;
 
-    public DcMotor spoolMotor;
+    public DcMotor linActuator;
 
     private Toggle toggleGrabber;
 
@@ -23,11 +23,11 @@ public class Grabber {
         grabber.leftServo = hardwareMap.servo.get("leftServo");
         grabber.rightServo = hardwareMap.servo.get("rightServo");
 
-        grabber.spoolMotor = hardwareMap.dcMotor.get("spoolMotor");
+        grabber.linActuator = hardwareMap.dcMotor.get("arm");
         grabber.toggleGrabber = new Toggle();
-        grabber.spoolMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        grabber.linActuator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        grabber.spoolMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        grabber.linActuator.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         return grabber;
     }
 
@@ -52,12 +52,12 @@ public class Grabber {
     public void setHeightTo(Telemetry telemetry, int targetPosition) throws InterruptedException{
         Thread.sleep(1);
 
-        spoolMotor.setPower(1);
-        spoolMotor.setTargetPosition(targetPosition);
-        spoolMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        linActuator.setPower(1);
+        linActuator.setTargetPosition(targetPosition);
+        linActuator.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         int i = 0;
-        while(spoolMotor.isBusy() && i < 500){
+        while(linActuator.isBusy() && i < 500){
             telemetry.update();
             i++;
             Thread.sleep(1);
@@ -95,22 +95,22 @@ public class Grabber {
     }
 
     private void SpoolMotorControl(float Power, Gamepad gamepad){
-        if (spoolMotor.getCurrentPosition() < 18000 && spoolMotor.getCurrentPosition() > -10 || gamepad.dpad_right) {
+        if (linActuator.getCurrentPosition() < 18000 && linActuator.getCurrentPosition() > -10 || gamepad.dpad_right) {
             if (Math.abs(Power) >= 0.1) {
-                spoolMotor.setPower(Power);
+                linActuator.setPower(Power);
             } else {
-                spoolMotor.setPower(0);
+                linActuator.setPower(0);
             }
-        }else if(spoolMotor.getCurrentPosition() > -10){
-            spoolMotor.setPower(-.3);
+        }else if(linActuator.getCurrentPosition() > -10){
+            linActuator.setPower(-.3);
         }else{
-            spoolMotor.setPower(.3);
+            linActuator.setPower(.3);
         }
 
         if(gamepad.dpad_up){
-            spoolMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            linActuator.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             for(int i = 0; i < 100; i++){/*slow down*/}
-            spoolMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            linActuator.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
 
