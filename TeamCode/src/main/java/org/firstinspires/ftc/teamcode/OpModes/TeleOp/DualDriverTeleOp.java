@@ -14,7 +14,6 @@ public class DualDriverTeleOp extends OpMode {
     Grabber grabber;
     DriveTrain driveTrain;
     Misc misc;
-    DcMotor arm;
 
     @Override
     public void init(){
