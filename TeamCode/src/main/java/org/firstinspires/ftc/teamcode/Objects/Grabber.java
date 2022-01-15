@@ -13,6 +13,7 @@ public class Grabber {
     public Servo rightServo;
 
     public DcMotor linActuator;
+    public DcMotor armMotor;
 
     private Toggle toggleGrabber;
 
@@ -23,11 +24,16 @@ public class Grabber {
         grabber.leftServo = hardwareMap.servo.get("leftServo");
         grabber.rightServo = hardwareMap.servo.get("rightServo");
 
-        grabber.linActuator = hardwareMap.dcMotor.get("arm");
-        grabber.toggleGrabber = new Toggle();
+        grabber.linActuator = hardwareMap.dcMotor.get("linActuator");
         grabber.linActuator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
         grabber.linActuator.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        grabber.armMotor = hardwareMap.dcMotor.get("armMotor");
+        grabber.armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        grabber.linActuator.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        grabber.toggleGrabber = new Toggle();
+
         return grabber;
     }
 
@@ -39,14 +45,6 @@ public class Grabber {
             rightServo.setPosition(0.05);
             leftServo.setPosition(0.95);
         }
-    }
-
-    public double leftServoPosition(){
-        return leftServo.getPosition();
-    }
-
-    public double rightServoPosition(){
-        return rightServo.getPosition();
     }
 
     public void setHeightTo(Telemetry telemetry, int targetPosition) throws InterruptedException{
@@ -81,21 +79,21 @@ public class Grabber {
         checkToggleGrabber();
     }
 
-    public void ManuallinActuator(Gamepad gamepad) {
+    public void ManualLinActuator(Gamepad gamepad) {
         //Moves the arm up and down
             if (gamepad.right_trigger >= 0.1 && gamepad.left_trigger >= 0.1) {
-                SpoolMotorControl(0, gamepad);
+                LinActuatorControl(0, gamepad);
             } else if (gamepad.right_trigger >= 0.1) {
-                SpoolMotorControl(gamepad.right_trigger, gamepad);
+                LinActuatorControl(gamepad.right_trigger, gamepad);
             } else if (gamepad.left_trigger >= 0.1) {
-                SpoolMotorControl(-gamepad.left_trigger, gamepad);
+                LinActuatorControl(-gamepad.left_trigger, gamepad);
             } else {
-                SpoolMotorControl(0, gamepad);
+                LinActuatorControl(0, gamepad);
             }
     }
 
-    private void SpoolMotorControl(float Power, Gamepad gamepad){
-        if (linActuator.getCurrentPosition() < 18000 && linActuator.getCurrentPosition() > -10 || gamepad.dpad_right) {
+    private void LinActuatorControl(float Power, Gamepad gamepad){
+        if(linActuator.getCurrentPosition() < 18000 && linActuator.getCurrentPosition() > -10 || gamepad.dpad_right) {
             if (Math.abs(Power) >= 0.1) {
                 linActuator.setPower(Power);
             } else {
@@ -114,5 +112,16 @@ public class Grabber {
         }
     }
 
+    public void ManualArmMotor(Gamepad gamepad){
+        if (gamepad.right_trigger >= 0.1 && gamepad.left_trigger >= 0.1) {
+            armMotor.setPower(0);
+        } else if (gamepad.right_trigger >= 0.1) {
+            armMotor.setPower(gamepad.right_trigger);
+        } else if (gamepad.left_trigger >= 0.1) {
+            armMotor.setPower(-gamepad.right_trigger);
+        } else {
+            LinActuatorControl(0, gamepad);
+        }
+    }
 
 }
