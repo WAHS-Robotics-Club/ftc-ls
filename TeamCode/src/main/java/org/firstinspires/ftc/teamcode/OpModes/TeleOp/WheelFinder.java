@@ -26,22 +26,22 @@ public class WheelFinder extends OpMode {
         //Drive Train manual control system
         DriveTrain.logTelemetry(telemetry, driveTrain);
         if(gamepad1.a){
-            driveTrain.flMotor.setPower(1);
+            driveTrain.flMotor.setPower(0.25);
         }else{
             driveTrain.flMotor.setPower(0);
         }
         if(gamepad1.b){
-            driveTrain.frMotor.setPower(1);
+            driveTrain.frMotor.setPower(0.25);
         }else{
             driveTrain.frMotor.setPower(0);
         }
         if(gamepad1.x){
-            driveTrain.blMotor.setPower(1);
+            driveTrain.blMotor.setPower(0.25);
         }else{
             driveTrain.blMotor.setPower(0);
         }
         if(gamepad1.y){
-            driveTrain.brMotor.setPower(1);
+            driveTrain.brMotor.setPower(0.25);
         }else{
             driveTrain.brMotor.setPower(0);
         }
