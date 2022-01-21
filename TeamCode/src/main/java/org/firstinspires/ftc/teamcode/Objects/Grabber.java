@@ -34,10 +34,25 @@ public class Grabber {
 
         grabber.toggleGrabber = new Toggle();
 
+
         return grabber;
+
     }
 
-    public void checkToggleGrabber(){
+public void grab(Gamepad gamepad1) {
+        if(gamepad1.a) {
+            rightServo.setPosition(0.95);
+            leftServo.setPosition(0.05);
+        }
+        else if (gamepad1.b) {
+                rightServo.setPosition(0.05);
+                leftServo.setPosition(0.95);
+
+            }
+        }
+
+
+    /*public void checkToggleGrabber(){
         if(toggleGrabber.isToggled()){
             rightServo.setPosition(0.95);
             leftServo.setPosition(0.05);
@@ -45,7 +60,7 @@ public class Grabber {
             rightServo.setPosition(0.05);
             leftServo.setPosition(0.95);
         }
-    }
+    }*/
 
     public void setHeightTo(Telemetry telemetry, int targetPosition) throws InterruptedException{
         Thread.sleep(1);
@@ -62,11 +77,12 @@ public class Grabber {
         }
     }
 
-    public void ManualToggleGrabber(Gamepad gamepad1){
-        if(gamepad1.right_bumper) {
+
+    /*public void ManualToggleGrabber(Gamepad gamepad1){
+        if(gamepad1.a) {
             toggleGrabber.toggle();
         }
-        checkToggleGrabber();
+        //checkToggleGrabber();
     }
 
     public void forceToggleGrabber(){
@@ -76,7 +92,7 @@ public class Grabber {
     public void toggleGrabberAuto() throws InterruptedException{
         forceToggleGrabber();
         Thread.sleep(50);
-        checkToggleGrabber();
+        //checkToggleGrabber();
     }
 
     public void ManualLinActuator(Gamepad gamepad) {
@@ -107,8 +123,8 @@ public class Grabber {
 
         if(gamepad.dpad_up){
             linActuator.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            for(int i = 0; i < 100; i++){/*slow down*/}
-            linActuator.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            for(int i = 0; i < 100; i++){/*slow down*/
+            /*linActuator.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
 
@@ -120,8 +136,33 @@ public class Grabber {
         } else if (gamepad.left_trigger >= 0.1) {
             armMotor.setPower(-gamepad.right_trigger);
         } else {
-            LinActuatorControl(0, gamepad);
+            //LinActuatorControl(0, gamepad);
         }
+    }*/
+
+    public void ManualLinActuator(Gamepad gamepad) {
+        //Moves the arm up and down
+        if (gamepad.a) {
+            linActuator.setPower(.7);
+        }
+        else if (gamepad.b) {
+            linActuator.setPower(-0.7);
+        }
+        else {
+            linActuator.setPower(0);
+        }
+
+    }
+    public void ManualArmMotor(Gamepad gamepad){
+        if (gamepad.right_trigger >= 0.1 && gamepad.left_trigger >= 0.1) {
+            armMotor.setPower(0);
+        } else if (gamepad.right_trigger >= 0.1) {
+            armMotor.setPower(gamepad.right_trigger);
+        } else if (gamepad.left_trigger >= 0.1) {
+            armMotor.setPower((-gamepad.left_trigger)*.8);
+        } //else {
+            //LinActuatorControl(0, gamepad);
+        //}
     }
 
 }

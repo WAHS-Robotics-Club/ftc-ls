@@ -20,8 +20,8 @@ public class Misc {
         return misc;
     }
 
-    public void toggleCarouselPowerManual(Gamepad gamepad){
-        if(gamepad.b){
+    public void toggleCarouselPowerManual(Gamepad gamepad2){
+        if(gamepad2.a){
             toggleCarouselPower.toggle();
         }
     }

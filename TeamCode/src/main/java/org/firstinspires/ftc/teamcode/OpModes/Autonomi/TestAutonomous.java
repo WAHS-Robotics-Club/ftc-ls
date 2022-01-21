@@ -35,7 +35,7 @@ public class TestAutonomous extends LinearOpMode {
 
         //Sets the height to a safe height
         grabber.setHeightTo(telemetry, 500);
-        grabber.toggleGrabberAuto();
+        //grabber.toggleGrabberAuto();
 
         driveTrain.moveForwardsBy(telemetry, 12);
 

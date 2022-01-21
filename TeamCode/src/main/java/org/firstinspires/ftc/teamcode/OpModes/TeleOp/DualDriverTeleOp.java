@@ -24,6 +24,8 @@ public class DualDriverTeleOp extends OpMode {
 
         driveTrain.resetEncoders();
         driveTrain.setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
     }
 
     @Override public void loop(){
@@ -33,10 +35,11 @@ public class DualDriverTeleOp extends OpMode {
         DriveTrain.logTelemetry(telemetry, driveTrain);
 
         //Grabber System (Servos)
-        grabber.ManualToggleGrabber(gamepad1);
+        //grabber.ManualToggleGrabber(gamepad1);
+        grabber.grab(gamepad1);
 
         //Spool controls
-        grabber.ManualLinActuator(gamepad1);
+        grabber.ManualLinActuator(gamepad2);
         telemetry.addData("linActuator Position", grabber.linActuator.getCurrentPosition());
         grabber.ManualArmMotor(gamepad2);
 
