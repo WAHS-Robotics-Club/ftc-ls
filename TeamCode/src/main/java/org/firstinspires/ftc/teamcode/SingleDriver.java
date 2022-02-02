@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.google.gson.internal.bind.util.ISO8601Utils;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -11,27 +12,34 @@ import com.qualcomm.robotcore.hardware.Servo;
 @TeleOp(name ="Single Driver TeleOp")
 public class SingleDriver extends OpMode {
     //Local DcMotor variables:
-    DcMotor frontLeftMotor;
-    DcMotor backLeftMotor;
-    DcMotor frontRightMotor;
-    DcMotor backRightMotor;
+    DcMotor frontL;
+    DcMotor frontR;
+    DcMotor backL;
+    DcMotor backR;
+    DcMotor spool;
+    DcMotor spinner;
+    DcMotor door;
+
+
+
 
     //Initiation process:
     @Override
     public void init(){
         //Hardwaremap ALL motors:
-        frontLeftMotor = hardwareMap.dcMotor.get("frontLeftMotor");
-        backLeftMotor = hardwareMap.dcMotor.get("backLeftMotor");
-        frontRightMotor = hardwareMap.dcMotor.get("frontRightMotor");
-        backRightMotor = hardwareMap.dcMotor.get("backRightMotor");
+    frontL = hardwareMap.dcMotor.get("frontLeftMotor");
+    frontR = hardwareMap.dcMotor.get("frontRightMotor");
+    backL = hardwareMap.dcMotor.get("backLeftMotor");
+    backR = hardwareMap.dcMotor.get("backRightMotor");
+    spool = hardwareMap.dcMotor.get("spool");
+    spinner = hardwareMap.dcMotor.get("spinner");
+    door = hardwareMap.dcMotor.get("door");
+
     }
 
     //Loop process:
     @Override
     public void loop(){
-        frontLeftMotor.setPower(-gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x);
-        backLeftMotor.setPower(-gamepad1.left_stick_y + -gamepad1.left_stick_x + gamepad1.right_stick_x);
-        frontRightMotor.setPower(gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x);
-        backRightMotor.setPower(gamepad1.left_stick_y + -gamepad1.left_stick_x + gamepad1.right_stick_x);
+
     }
 }
