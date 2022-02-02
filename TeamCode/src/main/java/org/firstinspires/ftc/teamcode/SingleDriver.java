@@ -10,27 +10,30 @@ import com.qualcomm.robotcore.hardware.Servo;
 @TeleOp(name ="Single Driver TeleOp")
 public class SingleDriver extends OpMode {
     //Local DcMotor variables:
-    DcMotor frontLeftMotor;
-    DcMotor backLeftMotor;
-    DcMotor frontRightMotor;
-    DcMotor backRightMotor;
+    DcMotor fl;
+    DcMotor fr;
+    DcMotor bl;
+    DcMotor br;
+    DcMotor spool;
+    DcMotor carousel;
+    DcMotor door;
 
     //Initiation process:
     @Override
     public void init(){
         //Hardwaremap ALL motors:
-        frontLeftMotor = hardwareMap.dcMotor.get("frontLeftMotor");
-        backLeftMotor = hardwareMap.dcMotor.get("backLeftMotor");
-        frontRightMotor = hardwareMap.dcMotor.get("frontRightMotor");
-        backRightMotor = hardwareMap.dcMotor.get("backRightMotor");
+        fl = hardwareMap.dcMotor.get("frontLeftMotor");
+        fr = hardwareMap.dcMotor.get("frontRightMotor");
+        bl = hardwareMap.dcMotor.get("backLeftMotor");
+        br = hardwareMap.dcMotor.get("backRightMotor");
+        spool = hardwareMap.dcMotor.get("spool");
+        carousel = hardwareMap.dcMotor.get("carousel");
+        door = hardwareMap.dcMotor.get("door");
     }
 
     //Loop process:
     @Override
     public void loop(){
-        frontLeftMotor.setPower(-gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x);
-        backLeftMotor.setPower(-gamepad1.left_stick_y + -gamepad1.left_stick_x + gamepad1.right_stick_x);
-        frontRightMotor.setPower(gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x);
-        backRightMotor.setPower(gamepad1.left_stick_y + -gamepad1.left_stick_x + gamepad1.right_stick_x);
+
     }
 }
