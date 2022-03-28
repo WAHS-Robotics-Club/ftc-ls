@@ -3,7 +3,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-    @Autonomous(name ="Warehouse RED")
+    @Autonomous(name ="Ryan Autonomous")
     public class TestAutonomous extends LinearOpMode {
 
         //DriveTrain DcMotors:
@@ -16,9 +16,14 @@ import com.qualcomm.robotcore.hardware.DcMotor;
         DcMotor spool;
         DcMotor grab;
         DcMotor carousel;
-        double inches;
+
+        double inches = 12;
         double rotations;
+
         int targetPosition;
+        int i = 0;
+
+        boolean isBusy;
 
         @Override
         public void runOpMode() throws InterruptedException {
@@ -28,35 +33,62 @@ import com.qualcomm.robotcore.hardware.DcMotor;
             bl = hardwareMap.dcMotor.get("backLeftMotor");
             fr = hardwareMap.dcMotor.get("frontRightMotor");
             br = hardwareMap.dcMotor.get("backRightMotor");
+
+            //hello
             grab = hardwareMap.dcMotor.get("grab");
             spool = hardwareMap.dcMotor.get("spoolMotor");
             carousel = hardwareMap.dcMotor.get("carouselSpinner");
 
-
-
-
-            telemetry.addData("Fl power", fl.getPower());
-            telemetry.addData("Bl power", bl.getPower());
-            telemetry.addData("Fr power", fr.getPower());
-            telemetry.addData("Br power", br.getPower());
+            telemetry.addData("FL Power: ", fl.getPower());
+            telemetry.addData("BL Power: ", bl.getPower());
+            telemetry.addData("FR Power", fr.getPower());
+            telemetry.addData("BR Power", br.getPower());
             telemetry.update();
 
-            //PLAY PHASE BUTTON PRESSED
+            //PLAY PHASE BUTTON PRESSED ||| ONLY MODIFY STUFF AFTER THIS
             //Wait for the button and subsequently wait 1/4 secs to start the program:
             waitForStart();
             sleep(250);
+
+            fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
             rotations = inches / (4*Math.PI);
-            targetPosition =(int)(rotations*1120);
-            bl.setTargetPosition(targetPosition);
-            fl.setTargetPosition(targetPosition);
+            targetPosition = (int)(rotations*1120);
+            fl.setTargetPosition(-targetPosition);
+            bl.setTargetPosition(-targetPosition);
             fr.setTargetPosition(targetPosition);
             br.setTargetPosition(targetPosition);
 
+            fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            bl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            br.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            fl.setPower(.8);
+            bl.setPower(.8);
+            fr.setPower(.8);
+            br.setPower(.8);
+            Thread.sleep(1);
+
+
+            if(fl.isBusy() && fr.isBusy() && bl.isBusy() && br.isBusy()){
+                isBusy = true;
+            }else{
+                isBusy = false;
+            }
+
+            while(isBusy == true && i < 500){
+                telemetry.update();
+                i++;
+                Thread.sleep(1);
 
 
 
 
-
+            }
         }
     }
 
