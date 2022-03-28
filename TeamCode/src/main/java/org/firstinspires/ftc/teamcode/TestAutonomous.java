@@ -85,6 +85,12 @@ import com.qualcomm.robotcore.hardware.DcMotor;
                 i++;
                 Thread.sleep(1);
 
+                fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
 
 
 
