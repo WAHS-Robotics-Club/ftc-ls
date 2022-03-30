@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 public class DriveTrain {
 
 
-    public void driving(DcMotor fl, DcMotor fr, DcMotor br, DcMotor bl, double inches) {
+    public void driving(DcMotor fl, DcMotor fr, DcMotor br, DcMotor bl, double inches) throws InterruptedException {
         double rotations;
         int targetPosition;
         boolean isBusy;
