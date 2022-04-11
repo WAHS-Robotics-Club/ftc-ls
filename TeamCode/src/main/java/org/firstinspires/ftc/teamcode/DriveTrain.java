@@ -64,22 +64,23 @@ public class DriveTrain {
 
 
         int targetHeading = degrees;
-        boolean isCorrectHeading;
+        boolean isCorrectHeading = false;
         int currentHeading;
         frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        if (targetHeading < gyro.getHeading() + 10 && targetHeading > gyro.getHeading() - 10) {
-            isCorrectHeading = true;
-        } else {
-            isCorrectHeading = false;
-        }
 
         while (!isCorrectHeading) {
             telemetry.update();
             currentHeading = gyro.getHeading();
+
+            if (targetHeading < gyro.getHeading() + 10 && targetHeading > gyro.getHeading() - 10) {
+                isCorrectHeading = true;
+            } else {
+                isCorrectHeading = false;
+            }
 
             if (currentHeading > 145 || currentHeading < -145) {
                 if (currentHeading < 0) {
