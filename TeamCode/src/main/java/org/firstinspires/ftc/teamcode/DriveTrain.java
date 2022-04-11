@@ -3,39 +3,49 @@ import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.tel
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 public class DriveTrain {
+    public DcMotor frontLeft, frontRight, backLeft, backRight;
+
+    public DriveTrain(DcMotor fl, DcMotor fr, DcMotor br, DcMotor bl) {
+        frontLeft = fl;
+        frontRight = fr;
+        backLeft = bl;
+        backRight = br;
+    }
 
 
-    public void driving(DcMotor fl, DcMotor fr, DcMotor br, DcMotor bl, double inches) throws InterruptedException {
+    public void driving(double inches, double power, Telemetry telemetry) throws InterruptedException {
         double rotations;
         int targetPosition;
         boolean isBusy;
         int i = 0;
-        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         rotations = inches / (4 * Math.PI);
         targetPosition = (int) (rotations * 1120);
-        fl.setTargetPosition(-targetPosition);
-        bl.setTargetPosition(-targetPosition);
-        fr.setTargetPosition(targetPosition);
-        br.setTargetPosition(targetPosition);
+        frontLeft.setTargetPosition(-targetPosition);
+        backLeft.setTargetPosition(-targetPosition);
+        frontRight.setTargetPosition(targetPosition);
+        backRight.setTargetPosition(targetPosition);
 
-        fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        bl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        br.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        fl.setPower(.8);
-        bl.setPower(.8);
-        fr.setPower(.8);
-        br.setPower(.8);
+        frontLeft.setPower(power);
+        backLeft.setPower(power);
+        frontRight.setPower(power);
+        backRight.setPower(power);
         Thread.sleep(1);
 
 
-        if (fl.isBusy() && fr.isBusy() && bl.isBusy() && br.isBusy()) {
+        if (frontLeft.isBusy() && frontRight.isBusy() && backLeft.isBusy() && backRight.isBusy()) {
             isBusy = true;
         } else {
             isBusy = false;
@@ -46,5 +56,55 @@ public class DriveTrain {
             i++;
             Thread.sleep(1);
         }
+
+
     }
+
+    public void turning(int degrees, Telemetry telemetry, BananaFruit gyro) {
+
+
+        int targetHeading = degrees;
+        boolean isCorrectHeading;
+        int currentHeading;
+        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        if (targetHeading < gyro.getHeading() + 10 && targetHeading > gyro.getHeading() - 10) {
+            isCorrectHeading = true;
+        } else {
+            isCorrectHeading = false;
+        }
+
+        while (!isCorrectHeading) {
+            telemetry.update();
+            currentHeading = gyro.getHeading();
+
+            if (currentHeading > 145 || currentHeading < -145) {
+                if (currentHeading < 0) {
+                    currentHeading += 360;
+                }
+            }
+
+            double modifier, basePower;
+            modifier = ((Math.sqrt(Math.abs(targetHeading - currentHeading))) / 2);
+            basePower = 0.1;
+
+            if (targetHeading < currentHeading - 10) {
+                frontLeft.setPower(basePower * modifier);
+                frontRight.setPower(basePower * modifier);
+                backLeft.setPower(basePower * modifier);
+                backRight.setPower(basePower * modifier);
+            } else if (targetHeading > currentHeading + 10) {
+                frontLeft.setPower(-basePower * modifier);
+                frontRight.setPower(-basePower * modifier);
+                backLeft.setPower(-basePower * modifier);
+                backRight.setPower(-basePower * modifier);
+            }
+        }
+
+
+    }
+
 }

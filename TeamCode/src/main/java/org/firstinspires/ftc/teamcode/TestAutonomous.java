@@ -12,19 +12,16 @@ import com.qualcomm.robotcore.hardware.DcMotor;
         DcMotor fr;
         DcMotor br;
 
+
         //Appendage DcMotors:
         DcMotor spool;
         DcMotor grab;
         DcMotor carousel;
 
-        double inches = 12;
         double rotations;
-
-        int targetPosition;
         int i = 0;
 
         boolean isBusy;
-        DriveTrain driveTrain = new DriveTrain();
 
         @Override
         public void runOpMode() throws InterruptedException {
@@ -45,13 +42,21 @@ import com.qualcomm.robotcore.hardware.DcMotor;
             telemetry.addData("FR Power", fr.getPower());
             telemetry.addData("BR Power", br.getPower());
             telemetry.update();
+            DriveTrain food = new DriveTrain(fl,fr,br,bl);
+            BananaFruit gyro = new BananaFruit();
+            gyro.runBananaFruit(hardwareMap, telemetry);
+
+
 
             //PLAY PHASE BUTTON PRESSED ||| ONLY MODIFY STUFF AFTER THIS
             //Wait for the button and subsequently wait 1/4 secs to start the program:
             waitForStart();
             sleep(250);
 
-            driveTrain.driving(fl,fr,br,bl,12);
+            food.driving(12, 0.8, telemetry);
+            food.turning(90, telemetry, gyro);
+
+
 
 
 
