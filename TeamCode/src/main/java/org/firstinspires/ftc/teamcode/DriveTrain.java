@@ -60,7 +60,7 @@ public class DriveTrain {
 
     }
 
-    public void turning(int degrees, Telemetry telemetry, BananaFruit gyro) {
+    public void turning(int degrees, Telemetry telemetry, BananaFruit gyro) throws InterruptedException {
 
 
         int targetHeading = degrees;
@@ -89,7 +89,7 @@ public class DriveTrain {
             }
 
             double modifier, basePower;
-            modifier = ((Math.sqrt(Math.abs(targetHeading - currentHeading))) / 2);
+            modifier = ((Math.sqrt(Math.abs(targetHeading - currentHeading)))/2);
             basePower = 0.1;
 
             if (targetHeading < currentHeading - 1.25) {
@@ -103,6 +103,7 @@ public class DriveTrain {
                 backLeft.setPower(-basePower * modifier);
                 backRight.setPower(-basePower * modifier);
             }
+            Thread.sleep(1);
         }
 
 
