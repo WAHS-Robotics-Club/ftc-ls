@@ -76,7 +76,7 @@ public class DriveTrain {
             telemetry.update();
             currentHeading = gyro.getHeading();
 
-            if (targetHeading < gyro.getHeading() + 10 && targetHeading > gyro.getHeading() - 10) {
+            if (targetHeading < gyro.getHeading() + 1.25 && targetHeading > gyro.getHeading() - 1.25) {
                 isCorrectHeading = true;
             } else {
                 isCorrectHeading = false;
@@ -92,12 +92,12 @@ public class DriveTrain {
             modifier = ((Math.sqrt(Math.abs(targetHeading - currentHeading))) / 2);
             basePower = 0.1;
 
-            if (targetHeading < currentHeading - 10) {
+            if (targetHeading < currentHeading - 1.25) {
                 frontLeft.setPower(basePower * modifier);
                 frontRight.setPower(basePower * modifier);
                 backLeft.setPower(basePower * modifier);
                 backRight.setPower(basePower * modifier);
-            } else if (targetHeading > currentHeading + 10) {
+            } else if (targetHeading > currentHeading + 1.25) {
                 frontLeft.setPower(-basePower * modifier);
                 frontRight.setPower(-basePower * modifier);
                 backLeft.setPower(-basePower * modifier);
