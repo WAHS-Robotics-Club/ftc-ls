@@ -103,6 +103,12 @@ public class DriveTrain {
                 backLeft.setPower(-basePower * modifier);
                 backRight.setPower(-basePower * modifier);
             }
+            else {
+                frontLeft.setPower(0);
+                frontRight.setPower(0);
+                backLeft.setPower(0);
+                backRight.setPower(0);
+            }
             Thread.sleep(1);
         }
 

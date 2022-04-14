@@ -37,14 +37,15 @@ import com.qualcomm.robotcore.hardware.DcMotor;
             spool = hardwareMap.dcMotor.get("spoolMotor");
             carousel = hardwareMap.dcMotor.get("carouselSpinner");
 
+            DriveTrain food = new DriveTrain(fl,fr,br,bl);
+            BananaFruit gyro = new BananaFruit();
+            gyro.runBananaFruit(hardwareMap, telemetry);
+
             telemetry.addData("FL Power: ", fl.getPower());
             telemetry.addData("BL Power: ", bl.getPower());
             telemetry.addData("FR Power", fr.getPower());
             telemetry.addData("BR Power", br.getPower());
             telemetry.update();
-            DriveTrain food = new DriveTrain(fl,fr,br,bl);
-            BananaFruit gyro = new BananaFruit();
-            gyro.runBananaFruit(hardwareMap, telemetry);
 
 
 
@@ -54,9 +55,12 @@ import com.qualcomm.robotcore.hardware.DcMotor;
             sleep(250);
             food.driving(-50, 0.8, telemetry);
             food.turning(90, telemetry, gyro);
-            grab.setPower(0.2);
+            grab.setPower(-0.2);
             sleep(1000);
             grab.setPower(0);
+            carousel.setPower(0.5);
+            sleep(1000);
+            carousel.setPower(0);
 
 
 
