@@ -3,7 +3,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-    @Autonomous(name ="Ryan Autonomous")
+    @Autonomous(name ="Ryan Autonomous Right")
     public class TestAutonomous extends LinearOpMode {
 
         //DriveTrain DcMotors:
@@ -58,9 +58,10 @@ import com.qualcomm.robotcore.hardware.DcMotor;
             grab.setPower(-0.2);
             sleep(1000);
             grab.setPower(0);
-            carousel.setPower(0.5);
-            sleep(1000);
-            carousel.setPower(0);
+            food.turning(-90, telemetry, gyro);
+            food.driving(50,0.8, telemetry);
+            food.turning(-90, telemetry, gyro);
+            food.driving(40, 0.8, telemetry);
 
 
 
