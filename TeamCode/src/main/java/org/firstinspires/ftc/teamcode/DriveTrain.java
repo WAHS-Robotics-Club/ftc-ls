@@ -16,8 +16,9 @@ public class DriveTrain {
     }
 
 
-    public void driving(double inches, double power, Telemetry telemetry) throws InterruptedException {
+    public void driving(double inches2, double power, Telemetry telemetry) throws InterruptedException {
         double rotations;
+        double inches1 = inches2;
         int targetPosition;
         boolean isBusy;
         int i = 0;
@@ -26,7 +27,7 @@ public class DriveTrain {
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        rotations = inches / (4 * Math.PI);
+        rotations = inches1 / (4 * Math.PI);
         targetPosition = (int) (rotations * 1120);
         frontLeft.setTargetPosition(-targetPosition);
         backLeft.setTargetPosition(-targetPosition);
