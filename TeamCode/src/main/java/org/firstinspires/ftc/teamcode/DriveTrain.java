@@ -27,7 +27,7 @@ public class DriveTrain {
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        rotations = (inches1/(4*Math.PI));
+        rotations = (inches1/(4.0*Math.PI));
         targetPosition = (int)(rotations*1120);
         frontLeft.setTargetPosition(-targetPosition);
         backLeft.setTargetPosition(-targetPosition);
@@ -52,7 +52,8 @@ public class DriveTrain {
             isBusy = false;
         }
 
-        while(isBusy == true && i < 500) {
+        while((frontLeft.isBusy() && frontRight.isBusy() && backLeft.isBusy() && backRight.isBusy()) && i < 500) {
+
             telemetry.update();
             i++;
             Thread.sleep(1);
