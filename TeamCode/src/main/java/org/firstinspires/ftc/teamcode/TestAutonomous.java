@@ -11,8 +11,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
         DcMotor bl;
         DcMotor fr;
         DcMotor br;
-
-
         //Appendage DcMotors:
         DcMotor spool;
         DcMotor grab;
@@ -51,13 +49,13 @@ import com.qualcomm.robotcore.hardware.DcMotor;
             //Wait for the button and subsequently wait 1/4 secs to start the program:
             waitForStart();
             sleep(250);
-            food.driving(-175, 0.8, telemetry);
+            food.driving(-12, 0.8, telemetry);
             food.turning(90, telemetry, gyro);
             grab.setPower(-0.2);
             sleep(1000);
             grab.setPower(0);
             food.turning(0, telemetry, gyro);
-            food.driving(75,0.8, telemetry);
+            food.driving(12,0.8, telemetry);
             food.turning(-90, telemetry, gyro);
             food.driving(40, 0.8, telemetry);
 

@@ -18,10 +18,6 @@ public class TestAutonomousLeft extends LinearOpMode {
     DcMotor grab;
     DcMotor carousel;
 
-    double rotations;
-    int i = 0;
-
-    boolean isBusy;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -51,6 +47,7 @@ public class TestAutonomousLeft extends LinearOpMode {
 
         //PLAY PHASE BUTTON PRESSED ||| ONLY MODIFY STUFF AFTER THIS
         //Wait for the button and subsequently wait 1/4 secs to start the program:
+
         waitForStart();
         sleep(250);
         food.driving(-65, 0.8, telemetry);

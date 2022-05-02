@@ -27,8 +27,8 @@ public class DriveTrain {
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        rotations = inches1 / (4 * Math.PI);
-        targetPosition = (int) (rotations * 1120);
+        rotations = (inches1/(4*Math.PI));
+        targetPosition = (int)(rotations*1120);
         frontLeft.setTargetPosition(-targetPosition);
         backLeft.setTargetPosition(-targetPosition);
         frontRight.setTargetPosition(targetPosition);
@@ -52,13 +52,11 @@ public class DriveTrain {
             isBusy = false;
         }
 
-        while (isBusy == true && i < 500) {
+        while(isBusy == true && i < 500) {
             telemetry.update();
             i++;
             Thread.sleep(1);
         }
-
-
     }
 
     public void turning(int degrees, Telemetry telemetry, BananaFruit gyro) throws InterruptedException {
@@ -112,8 +110,5 @@ public class DriveTrain {
             }
             Thread.sleep(1);
         }
-
-
     }
-
 }
