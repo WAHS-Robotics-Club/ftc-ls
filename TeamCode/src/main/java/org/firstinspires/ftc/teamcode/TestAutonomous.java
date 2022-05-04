@@ -55,9 +55,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
             sleep(1000);
             grab.setPower(0);
             food.turning(0, telemetry, gyro);
-            food.driving(50hh,0.8, telemetry);
-            food.turning(-90, telemetry, gyro);
-            food.driving(40, 0.8, telemetry);
+            food.driving(50,0.8, telemetry);
+            food.turning(90, telemetry, gyro);
+            food.driving(70, 0.8, telemetry);
 
 
 

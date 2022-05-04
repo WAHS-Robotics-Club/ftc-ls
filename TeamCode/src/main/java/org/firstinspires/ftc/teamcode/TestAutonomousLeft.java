@@ -50,15 +50,15 @@ public class TestAutonomousLeft extends LinearOpMode {
 
         waitForStart();
         sleep(250);
-        food.driving(-65, 0.8, telemetry);
+        food.driving(-50, 0.8, telemetry);
         food.turning(-90, telemetry, gyro);
         grab.setPower(-0.2);
         sleep(1000);
         grab.setPower(0);
         food.turning(0, telemetry, gyro);
-        food.driving(65,0.8, telemetry);
+        food.driving(50,0.8, telemetry);
         food.turning(90, telemetry, gyro);
-        food.driving(80, 0.8, telemetry);
+        food.driving(-80, 0.8, telemetry);
 
         
 
