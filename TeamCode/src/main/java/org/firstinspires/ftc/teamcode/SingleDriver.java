@@ -78,13 +78,9 @@ public class SingleDriver extends OpMode {
             frontR.setPower((gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x));
             backR.setPower((gamepad1.left_stick_y + -gamepad1.left_stick_x + gamepad1.right_stick_x));
         }
-            ifElseAnalog(gamepad2.right_trigger, gamepad2.left_trigger, spool);
-            ifElseAnalog(gamepad1.right_trigger, gamepad2.left_trigger, spool);
-            if(gamepad1.left_trigger > 0.001){
-                spool.setPower(-gamepad1.left_trigger);
 
-
-            }            ifElse(gamepad2.right_bumper, gamepad2.left_bumper, door, 0.2);
+            ifElseAnalog(gamepad1.right_trigger, gamepad1.left_trigger, spool);
+               ifElse(gamepad2.right_bumper, gamepad2.left_bumper, door, 0.2);
             ifElse(gamepad1.a, gamepad1.b, spinner, 0.6);
         }
     }

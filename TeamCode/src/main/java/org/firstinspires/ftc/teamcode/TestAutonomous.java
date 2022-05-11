@@ -49,15 +49,17 @@ import com.qualcomm.robotcore.hardware.DcMotor;
             //Wait for the button and subsequently wait 1/4 secs to start the program:
             waitForStart();
             sleep(250);
-            food.driving(-50, 0.8, telemetry);
+            food.driving(-40, 0.8, telemetry);
             food.turning(90, telemetry, gyro);
+            food.driving(-1,0.5,telemetry);
             grab.setPower(-0.2);
             sleep(1000);
             grab.setPower(0);
+            food.driving(1,0.5,telemetry);
             food.turning(0, telemetry, gyro);
-            food.driving(50,0.8, telemetry);
-            food.turning(90, telemetry, gyro);
-            food.driving(70, 0.8, telemetry);
+            food.driving(45,0.8, telemetry);
+            food.turning(-90, telemetry, gyro);
+            food.driving(-70, 0.8, telemetry);
 
 
 
