@@ -16,9 +16,8 @@ public class DriveTrain {
     }
 
 
-    public void driving(double inches2, double power, Telemetry telemetry) throws InterruptedException {
+    public void driving(double inches1, double power, Telemetry telemetry) throws InterruptedException {
         double rotations;
-        double inches1 = inches2;
         int targetPosition;
         boolean isBusy;
         int i = 0;

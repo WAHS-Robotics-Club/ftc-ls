@@ -63,10 +63,11 @@ public class SingleDriver extends OpMode {
         @Override
         public void loop () {
 
-        if(gamepad1.right_bumper){
-            x++;
-        }
-        if (x%2 != 0) {
+        //if(gamepad1.right_bumper){
+        //    x++;
+        //}
+        //if (x%2 != 0) {
+            if (gamepad1.left_bumper){
             frontL.setPower((-gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x)/4);
             backL.setPower((-gamepad1.left_stick_y + -gamepad1.left_stick_x + gamepad1.right_stick_x)/4);
             frontR.setPower((gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x)/4);
@@ -80,7 +81,7 @@ public class SingleDriver extends OpMode {
         }
 
             ifElseAnalog(gamepad1.right_trigger, gamepad1.left_trigger, spool);
-               ifElse(gamepad2.right_bumper, gamepad2.left_bumper, door, 0.2);
+               ifElse(gamepad1.x, gamepad1.y, door, 0.2);
             ifElse(gamepad1.a, gamepad1.b, spinner, 0.6);
         }
     }

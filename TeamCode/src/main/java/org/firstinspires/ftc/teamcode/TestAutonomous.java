@@ -27,13 +27,11 @@ import com.qualcomm.robotcore.hardware.DcMotor;
             bl = hardwareMap.dcMotor.get("backLeftMotor");
             fr = hardwareMap.dcMotor.get("frontRightMotor");
             br = hardwareMap.dcMotor.get("backRightMotor");
-
-            //hello
             grab = hardwareMap.dcMotor.get("grab");
             spool = hardwareMap.dcMotor.get("spoolMotor");
             carousel = hardwareMap.dcMotor.get("carouselSpinner");
 
-            DriveTrain food = new DriveTrain(fl,fr,br,bl);
+            DriveTrain robot = new DriveTrain(fl,fr,br,bl);
             BananaFruit gyro = new BananaFruit();
             gyro.runBananaFruit(hardwareMap, telemetry);
 
@@ -45,21 +43,21 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 
 
-            //PLAY PHASE BUTTON PRESSED ||| ONLY MODIFY STUFF AFTER THIS
+            //PLAY PHASE BUTTON PRESSED
             //Wait for the button and subsequently wait 1/4 secs to start the program:
             waitForStart();
             sleep(250);
-            food.driving(-40, 0.8, telemetry);
-            food.turning(90, telemetry, gyro);
-            food.driving(-1,0.5,telemetry);
+            robot.driving(-40, 0.8, telemetry);
+            robot.turning(90, telemetry, gyro);
+            robot.driving(-1,0.5,telemetry);
             grab.setPower(-0.2);
             sleep(1000);
             grab.setPower(0);
-            food.driving(1,0.5,telemetry);
-            food.turning(0, telemetry, gyro);
-            food.driving(45,0.8, telemetry);
-            food.turning(-90, telemetry, gyro);
-            food.driving(-70, 0.8, telemetry);
+            robot.driving(1,0.5,telemetry);
+            robot.turning(0, telemetry, gyro);
+            robot.driving(45,0.8, telemetry);
+            robot.turning(-90, telemetry, gyro);
+            robot.driving(-70, 0.8, telemetry);
 
 
 
