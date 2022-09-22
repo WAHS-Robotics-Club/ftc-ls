@@ -82,6 +82,6 @@ public class SingleDriver extends OpMode {
 
             ifElseAnalog(gamepad1.right_trigger, gamepad1.left_trigger, spool);
                ifElse(gamepad1.x, gamepad1.y, door, 0.2);
-            ifElse(gamepad1.a, gamepad1.b, spinner, 0.6);
+            ifElse(gamepad1.a, gamepad1.b, spinner, 0.6); //test
         }
     }
