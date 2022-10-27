@@ -16,9 +16,9 @@ public class SingleDriver extends OpMode {
     DcMotor frontR;
     DcMotor backL;
     DcMotor backR;
-    DcMotor spool;
-    DcMotor spinner;
-    DcMotor door;
+    DcMotor spoolMotor;
+    Servo chopstick;
+
     int x = 0;
 
     public void ifElse(boolean value1, boolean value2, DcMotor motor, double power) {
@@ -43,7 +43,35 @@ public class SingleDriver extends OpMode {
             motor2.setPower(0);
 
         }
+
     }
+
+    public void ifElseServo(boolean button1, boolean button2, Servo controller, double position1, double position2) {
+        if (controller.getPosition() == 0 || controller.getPosition() == 180){
+            controller.setPosition(controller.getPosition());
+        }
+        else if (button1) {
+            controller.setPosition(position1);
+        } else if (button2) {
+            controller.setPosition(position2);
+
+
+        }
+
+
+    }
+    public void ifElseAnalogServo(float button1, float button2, Servo controller) {
+        if (controller.getPosition() == 0 || controller.getPosition() == 180){
+            controller.setPosition(controller.getPosition());
+        }
+        else if (button1 > 0.001 || button1 < -0.001) {
+            controller.setPosition(controller.getPosition()+button1);
+        } else if (button2 > 0.001 || button2 < -0.001) {
+            controller.setPosition(controller.getPosition()+button2);
+        }
+
+        }
+
 
 
         //Initiation process:
@@ -54,20 +82,16 @@ public class SingleDriver extends OpMode {
             frontR = hardwareMap.dcMotor.get("frontRightMotor");
             backL = hardwareMap.dcMotor.get("backLeftMotor");
             backR = hardwareMap.dcMotor.get("backRightMotor");
-            spool = hardwareMap.dcMotor.get("spoolMotor");
-            spinner = hardwareMap.dcMotor.get("carouselSpinner");
-            door = hardwareMap.dcMotor.get("grab");
+            spoolMotor = hardwareMap.dcMotor.get("spool");
+            chopstick = hardwareMap.servo.get("servo");
+
         }
 
         //Loop process:
         @Override
         public void loop () {
-
-        //if(gamepad1.right_bumper){
-        //    x++;
-        //}
-        //if (x%2 != 0) {
-            if (gamepad1.left_bumper){
+        chopstick.setPosition(0.0);
+        if (gamepad1.left_bumper){
             frontL.setPower((-gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x)/4);
             backL.setPower((-gamepad1.left_stick_y + -gamepad1.left_stick_x + gamepad1.right_stick_x)/4);
             frontR.setPower((gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x)/4);
@@ -80,8 +104,10 @@ public class SingleDriver extends OpMode {
             backR.setPower((gamepad1.left_stick_y + -gamepad1.left_stick_x + gamepad1.right_stick_x));
         }
 
-            ifElseAnalog(gamepad1.right_trigger, gamepad1.left_trigger, spool);
-               ifElse(gamepad1.x, gamepad1.y, door, 0.2);
-            ifElse(gamepad1.a, gamepad1.b, spinner, 0.6); //test
+        ifElseAnalog(gamepad1.right_trigger, gamepad1.left_trigger, spoolMotor);
+        ifElseServo(gamepad1.a, gamepad1.b, chopstick,30,0);
+
+
+
+            }
         }
-    }
