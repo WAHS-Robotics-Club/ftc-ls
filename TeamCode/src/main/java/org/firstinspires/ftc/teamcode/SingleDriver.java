@@ -47,10 +47,8 @@ public class SingleDriver extends OpMode {
     }
 
     public void ifElseServo(boolean button1, boolean button2, Servo controller, double position1, double position2) {
-        if (controller.getPosition() == 0 || controller.getPosition() == 180){
-            controller.setPosition(controller.getPosition());
-        }
-        else if (button1) {
+
+        if (button1) {
             controller.setPosition(position1);
         } else if (button2) {
             controller.setPosition(position2);
@@ -61,10 +59,8 @@ public class SingleDriver extends OpMode {
 
     }
     public void ifElseAnalogServo(float button1, float button2, Servo controller) {
-        if (controller.getPosition() == 0 || controller.getPosition() == 180){
-            controller.setPosition(controller.getPosition());
-        }
-        else if (button1 > 0.001 || button1 < -0.001) {
+
+        if (button1 > 0.001 || button1 < -0.001) {
             controller.setPosition(controller.getPosition()+button1);
         } else if (button2 > 0.001 || button2 < -0.001) {
             controller.setPosition(controller.getPosition()+button2);
@@ -87,10 +83,14 @@ public class SingleDriver extends OpMode {
 
         }
 
+
         //Loop process:
         @Override
         public void loop () {
-        chopstick.setPosition(0.0);
+        int i = 0;
+        if(i==0){
+            chopstick.setPosition(0.0);
+        }
         if (gamepad1.left_bumper){
             frontL.setPower((-gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x)/4);
             backL.setPower((-gamepad1.left_stick_y + -gamepad1.left_stick_x + gamepad1.right_stick_x)/4);
