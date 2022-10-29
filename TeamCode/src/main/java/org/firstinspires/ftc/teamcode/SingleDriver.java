@@ -33,7 +33,7 @@ public class SingleDriver extends OpMode {
         }
 
     }
-
+//comment
     public void ifElseAnalog(float input1, float input2, DcMotor motor2) {
         if (input1 > 0.001 || input1 < -0.001) {
             motor2.setPower(input1);
@@ -63,7 +63,7 @@ public class SingleDriver extends OpMode {
         if (button1 > 0.001 || button1 < -0.001) {
             controller.setPosition(controller.getPosition()+button1);
         } else if (button2 > 0.001 || button2 < -0.001) {
-            controller.setPosition(controller.getPosition()+button2);
+            controller.setPosition(controller.getPosition()-button2);
         }
 
         }
@@ -80,6 +80,7 @@ public class SingleDriver extends OpMode {
             backR = hardwareMap.dcMotor.get("backRightMotor");
             spoolMotor = hardwareMap.dcMotor.get("spool");
             chopstick = hardwareMap.servo.get("servo");
+            chopstick.setPosition(0.0);
 
         }
 
@@ -87,10 +88,7 @@ public class SingleDriver extends OpMode {
         //Loop process:
         @Override
         public void loop () {
-        int i = 0;
-        if(i==0){
-            chopstick.setPosition(0.0);
-        }
+
         if (gamepad1.left_bumper){
             frontL.setPower((-gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x)/4);
             backL.setPower((-gamepad1.left_stick_y + -gamepad1.left_stick_x + gamepad1.right_stick_x)/4);
